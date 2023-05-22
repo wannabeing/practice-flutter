@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'pomodoro/views/pomodoro_screen.dart';
+import 'package:may230517/webtoon/webtoon_screen.dart';
 
 void main() {
   runApp(const App());
@@ -15,9 +14,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "test",
-      home: PomodoroScreen(),
+    return MaterialApp(
+      title: "may",
+      home: WebtoonScreen(),
     );
   }
 }
