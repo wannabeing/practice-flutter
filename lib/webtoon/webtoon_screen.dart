@@ -7,8 +7,8 @@ import 'widgets/webtoon_widget.dart';
 class WebtoonScreen extends StatelessWidget {
   WebtoonScreen({super.key});
 
-  final Future<List<WebtoonModel>> webtoons =
-      WebtoonApiService.getTodayToons(); // 비동기처리 데이터
+  // ✅ 비동기처리 데이터
+  final Future<List<WebtoonModel>> webtoons = WebtoonApiService.getTodayToons();
 
   @override
   Widget build(BuildContext context) {
