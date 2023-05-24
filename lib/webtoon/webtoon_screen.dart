@@ -30,12 +30,48 @@ class WebtoonScreen extends StatelessWidget {
         builder: (context, snapshot) {
           // snapshot: 데이터의 상태
           if (snapshot.hasData) {
-            return Column(
-              children: [
-                Expanded(
-                  child: webtoonList(snapshot),
-                ),
-              ],
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 20,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: const [
+                      Text(
+                        "오늘의 웹툰",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "SBAggro",
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                      child: Container(
+                          color: Colors.amber, child: webtoonList(snapshot))),
+                  Expanded(
+                    child: Container(
+                      color: Colors.blue,
+                      child: Row(
+                        children: const [
+                          Text(
+                            "내가 좋아하는 웹툰",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "SBAggro",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(child: webtoonList(snapshot)),
+                ],
+              ),
             );
           }
           return const Center(
@@ -49,10 +85,9 @@ class WebtoonScreen extends StatelessWidget {
   // 웹툰 정보를 반환하는 ListView
   ListView webtoonList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
     return ListView.separated(
-      padding: const EdgeInsets.all(15),
       separatorBuilder: (context, index) {
         return const SizedBox(
-          width: 30,
+          width: 20,
         );
       },
       scrollDirection: Axis.horizontal,

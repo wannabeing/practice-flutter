@@ -55,13 +55,19 @@ class WebtoonWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontFamily: "SBAggro",
-              fontWeight: FontWeight.bold,
-              fontSize: 19,
+          Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width / 2,
+            child: Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: const TextStyle(
+                color: Colors.black,
+                fontFamily: "SBAggro",
+                fontWeight: FontWeight.bold,
+                fontSize: 19,
+              ),
             ),
           ),
         ],
