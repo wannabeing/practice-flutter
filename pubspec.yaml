@@ -81,6 +81,9 @@ flutter:
     - family: SBAggro
       fonts:
         - asset: assets/fonts/SBAggroL.otf
+    - family: SWEET
+      fonts:
+        - asset: assets/fonts/SUITE-Medium.otf
 
   #
   # For details regarding fonts from package dependencies,
