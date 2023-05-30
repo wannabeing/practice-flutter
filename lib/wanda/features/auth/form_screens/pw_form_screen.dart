@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
+import 'package:may230517/wanda/features/auth/form_screens/birth_form_screen.dart';
 import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 
@@ -56,7 +56,7 @@ class _PwFormScreenState extends State<PwFormScreen> {
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const SignupMainScreen(),
+        builder: (context) => const BirthFormScreen(),
       ),
     );
   }

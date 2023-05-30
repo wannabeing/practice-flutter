@@ -3,32 +3,24 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
-class InputWidget extends StatefulWidget {
-  final VoidCallback? onSubmitted;
-  final TextEditingController controller;
+class FormInputWidget extends StatefulWidget {
   final String type;
   final String hintText;
   final String? errorText;
-  final FocusNode? focusNode;
-  final int? maxLength;
 
-  const InputWidget({
+  const FormInputWidget({
     super.key,
-    required this.controller,
-    String? hintText,
-    String? type,
+    required this.type,
+    required this.hintText,
     this.errorText,
-    this.onSubmitted,
-    this.focusNode,
-    this.maxLength,
-  })  : type = type ?? "default",
-        hintText = hintText ?? "";
+  });
 
   @override
-  State<InputWidget> createState() => _InputWidgetState();
+  State<FormInputWidget> createState() => _FormInputWidgetState();
 }
 
-class _InputWidgetState extends State<InputWidget> {
+class _FormInputWidgetState extends State<FormInputWidget> {
+  final TextEditingController _controller = TextEditingController();
   bool _isObscure = false; // 암호화해서 보여주기
 
   // 🚀 키보드 형식 설정 함수
@@ -40,15 +32,6 @@ class _InputWidgetState extends State<InputWidget> {
         return TextInputType.number;
       default:
         return TextInputType.text;
-    }
-  }
-
-  // 🚀 null이 아닌 상속받은 함수 실행
-  void _onSubmitted() {
-    if (widget.onSubmitted != null) {
-      widget.onSubmitted!();
-    } else {
-      return;
     }
   }
 
@@ -104,7 +87,7 @@ class _InputWidgetState extends State<InputWidget> {
 
   // 🚀 surfix xMark 아이콘 함수
   void _onXmark() {
-    widget.controller.clear();
+    _controller.clear();
   }
 
   @override
@@ -120,12 +103,17 @@ class _InputWidgetState extends State<InputWidget> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return TextField(
-      maxLength: widget.maxLength,
-      controller: widget.controller,
-      focusNode: widget.focusNode,
-      onEditingComplete: _onSubmitted,
+    return TextFormField(
+      controller: _controller,
+      maxLength: 10,
+      onEditingComplete: () {},
       keyboardType: _getKeyboardType(),
       autocorrect: false,
       obscureText: _isObscure,

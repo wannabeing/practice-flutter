@@ -2,14 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/auth/form_screens/login_form_screen.dart';
 import 'package:may230517/wanda/features/auth/widgets/auth_btn.dart';
 
-class LoginFormScreen extends StatelessWidget {
-  const LoginFormScreen({super.key});
+class LoginMainScreen extends StatelessWidget {
+  const LoginMainScreen({super.key});
 
   // 🚀 회원가입 페이지 이동 함수
   void _onLoginTap(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  // 🚀 이메일 로그인 페이지 이동 함수
+  void _onEmailLoginTap(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginFormScreen(),
+      ),
+    );
   }
 
   @override
@@ -42,7 +52,7 @@ class LoginFormScreen extends StatelessWidget {
               AuthButton(
                 icon: const FaIcon(FontAwesomeIcons.user),
                 text: "이메일로 시작하기",
-                onTap: () {},
+                onTap: () => _onEmailLoginTap(context),
               ),
               Gaps.v16,
               AuthButton(

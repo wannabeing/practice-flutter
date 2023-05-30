@@ -42,9 +42,9 @@ class SubmitButton extends StatelessWidget {
               color: isActive ? Colors.white : Colors.grey.shade600,
             ),
             duration: const Duration(milliseconds: 300),
-            child: const Text(
-              "다음",
-              style: TextStyle(
+            child: Text(
+              text,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Sizes.size18,
               ),

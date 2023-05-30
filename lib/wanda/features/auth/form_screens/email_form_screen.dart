@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/pw_form_screen.dart';
+import 'package:may230517/wanda/features/auth/form_screens/pw_form_screen.dart';
+
 import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 

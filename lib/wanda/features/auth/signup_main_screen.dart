@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:may230517/wanda/features/auth/login_form_screen.dart';
+import 'package:may230517/wanda/features/auth/form_screens/name_form_screen.dart';
+
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/name_form_screen.dart';
+import 'package:may230517/wanda/features/auth/login_main_screen.dart';
+
 import 'package:may230517/wanda/features/auth/widgets/auth_btn.dart';
 
 class SignupMainScreen extends StatelessWidget {
@@ -13,7 +15,7 @@ class SignupMainScreen extends StatelessWidget {
   void _onLoginTap(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const LoginFormScreen(),
+        builder: (context) => const LoginMainScreen(),
       ),
     );
   }
