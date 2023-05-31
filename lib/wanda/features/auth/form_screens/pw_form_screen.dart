@@ -54,7 +54,8 @@ class _PwFormScreenState extends State<PwFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getPwValid() != null || !_getPwLength()) return;
 
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => const BirthFormScreen(),
       ),

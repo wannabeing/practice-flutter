@@ -38,7 +38,8 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getEmailValid() != null) return;
 
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => const PwFormScreen(),
       ),

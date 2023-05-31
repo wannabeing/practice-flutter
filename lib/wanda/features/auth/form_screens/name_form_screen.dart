@@ -26,7 +26,8 @@ class _NameFormScreenState extends State<NameFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getNameValid() != null) return;
 
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => const EmailFormScreen(),
       ),

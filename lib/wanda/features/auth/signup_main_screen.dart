@@ -22,7 +22,8 @@ class SignupMainScreen extends StatelessWidget {
 
   // 🚀 이메일 회원가입 페이지 이동 함수
   void _onEmailSignupTap(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => const NameFormScreen(),
       ),

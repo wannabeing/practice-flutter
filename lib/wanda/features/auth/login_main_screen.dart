@@ -15,7 +15,8 @@ class LoginMainScreen extends StatelessWidget {
 
   // 🚀 이메일 로그인 페이지 이동 함수
   void _onEmailLoginTap(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => const LoginFormScreen(),
       ),

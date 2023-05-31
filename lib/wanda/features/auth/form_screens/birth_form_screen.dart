@@ -27,7 +27,8 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getBirthValid() != null) return;
 
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => const FirstOnboardScreen(),
       ),
