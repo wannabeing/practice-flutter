@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/widgets/interest_widget.dart';
-import 'package:may230517/wanda/features/onboard/first_onboard_screen.dart';
+import 'package:may230517/wanda/features/onboard/onboard_main_screen.dart';
 
 // 관심분야 예시 리스트
 const interests = [
@@ -67,7 +67,7 @@ class _InterestScreenState extends State<InterestScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const FirstOnboardScreen(),
+        builder: (context) => const OnboardMainScreen(),
       ),
     );
   }

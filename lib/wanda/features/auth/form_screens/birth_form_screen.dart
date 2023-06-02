@@ -4,7 +4,7 @@ import 'package:may230517/wanda/constants/sizes.dart';
 
 import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
-import 'package:may230517/wanda/features/onboard/first_onboard_screen.dart';
+import 'package:may230517/wanda/features/onboard/onboard_main_screen.dart';
 
 class BirthFormScreen extends StatefulWidget {
   const BirthFormScreen({super.key});
@@ -30,7 +30,7 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const FirstOnboardScreen(),
+        builder: (context) => const OnboardMainScreen(),
       ),
     );
   }

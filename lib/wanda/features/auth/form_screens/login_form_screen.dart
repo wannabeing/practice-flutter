@@ -146,11 +146,34 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
             child: Column(
               children: [
                 Gaps.v20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "완다 ",
+                      style: TextStyle(
+                        fontSize: Sizes.size32,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    const Text(
+                      "이메일로 시작하기",
+                      style: TextStyle(
+                        fontSize: Sizes.size28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Gaps.v40,
                 // ⭐️ 이메일 TextField
                 TextFormField(
                   controller: _emailController,
                   maxLength: 20,
                   autocorrect: false,
+                  keyboardType: TextInputType.emailAddress,
+                  autofocus: true,
                   cursorColor: Theme.of(context).primaryColor,
                   // ✅ 유효성 검사
                   validator: (value) {
@@ -165,6 +188,9 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                   },
                   decoration: InputDecoration(
                     suffix: _setSurfix(),
+                    hintText: "아이디 (이메일)",
+                    labelText: "이메일 입력하기",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
                     errorStyle: const TextStyle(
                       fontSize: Sizes.size14,
                     ),
@@ -180,7 +206,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                     ),
                   ),
                 ),
-                Gaps.v20,
+
                 // ⭐️ 비밀번호 TextField
                 TextFormField(
                   controller: _pwController,
@@ -201,6 +227,9 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                   },
                   decoration: InputDecoration(
                     suffix: _setSurfix("pw"),
+                    hintText: "비밀번호",
+                    labelText: "비밀번호 입력하기",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
                     errorStyle: const TextStyle(
                       fontSize: Sizes.size14,
                     ),

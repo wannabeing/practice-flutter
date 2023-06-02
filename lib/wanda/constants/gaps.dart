@@ -34,8 +34,11 @@ class Gaps {
   static const v72 = SizedBox(height: Sizes.size72);
   static const v80 = SizedBox(height: Sizes.size80);
   static const v96 = SizedBox(height: Sizes.size96);
-  static double width =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
+  static double height =
+      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
+  static final vheight20 = SizedBox(height: height / 20);
+  static final vheight30 = SizedBox(height: height / 30);
+  static final vheight40 = SizedBox(height: height / 40);
 
   // Horizontal Gaps
   static const h1 = SizedBox(width: Sizes.size1);
@@ -67,6 +70,9 @@ class Gaps {
   static const h72 = SizedBox(width: Sizes.size72);
   static const h80 = SizedBox(width: Sizes.size80);
   static const h96 = SizedBox(width: Sizes.size96);
-  static double height =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
+  static double width =
+      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
+  static final vwidth20 = SizedBox(width: width / 20);
+  static final vwidth30 = SizedBox(width: width / 30);
+  static final vwidth40 = SizedBox(width: width / 40);
 }
