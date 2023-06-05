@@ -88,7 +88,7 @@ class OnboardWidget extends StatelessWidget {
               child: Image.asset(imageSrc),
             ),
           ),
-          Flexible(
+          Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

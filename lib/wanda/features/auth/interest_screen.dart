@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/widgets/interest_widget.dart';
-import 'package:may230517/wanda/features/onboard/onboard_main_screen.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 // 관심분야 예시 리스트
 const interests = [
@@ -55,19 +55,19 @@ class InterestScreen extends StatefulWidget {
 
 class _InterestScreenState extends State<InterestScreen> {
   final ScrollController _scrollController = ScrollController();
-  List<String> newInterests = []; // 사용자의 관심분야 목록
+  final List<String> _interestList = []; // 사용자의 관심분야 목록
   bool _showTitle = false; // appBar Title 활성화 여부
-  bool _isInterested = false; // 관심분야 하나라도 선택 여부
+  final bool _isEnough = false; // 관심분야 클릭 활성화 여부
 
   // 🚀 버튼 함수 (스킵 & 다음)
   void _onSubmit() {
     // 스킵하기 클릭
-    if (_isInterested == false) {}
+    if (_interestList.isEmpty) {}
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const OnboardMainScreen(),
+        builder: (context) => const NavMainScreen(),
       ),
     );
   }
@@ -76,15 +76,20 @@ class _InterestScreenState extends State<InterestScreen> {
    🚀 관심분야 정리 함수
     result는 callback으로 전달받은 관심분야임
   */
-  void _onInterest(String result) {
-    if (newInterests.contains(result)) {
-      newInterests.remove(result); // 중복된 result를 리스트에서 제거
-    } else {
-      newInterests.add(result); // 중복되지 않은 result를 리스트에 추가
+  String? _onInterest(String result) {
+    // 중복된 result를 리스트에서 제거
+    if (_interestList.contains(result)) {
+      _interestList.remove(result);
     }
-    // 리스트 데이터가 있는지에 따라 _isInterested 업데이트
-    _isInterested = newInterests.isNotEmpty;
+    // 중복되지 않은 result를 리스트에 추가
+    else {
+      // 6번째 분야 추가하려는 경우
+      if (_interestList.length == 5) return "꽉찼으니 위젯에 전달";
+      _interestList.add(result);
+    }
+
     setState(() {});
+    return null;
   }
 
   // 🚀 스크롤 감지 함수
@@ -157,15 +162,26 @@ class _InterestScreenState extends State<InterestScreen> {
                     color: Colors.grey.shade700,
                   ),
                 ),
-                Gaps.v52,
+                Gaps.v10,
+                const Text(
+                  "*최대 5개만 선택 가능합니다.",
+                  style: TextStyle(
+                    fontSize: Sizes.size16,
+                    color: Colors.red,
+                  ),
+                ),
+                Gaps.v40,
                 Wrap(
                   spacing: Sizes.size16,
                   runSpacing: Sizes.size16,
                   children: [
                     for (var interest in interests) ...[
-                      InterestWidget(
-                        callback: _onInterest,
-                        interestText: interest,
+                      IgnorePointer(
+                        ignoring: false,
+                        child: InterestWidget(
+                          callback: _onInterest,
+                          interestText: interest,
+                        ),
                       ),
                     ],
                   ],
@@ -201,7 +217,7 @@ class _InterestScreenState extends State<InterestScreen> {
                     border: Border.all(
                       color: Colors.grey.shade400,
                     ),
-                    borderRadius: BorderRadius.circular(Sizes.size4),
+                    borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
                   child: const Text(
                     "스킵하기",
@@ -209,10 +225,13 @@ class _InterestScreenState extends State<InterestScreen> {
                   ),
                 ),
               ),
-
               // ⭐️ 다음버튼
               GestureDetector(
-                onTap: () => _onSubmit(),
+                onTap: () {
+                  if (_interestList.isNotEmpty) {
+                    return _onSubmit();
+                  }
+                },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300), // 애니메이션 지속 시간 설정
                   width: Sizes.width / 2.5,
@@ -221,16 +240,17 @@ class _InterestScreenState extends State<InterestScreen> {
                     horizontal: Sizes.size28,
                   ),
                   decoration: BoxDecoration(
-                    color: _isInterested
+                    color: _interestList.isNotEmpty
                         ? Theme.of(context).primaryColor
                         : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(Sizes.size4),
+                    borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
                   child: Text(
                     "다음",
                     style: TextStyle(
-                      color:
-                          _isInterested ? Colors.white : Colors.grey.shade800,
+                      color: _interestList.isNotEmpty
+                          ? Colors.white
+                          : Colors.grey.shade800,
                     ),
                     textAlign: TextAlign.center,
                   ),

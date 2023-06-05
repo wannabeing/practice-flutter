@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 import 'package:may230517/wanda/features/onboard/widgets/onboard_widget.dart';
 
@@ -30,7 +31,14 @@ class _OnboardMainScreenState extends State<OnboardMainScreen>
   }
 
   // 🚀 다음 스크린으로 이동
-  void _nextScreen() {}
+  void _nextScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignupMainScreen(),
+      ),
+    );
+  }
 
   @override
   void initState() {

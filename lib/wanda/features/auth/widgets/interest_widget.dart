@@ -17,10 +17,13 @@ class InterestWidget extends StatefulWidget {
 
 class _InterestWidgetState extends State<InterestWidget> {
   bool _isSelected = false; // 선택했는지 여부
+  late dynamic isFullList;
 
   // 🚀 부모위젯에게 전달하는 함수
   void _handleCallback() {
-    widget.callback(widget.interestText); // callback
+    isFullList = widget.callback(widget.interestText); // callback
+
+    if (isFullList != null) return;
 
     setState(() {
       _isSelected = !_isSelected;
@@ -31,32 +34,42 @@ class _InterestWidgetState extends State<InterestWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _handleCallback(),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        padding: const EdgeInsets.symmetric(
-          vertical: Sizes.size16,
-          horizontal: Sizes.size24,
-        ),
-        decoration: BoxDecoration(
-          color: _isSelected ? Theme.of(context).primaryColor : Colors.white,
-          borderRadius: BorderRadius.circular(
-            Sizes.size32,
-          ),
-          border: Border.all(color: Colors.black.withOpacity(0.2)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.02),
-              blurRadius: 5,
-              spreadRadius: 5,
+      child: Column(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            padding: const EdgeInsets.symmetric(
+              vertical: Sizes.size16,
+              horizontal: Sizes.size24,
             ),
-          ],
-        ),
-        child: Text(
-          widget.interestText,
-          style: TextStyle(
-            color: _isSelected ? Colors.white : Colors.black,
+            decoration: BoxDecoration(
+              color:
+                  _isSelected ? Theme.of(context).primaryColor : Colors.white,
+              borderRadius: BorderRadius.circular(
+                Sizes.size32,
+              ),
+              border: Border.all(
+                color: _isSelected
+                    ? Colors.transparent
+                    : Colors.black.withOpacity(0.2),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 5,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Text(
+              widget.interestText,
+              style: TextStyle(
+                color: _isSelected ? Colors.white : Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
