@@ -72,7 +72,7 @@ class Gaps {
   static const h96 = SizedBox(width: Sizes.size96);
   static double width =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
-  static final vwidth20 = SizedBox(width: width / 20);
-  static final vwidth30 = SizedBox(width: width / 30);
-  static final vwidth40 = SizedBox(width: width / 40);
+  static final hwidth20 = SizedBox(width: width / 20);
+  static final hwidth30 = SizedBox(width: width / 30);
+  static final hwidth40 = SizedBox(width: width / 40);
 }

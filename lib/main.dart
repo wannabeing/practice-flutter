@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/interest_screen.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 void main() {
   runApp(const App());
@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       title: "may",
       home: Scaffold(
         backgroundColor: Colors.grey.shade50,
-        body: const InterestScreen(),
+        body: const NavMainScreen(),
       ),
       theme: ThemeData(
         fontFamily: "SWEET",
