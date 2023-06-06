@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/navigations/widgets/camera_btn_widget.dart';
 import 'package:may230517/wanda/features/navigations/widgets/nav_tab_widget.dart';
+import 'package:may230517/wanda/features/videos/video_main_screen.dart';
 
 class NavMainScreen extends StatefulWidget {
   const NavMainScreen({super.key});
@@ -42,11 +44,33 @@ class _NavMainScreenState extends State<NavMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Gaps.hwidth40,
+            const FaIcon(
+              FontAwesomeIcons.playstation,
+              color: Colors.white,
+            ),
+            Gaps.h5,
+            const Text(
+              "쇼츠",
+              style: TextStyle(
+                fontSize: Sizes.size22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         children: [
           Offstage(
             offstage: _selectedIndex != 0, // false 상태가 되어야 렌더링
-            child: screens[_selectedIndex],
+            child: const VideoMainScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 1, // false 상태가 되어야 렌더링

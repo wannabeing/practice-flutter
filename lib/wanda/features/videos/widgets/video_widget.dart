@@ -1,0 +1,318 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:may230517/wanda/constants/gaps.dart';
+import 'package:may230517/wanda/constants/shadows.dart';
+import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/videos/widgets/video_icon_widget.dart';
+import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+class VideoWidget extends StatefulWidget {
+  final int index;
+  final Function onVideoFinished;
+  const VideoWidget({
+    super.key,
+    required this.onVideoFinished,
+    required this.index,
+  });
+
+  @override
+  State<VideoWidget> createState() => _VideoWidgetState();
+}
+
+class _VideoWidgetState extends State<VideoWidget>
+    with SingleTickerProviderStateMixin {
+  final VideoPlayerController _videoPlayerController =
+      VideoPlayerController.asset("assets/videos/goodhair.mp4");
+  late final AnimationController _animationController;
+  final _myDuration = const Duration(milliseconds: 300);
+
+  bool _isVideoPlay = true; // 비디오 실행 여부
+  bool _isReadmore = false; // 비디오 상세보기 여부
+
+  // 🚀 화면 클릭 함수
+  void _onTap() {
+    // 1. 비디오컨트롤러 초기화 되었는지
+    if (_videoPlayerController.value.isInitialized) {
+      // 2. 재생상태라면 멈추고, 멈춘상태라면 재생
+      if (_videoPlayerController.value.isPlaying) {
+        _videoPlayerController.pause();
+        _animationController.reverse(); // upper -> lower
+      } else {
+        _videoPlayerController.play();
+        _animationController.forward(); // lower -> upper
+      }
+      // 3. 비디오 실행여부 변수 상태전환
+      setState(() {
+        _isVideoPlay = !_isVideoPlay;
+      });
+    }
+  }
+
+  // 🚀 비디오 설명글 더보기 함수
+  void _toggleReadmore() {
+    setState(() {
+      _isReadmore = !_isReadmore;
+    });
+  }
+
+  // 🚀 비디오의 보이는 비율이 달라질 때마다 실행되는 함수
+  void _visibilityChanged(VisibilityInfo info) {
+    // 1. 화면비율이 100% && 비디오가 멈춰있는 상태 && 비디오 상태변수 true
+    // (전체화면이고, 상태변수가 true이면 비디오 실행)
+    if (info.visibleFraction == 1 &&
+        !_videoPlayerController.value.isPlaying &&
+        _isVideoPlay) {
+      // 2. 비디오 실행
+      _videoPlayerController.play();
+    }
+  }
+
+  // 🚀 [1]. 비디오컨트롤러 시작 함수
+  Future<void> _initVideoPlayer() async {
+    await _videoPlayerController.initialize(); // 비디오컨트롤러 초기화
+    setState(() {});
+
+    // 비디오컨트롤러 리스너 등록
+    _videoPlayerController.addListener(() {
+      _onVideoListener();
+    });
+  }
+
+  // 🚀 [2]. 비디오컨트롤러 리스너 함수
+  void _onVideoListener() {
+    // 1. 비디오컨트롤러 초기화 되었는지
+    if (_videoPlayerController.value.isInitialized) {
+      // 2. 비디오 영상길이와 현재 영상 위치가 같은지 (영상이 끝났는지)
+      if (_videoPlayerController.value.duration ==
+          _videoPlayerController.value.position) {
+        // 3. 비디오가 끝났으면 부모함수 실행
+        widget.onVideoFinished();
+      }
+    }
+  }
+
+  // 🚀 애니메이션컨트롤러 시작 함수
+  void _initAnimation() {
+    _animationController = AnimationController(
+      vsync: this,
+      value: 1.5, // 애니메이션 시작시점 값
+      lowerBound: 1.0, // 애니메이션 최소 값
+      upperBound: 1.5, // 애니메이션 최대 값
+      duration: _myDuration,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideoPlayer(); // 비디오컨트롤러 초기화
+    _initAnimation(); // 애니메이션컨트롤러 초기화
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key("${widget.index}"),
+      onVisibilityChanged: (info) => _visibilityChanged(info),
+      child: Stack(
+        children: [
+          // ✅ 영상
+          Positioned.fill(
+            child: _videoPlayerController.value.isInitialized
+                ? VideoPlayer(_videoPlayerController)
+                : Container(
+                    color: Colors.black,
+                  ),
+          ),
+          // ✅ 화면 감지
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => _onTap(),
+            ),
+          ),
+          // ✅ 타이틀
+          // Positioned(
+          //   top: 0,
+          //   child: Container(
+          //     width: Sizes.width,
+          //     height: Sizes.height / 8,
+          //     alignment: Alignment.bottomLeft,
+          //     padding: const EdgeInsets.only(bottom: 20),
+          //     decoration: BoxDecoration(
+          //       color: Theme.of(context).primaryColor,
+          //     ),
+          //     child: Row(
+          //       children: const [
+          //         Gaps.h20,
+          //         Text(
+          //           "Shorts",
+          //           style: TextStyle(
+          //             fontSize: Sizes.size22,
+          //             fontWeight: FontWeight.bold,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // ✅ 재생/멈춤 아이콘
+          Positioned.fill(
+            child: IgnorePointer(
+              ignoring: true,
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _animationController.value,
+                    child: child,
+                  );
+                },
+                child: AnimatedOpacity(
+                  opacity: !_isVideoPlay ? 1 : 0, // 정지아이콘 100%
+                  duration: _myDuration,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.size28,
+                        vertical: Sizes.size20,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        shape: BoxShape.circle,
+                      ),
+                      child: FaIcon(
+                        _isVideoPlay
+                            ? FontAwesomeIcons.play
+                            : FontAwesomeIcons.pause,
+                        color: Colors.white,
+                        size: Sizes.size56,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // ✅ 비디오 업로드 유저 정보 (id, 설명, 해시태그)
+          Positioned(
+            bottom: Sizes.height / 20,
+            child: Container(
+              width: Sizes.width,
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.size14,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "@ID",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: Sizes.size20,
+                      shadows: MyShadows.textShadow,
+                    ),
+                  ),
+                  Gaps.v10,
+                  GestureDetector(
+                    onTap: () => _toggleReadmore(),
+                    child: AnimatedSize(
+                      duration: _myDuration,
+                      child: Text(
+                        "설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란",
+                        overflow: _isReadmore
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Sizes.size16,
+                          shadows: MyShadows.textShadow,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Gaps.v18,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Text(
+                            "#해시태그 ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Sizes.size16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "#해시태그 ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Sizes.size16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "#해시태그 ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Sizes.size16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      CircleAvatar(
+                        radius: Sizes.width / 15,
+                        foregroundImage: const NetworkImage(
+                            "https://avatars.githubusercontent.com/u/79440384"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // ✅ 오른쪽 위젯들
+          Positioned(
+            bottom: Sizes.height / 5,
+            right: Sizes.width / 30,
+            child: Column(
+              children: [
+                // 1. 좋아요
+                const VideoIconWidget(
+                  faIconData: FontAwesomeIcons.thumbsUp,
+                  dataText: "300",
+                ),
+                Gaps.vheight40,
+                // 2. 공유하기
+                const VideoIconWidget(
+                  faIconData: FontAwesomeIcons.share,
+                  dataText: "공유",
+                ),
+                Gaps.vheight40,
+                // 3. 댓글
+                const VideoIconWidget(
+                  faIconData: FontAwesomeIcons.book,
+                  dataText: "300",
+                ),
+                Gaps.vheight40,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

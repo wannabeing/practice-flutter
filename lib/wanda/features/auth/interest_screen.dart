@@ -57,7 +57,6 @@ class _InterestScreenState extends State<InterestScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<String> _interestList = []; // 사용자의 관심분야 목록
   bool _showTitle = false; // appBar Title 활성화 여부
-  final bool _isEnough = false; // 관심분야 클릭 활성화 여부
 
   // 🚀 버튼 함수 (스킵 & 다음)
   void _onSubmit() {
