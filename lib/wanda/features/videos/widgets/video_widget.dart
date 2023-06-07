@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/shadows.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/videos/comment_main_modal.dart';
 import 'package:may230517/wanda/features/videos/widgets/video_icon_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -56,10 +57,29 @@ class _VideoWidgetState extends State<VideoWidget>
     });
   }
 
+  // 🚀 댓글아이콘 클릭 함수
+  Future<void> _onTapComment(BuildContext contexst) async {
+    // 1. 비디오 일시정지
+    if (_videoPlayerController.value.isPlaying) {
+      _onTap();
+    }
+    // 2. 모달창 보여주기
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent, // 투명하게
+      isScrollControlled: true, // 모달창의 높이 변경하기 위해
+      builder: (context) {
+        return const CommentMainModal();
+      },
+    );
+    // 3. 비디오 다시 플레이
+    _onTap();
+  }
+
   // 🚀 비디오의 보이는 비율이 달라질 때마다 실행되는 함수
   void _visibilityChanged(VisibilityInfo info) {
-    // 1. 화면비율이 100% && 비디오가 멈춰있는 상태 && 비디오 상태변수 true
-    // (전체화면이고, 상태변수가 true이면 비디오 실행)
+    // 1-1. 화면비율이 100% && 비디오가 멈춰있는 상태 && 비디오 상태변수 true
+    // 1-2. (전체화면이고, 상태변수가 true이면 비디오 실행)
     if (info.visibleFraction == 1 &&
         !_videoPlayerController.value.isPlaying &&
         _isVideoPlay) {
@@ -303,9 +323,12 @@ class _VideoWidgetState extends State<VideoWidget>
                 ),
                 Gaps.vheight40,
                 // 3. 댓글
-                const VideoIconWidget(
-                  faIconData: FontAwesomeIcons.book,
-                  dataText: "300",
+                GestureDetector(
+                  onTap: () => _onTapComment(context),
+                  child: const VideoIconWidget(
+                    faIconData: FontAwesomeIcons.book,
+                    dataText: "300",
+                  ),
                 ),
                 Gaps.vheight40,
               ],

@@ -44,6 +44,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Row(

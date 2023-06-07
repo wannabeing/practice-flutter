@@ -21,9 +21,9 @@ class VideoIconWidget extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2), // 그림자의 색상 설정
-                spreadRadius: 0.5, // 그림자의 확산 범위 설정
-                blurRadius: 5, // 그림자의 흐림 정도 설정
+                color: Colors.black.withOpacity(0.15), // 그림자의 색상 설정
+                spreadRadius: 0.2, // 그림자의 확산 범위 설정
+                blurRadius: 40, // 그림자의 흐림 정도 설정
                 offset: const Offset(0, 2), // 그림자의 위치 설정
               ),
             ],

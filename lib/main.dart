@@ -19,6 +19,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: "may",
       home: Scaffold(
+        resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
         backgroundColor: Colors.grey.shade50,
         body: const NavMainScreen(),
       ),
