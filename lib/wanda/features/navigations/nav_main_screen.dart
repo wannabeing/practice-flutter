@@ -45,28 +45,31 @@ class _NavMainScreenState extends State<NavMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Gaps.hwidth40,
-            const FaIcon(
-              FontAwesomeIcons.playstation,
-              color: Colors.white,
-            ),
-            Gaps.h5,
-            const Text(
-              "쇼츠",
-              style: TextStyle(
-                fontSize: Sizes.size22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+
+      appBar: _selectedIndex == 0
+          ? AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Gaps.hwidth40,
+                  const FaIcon(
+                    FontAwesomeIcons.playstation,
+                    color: Colors.white,
+                  ),
+                  Gaps.h5,
+                  const Text(
+                    "쇼츠",
+                    style: TextStyle(
+                      fontSize: Sizes.size22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : null,
       body: Stack(
         children: [
           Offstage(
