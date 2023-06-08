@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/videos/widgets/video_widget.dart';
+
+import '../../constants/gaps.dart';
 
 class VideoMainScreen extends StatefulWidget {
   const VideoMainScreen({super.key});
@@ -40,17 +44,41 @@ class _VideoMainScreenState extends State<VideoMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      controller: _pageController,
-      itemCount: 3,
-      onPageChanged: (value) => _onPageChanged(value),
-      itemBuilder: (context, index) {
-        return VideoWidget(
-          index: index,
-          onVideoFinished: _onVideoFinished,
-        );
-      },
-      scrollDirection: Axis.vertical,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Gaps.hwidth40,
+            const FaIcon(
+              FontAwesomeIcons.playstation,
+              color: Colors.white,
+            ),
+            Gaps.h5,
+            const Text(
+              "쇼츠",
+              style: TextStyle(
+                fontSize: Sizes.size22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: 3,
+        onPageChanged: (value) => _onPageChanged(value),
+        itemBuilder: (context, index) {
+          return VideoWidget(
+            index: index,
+            onVideoFinished: _onVideoFinished,
+          );
+        },
+        scrollDirection: Axis.vertical,
+      ),
     );
   }
 }

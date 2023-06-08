@@ -32,11 +32,18 @@ class NavTabWidget extends StatelessWidget {
             children: [
               FaIcon(
                 isSelected ? selectedIcon : tabIcon,
+                color:
+                    isSelected ? Theme.of(context).primaryColor : Colors.black,
               ),
               Gaps.v3,
               Text(
                 tabName,
-                style: const TextStyle(),
+                style: TextStyle(
+                  color: isSelected
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : null,
+                ),
               ),
             ],
           ),

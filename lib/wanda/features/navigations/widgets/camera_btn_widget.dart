@@ -23,18 +23,19 @@ class CameraBtnWidget extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(Sizes.size14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor,
-                    width: 3,
+                    color: Colors.grey.shade200,
+                    width: 10,
+                    strokeAlign: BorderSide.strokeAlignCenter,
                   ),
                 ),
-                child: Center(
+                child: const Center(
                   child: FaIcon(
                     FontAwesomeIcons.camera,
                     size: Sizes.size32,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.white,
                   ),
                 ),
               ),

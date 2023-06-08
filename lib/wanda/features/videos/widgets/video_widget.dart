@@ -76,15 +76,23 @@ class _VideoWidgetState extends State<VideoWidget>
     _onTap();
   }
 
-  // 🚀 비디오의 보이는 비율이 달라질 때마다 실행되는 함수
+  // 🚀 비디오의 보이는 비율이 달라질 때마다 실행되는 함수 ⭐️⭐️⭐️
   void _visibilityChanged(VisibilityInfo info) {
-    // 1-1. 화면비율이 100% && 비디오가 멈춰있는 상태 && 비디오 상태변수 true
-    // 1-2. (전체화면이고, 상태변수가 true이면 비디오 실행)
+    if (!mounted) return; // dispose된 controller 조작 방지
+
+    // [1]. 화면비율이 100% && 비디오가 멈춰있는 상태 && 비디오 상태변수 true
+    // 전체화면이고, 상태변수가 true이면 비디오 실행
     if (info.visibleFraction == 1 &&
         !_videoPlayerController.value.isPlaying &&
         _isVideoPlay) {
-      // 2. 비디오 실행
       _videoPlayerController.play();
+    }
+
+    // [2]. 화면비율이 0%면 비디오 멈추기
+    if (info.visibleFraction == 0 &&
+        _videoPlayerController.value.isPlaying &&
+        _isVideoPlay) {
+      _videoPlayerController.pause();
     }
   }
 
@@ -266,13 +274,14 @@ class _VideoWidgetState extends State<VideoWidget>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: const [
+                        children: [
                           Text(
                             "#해시태그 ",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
+                              shadows: MyShadows.textShadow,
                             ),
                           ),
                           Text(
@@ -281,6 +290,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
+                              shadows: MyShadows.textShadow,
                             ),
                           ),
                           Text(
@@ -289,6 +299,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
+                              shadows: MyShadows.textShadow,
                             ),
                           ),
                         ],

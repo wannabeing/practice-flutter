@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/boards/board_main_screen.dart';
 import 'package:may230517/wanda/features/navigations/widgets/camera_btn_widget.dart';
 import 'package:may230517/wanda/features/navigations/widgets/nav_tab_widget.dart';
 import 'package:may230517/wanda/features/videos/video_main_screen.dart';
@@ -14,7 +14,7 @@ class NavMainScreen extends StatefulWidget {
 }
 
 class _NavMainScreenState extends State<NavMainScreen> {
-  int _selectedIndex = 0; // 선택한 탭의 인덱스 번호
+  int _selectedIndex = 1; // 선택한 탭의 인덱스 번호
 
   final screens = [
     const Center(
@@ -45,31 +45,6 @@ class _NavMainScreenState extends State<NavMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
-
-      appBar: _selectedIndex == 0
-          ? AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Gaps.hwidth40,
-                  const FaIcon(
-                    FontAwesomeIcons.playstation,
-                    color: Colors.white,
-                  ),
-                  Gaps.h5,
-                  const Text(
-                    "쇼츠",
-                    style: TextStyle(
-                      fontSize: Sizes.size22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : null,
       body: Stack(
         children: [
           Offstage(
@@ -78,7 +53,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 1, // false 상태가 되어야 렌더링
-            child: screens[_selectedIndex],
+            child: BoardMainScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 2, // false 상태가 되어야 렌더링
@@ -95,6 +70,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
+        color: Colors.grey.shade200,
         padding: const EdgeInsets.symmetric(
           vertical: Sizes.size16,
           horizontal: Sizes.size20,
@@ -112,9 +88,9 @@ class _NavMainScreenState extends State<NavMainScreen> {
             ),
             NavTabWidget(
               isSelected: _selectedIndex == 1,
-              tabIcon: FontAwesomeIcons.clipboard,
-              selectedIcon: FontAwesomeIcons.solidClipboard,
-              tabName: "검색",
+              tabIcon: FontAwesomeIcons.wandSparkles,
+              selectedIcon: FontAwesomeIcons.wandMagicSparkles,
+              tabName: "완다",
               onTap: () => _onSelectTap(1),
             ),
             const CameraBtnWidget(),
