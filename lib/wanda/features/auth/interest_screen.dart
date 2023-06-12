@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
+import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/widgets/interest_widget.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
@@ -129,7 +130,7 @@ class _InterestScreenState extends State<InterestScreen> {
       appBar: AppBar(
         title: AnimatedOpacity(
           opacity: _showTitle ? 1 : 0,
-          duration: const Duration(milliseconds: 300),
+          duration: MyConstants.duration,
           child: const Text("관심분야를 선택해주세요!"),
         ),
       ),
@@ -206,7 +207,7 @@ class _InterestScreenState extends State<InterestScreen> {
               GestureDetector(
                 onTap: () => _onSubmit(),
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300), // 애니메이션 지속 시간 설정
+                  duration: MyConstants.duration, // 애니메이션 지속 시간 설정
                   width: Sizes.width / 2.5,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size14,
@@ -232,7 +233,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   }
                 },
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300), // 애니메이션 지속 시간 설정
+                  duration: MyConstants.duration, // 애니메이션 지속 시간 설정
                   width: Sizes.width / 2.5,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size14,

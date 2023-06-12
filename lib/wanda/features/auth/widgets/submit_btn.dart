@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
 class SubmitButton extends StatelessWidget {
@@ -26,7 +27,7 @@ class SubmitButton extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _onTap(context),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: MyConstants.duration,
           decoration: BoxDecoration(
             color: isActive
                 ? Theme.of(context).primaryColor
@@ -41,7 +42,7 @@ class SubmitButton extends StatelessWidget {
             style: TextStyle(
               color: isActive ? Colors.white : Colors.grey.shade600,
             ),
-            duration: const Duration(milliseconds: 300),
+            duration: MyConstants.duration,
             child: Text(
               text,
               style: const TextStyle(

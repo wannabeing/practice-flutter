@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
-import 'package:may230517/wanda/constants/shadows.dart';
+import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
 class VideoIconWidget extends StatelessWidget {
@@ -40,7 +40,7 @@ class VideoIconWidget extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            shadows: MyShadows.textShadow,
+            shadows: MyConstants.textShadow,
           ),
         ),
       ],

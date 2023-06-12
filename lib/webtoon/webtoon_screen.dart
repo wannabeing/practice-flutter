@@ -50,8 +50,11 @@ class WebtoonScreen extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                      child: Container(
-                          color: Colors.amber, child: webtoonList(snapshot))),
+                    child: Container(
+                      color: Colors.amber,
+                      child: webtoonList(snapshot),
+                    ),
+                  ),
                   Expanded(
                     child: Container(
                       color: Colors.blue,

@@ -45,6 +45,7 @@ class _VideoMainScreenState extends State<VideoMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Row(
@@ -56,10 +57,10 @@ class _VideoMainScreenState extends State<VideoMainScreen> {
               color: Colors.white,
             ),
             Gaps.h5,
-            const Text(
+            Text(
               "쇼츠",
               style: TextStyle(
-                fontSize: Sizes.size22,
+                fontSize: Sizes.width / 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),

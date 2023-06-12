@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
-import 'package:may230517/wanda/constants/shadows.dart';
+import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/videos/comment_main_modal.dart';
 import 'package:may230517/wanda/features/videos/widgets/video_icon_widget.dart';
@@ -26,7 +26,6 @@ class _VideoWidgetState extends State<VideoWidget>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/goodhair.mp4");
   late final AnimationController _animationController;
-  final _myDuration = const Duration(milliseconds: 300);
 
   bool _isVideoPlay = true; // 비디오 실행 여부
   bool _isReadmore = false; // 비디오 상세보기 여부
@@ -127,7 +126,7 @@ class _VideoWidgetState extends State<VideoWidget>
       value: 1.5, // 애니메이션 시작시점 값
       lowerBound: 1.0, // 애니메이션 최소 값
       upperBound: 1.5, // 애니메이션 최대 값
-      duration: _myDuration,
+      duration: MyConstants.duration,
     );
   }
 
@@ -206,7 +205,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 },
                 child: AnimatedOpacity(
                   opacity: !_isVideoPlay ? 1 : 0, // 정지아이콘 100%
-                  duration: _myDuration,
+                  duration: MyConstants.duration,
                   child: Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -248,14 +247,14 @@ class _VideoWidgetState extends State<VideoWidget>
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontSize: Sizes.size20,
-                      shadows: MyShadows.textShadow,
+                      shadows: MyConstants.textShadow,
                     ),
                   ),
                   Gaps.v10,
                   GestureDetector(
                     onTap: () => _toggleReadmore(),
                     child: AnimatedSize(
-                      duration: _myDuration,
+                      duration: MyConstants.duration,
                       child: Text(
                         "설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란",
                         overflow: _isReadmore
@@ -264,7 +263,7 @@ class _VideoWidgetState extends State<VideoWidget>
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: Sizes.size16,
-                          shadows: MyShadows.textShadow,
+                          shadows: MyConstants.textShadow,
                         ),
                       ),
                     ),
@@ -281,7 +280,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
-                              shadows: MyShadows.textShadow,
+                              shadows: MyConstants.textShadow,
                             ),
                           ),
                           Text(
@@ -290,7 +289,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
-                              shadows: MyShadows.textShadow,
+                              shadows: MyConstants.textShadow,
                             ),
                           ),
                           Text(
@@ -299,7 +298,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
-                              shadows: MyShadows.textShadow,
+                              shadows: MyConstants.textShadow,
                             ),
                           ),
                         ],

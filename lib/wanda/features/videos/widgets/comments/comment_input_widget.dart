@@ -33,8 +33,8 @@ class _CommentInputWidgetState extends State<CommentInputWidget> {
       expands: true, // 줄 바꾸기 설정
       minLines: null, // 최소 줄 null로 해야 함
       maxLines: null, // 최대 줄 null로 해야 함
-
       cursorColor: Theme.of(context).primaryColor,
+
       decoration: InputDecoration(
         hintText: "댓글 추가...",
         filled: true, // input 채우기
@@ -57,7 +57,7 @@ class _CommentInputWidgetState extends State<CommentInputWidget> {
             children: [
               // 키보드창 활성화 되어있을 때만 보여주기
               // ✅ 메시지 전송 함수
-              if (_onKeboard)
+              if (_onKeboard && FocusScope.of(context).hasFocus)
                 GestureDetector(
                   onTap: () => widget.onSubmit(),
                   child: FaIcon(

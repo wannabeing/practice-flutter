@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/boards/board_main_screen.dart';
+import 'package:may230517/wanda/features/messages/message_main_screen.dart';
 import 'package:may230517/wanda/features/navigations/widgets/camera_btn_widget.dart';
 import 'package:may230517/wanda/features/navigations/widgets/nav_tab_widget.dart';
 import 'package:may230517/wanda/features/videos/video_main_screen.dart';
@@ -53,7 +54,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 1, // false 상태가 되어야 렌더링
-            child: BoardMainScreen(),
+            child: const BoardMainScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 2, // false 상태가 되어야 렌더링
@@ -61,7 +62,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 3, // false 상태가 되어야 렌더링
-            child: screens[_selectedIndex],
+            child: const MessageMainScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 4, // false 상태가 되어야 렌더링

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
+import 'package:may230517/wanda/constants/myconstants.dart';
 
 class NavTabWidget extends StatelessWidget {
   final IconData tabIcon, selectedIcon;
@@ -26,7 +27,7 @@ class NavTabWidget extends StatelessWidget {
         onTap: () => onTap(),
         child: AnimatedOpacity(
           opacity: isSelected ? 1.0 : 0.5,
-          duration: const Duration(milliseconds: 300),
+          duration: MyConstants.duration,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

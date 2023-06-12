@@ -39,6 +39,8 @@ class Gaps {
   static final vheight20 = SizedBox(height: height / 20);
   static final vheight30 = SizedBox(height: height / 30);
   static final vheight40 = SizedBox(height: height / 40);
+  static final vheight50 = SizedBox(height: height / 50);
+  static final vheight60 = SizedBox(height: height / 60);
 
   // Horizontal Gaps
   static const h1 = SizedBox(width: Sizes.size1);

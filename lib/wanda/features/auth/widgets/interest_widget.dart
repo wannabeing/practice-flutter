@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
 class InterestWidget extends StatefulWidget {
@@ -37,7 +38,7 @@ class _InterestWidgetState extends State<InterestWidget> {
       child: Column(
         children: [
           AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
+            duration: MyConstants.duration,
             padding: const EdgeInsets.symmetric(
               vertical: Sizes.size16,
               horizontal: Sizes.size24,
