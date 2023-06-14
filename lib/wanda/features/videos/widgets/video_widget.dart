@@ -126,7 +126,7 @@ class _VideoWidgetState extends State<VideoWidget>
       value: 1.5, // 애니메이션 시작시점 값
       lowerBound: 1.0, // 애니메이션 최소 값
       upperBound: 1.5, // 애니메이션 최대 값
-      duration: MyConstants.duration,
+      duration: MyConstants.duration300,
     );
   }
 
@@ -205,7 +205,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 },
                 child: AnimatedOpacity(
                   opacity: !_isVideoPlay ? 1 : 0, // 정지아이콘 100%
-                  duration: MyConstants.duration,
+                  duration: MyConstants.duration300,
                   child: Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -254,7 +254,7 @@ class _VideoWidgetState extends State<VideoWidget>
                   GestureDetector(
                     onTap: () => _toggleReadmore(),
                     child: AnimatedSize(
-                      duration: MyConstants.duration,
+                      duration: MyConstants.duration300,
                       child: Text(
                         "설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란",
                         overflow: _isReadmore

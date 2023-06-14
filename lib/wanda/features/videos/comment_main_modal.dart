@@ -12,8 +12,6 @@ class CommentMainModal extends StatefulWidget {
 }
 
 class _CommentMainModalState extends State<CommentMainModal> {
-  bool _onKeboard = false; // 키보드 입력창 활성화 여부
-
   // 🚀 모달창 닫기 함수
   void _onClose() {
     Navigator.of(context).pop();
@@ -23,25 +21,12 @@ class _CommentMainModalState extends State<CommentMainModal> {
   void _onCloseKeyboard() {
     // 키보드 언포커싱 & 키보드 활성화 여부 변경
     FocusScope.of(context).unfocus();
-    _onKeboard = false;
-
-    setState(() {});
   }
 
   // 🚀 댓글 전송 함수
   void _submitComment() {
-    // 키보드 언포커싱 & 키보드 활성화 여부 변경
-    FocusScope.of(context).unfocus();
-    _onKeboard = false;
-
-    setState(() {});
-  }
-
-  // 🚀 키보드 입력창 클릭 함수
-  void _onTapTextField() {
-    // 키보드 활성화 여부 상태 변경
-    _onKeboard = true;
-    setState(() {});
+    // 키보드창 닫기
+    _onCloseKeyboard();
   }
 
   @override
@@ -60,7 +45,7 @@ class _CommentMainModalState extends State<CommentMainModal> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false, // 뒤로가기 버튼 false
-          elevation: 1,
+
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -150,6 +135,7 @@ class _CommentMainModalState extends State<CommentMainModal> {
                       child:
                           // ✅ 댓글 인풋 위젯
                           CommentInputWidget(
+                        hintText: "댓글 추가...",
                         onSubmit: _submitComment,
                       ),
                     ),

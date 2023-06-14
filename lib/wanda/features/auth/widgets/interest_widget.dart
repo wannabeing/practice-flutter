@@ -38,7 +38,7 @@ class _InterestWidgetState extends State<InterestWidget> {
       child: Column(
         children: [
           AnimatedContainer(
-            duration: MyConstants.duration,
+            duration: MyConstants.duration300,
             padding: const EdgeInsets.symmetric(
               vertical: Sizes.size16,
               horizontal: Sizes.size24,

@@ -27,7 +27,7 @@ class NavTabWidget extends StatelessWidget {
         onTap: () => onTap(),
         child: AnimatedOpacity(
           opacity: isSelected ? 1.0 : 0.5,
-          duration: MyConstants.duration,
+          duration: MyConstants.duration300,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

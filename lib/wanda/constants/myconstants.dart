@@ -9,7 +9,11 @@ class MyConstants {
     ),
   ];
 
-  static const Duration duration = Duration(
+  static const Duration duration200 = Duration(
+    milliseconds: 300,
+  );
+
+  static const Duration duration300 = Duration(
     milliseconds: 300,
   );
 }

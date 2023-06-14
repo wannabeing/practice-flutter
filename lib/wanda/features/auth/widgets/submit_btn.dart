@@ -27,7 +27,7 @@ class SubmitButton extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _onTap(context),
         child: AnimatedContainer(
-          duration: MyConstants.duration,
+          duration: MyConstants.duration300,
           decoration: BoxDecoration(
             color: isActive
                 ? Theme.of(context).primaryColor
@@ -42,7 +42,7 @@ class SubmitButton extends StatelessWidget {
             style: TextStyle(
               color: isActive ? Colors.white : Colors.grey.shade600,
             ),
-            duration: MyConstants.duration,
+            duration: MyConstants.duration300,
             child: Text(
               text,
               style: const TextStyle(

@@ -5,11 +5,14 @@ import 'package:may230517/wanda/constants/sizes.dart';
 class CommentInputWidget extends StatefulWidget {
   final Function onSubmit; // 🚀 텍스트필드 제출 함수
   final Function? onTap; // 🚀 텍스트필드 클릭감지 함수 (사용한다면 _onKeyboard도 사용하자)
+  final String? hintText;
+
   const CommentInputWidget({
     super.key,
     required this.onSubmit,
     this.onTap,
-  });
+    hintText,
+  }) : hintText = hintText ?? "";
 
   @override
   State<CommentInputWidget> createState() => _CommentInputWidgetState();
@@ -36,7 +39,7 @@ class _CommentInputWidgetState extends State<CommentInputWidget> {
       cursorColor: Theme.of(context).primaryColor,
 
       decoration: InputDecoration(
-        hintText: "댓글 추가...",
+        hintText: widget.hintText,
         filled: true, // input 채우기
         fillColor: Colors.grey.shade300,
         contentPadding: const EdgeInsets.symmetric(
