@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/boards/board_main_screen.dart';
 import 'package:may230517/wanda/features/chats/chat_main_screen.dart';
+import 'package:may230517/wanda/features/mypage/mypage_main_screen.dart';
 import 'package:may230517/wanda/features/navigations/widgets/camera_btn_widget.dart';
 import 'package:may230517/wanda/features/navigations/widgets/nav_tab_widget.dart';
 import 'package:may230517/wanda/features/videos/video_main_screen.dart';
@@ -15,7 +16,7 @@ class NavMainScreen extends StatefulWidget {
 }
 
 class _NavMainScreenState extends State<NavMainScreen> {
-  int _selectedIndex = 3; // 선택한 탭의 인덱스 번호
+  int _selectedIndex = 4; // 선택한 탭의 인덱스 번호
 
   final screens = [
     const Center(
@@ -66,7 +67,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 4, // false 상태가 되어야 렌더링
-            child: screens[_selectedIndex],
+            child: const MyPageMainScreen(),
           ),
         ],
       ),

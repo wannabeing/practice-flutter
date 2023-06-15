@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
 
@@ -58,29 +59,39 @@ class _ChatSelectScreenState extends State<ChatSelectScreen> {
             icon: Text(
               "확인",
               style: TextStyle(
-                  color: _isSelected ? Colors.black : Colors.grey.shade500),
+                color: _isChecked ? Colors.black : Colors.grey.shade500,
+                fontSize: Sizes.width / 24,
+              ),
             ),
           ),
         ],
-        elevation: 1,
       ),
-      body: ListView.builder(
+      body: ListView.separated(
+        padding: EdgeInsets.symmetric(
+          vertical: Sizes.height / 40,
+        ),
+        separatorBuilder: (context, index) {
+          return Gaps.v10;
+        },
         itemCount: 20,
         itemBuilder: (context, index) {
-          return ListTile(
-            leading: CircleAvatar(
-              radius: Sizes.width / 15,
-              foregroundImage: const NetworkImage(
-                  "https://avatars.githubusercontent.com/u/79440384"),
-            ),
-            title: const Text("닉네임"),
-            trailing: Checkbox(
-              activeColor: Theme.of(context).primaryColor,
-              shape: const CircleBorder(),
-              onChanged: (value) {
-                _onCheck();
-              },
-              value: _isChecked,
+          return GestureDetector(
+            onTap: () => _onCheck(),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: Sizes.width / 15,
+                foregroundImage: const NetworkImage(
+                    "https://avatars.githubusercontent.com/u/79440384"),
+              ),
+              title: const Text("닉네임"),
+              trailing: Checkbox(
+                activeColor: Theme.of(context).primaryColor,
+                shape: const CircleBorder(),
+                onChanged: (value) {
+                  _onCheck();
+                },
+                value: _isChecked,
+              ),
             ),
           );
         },

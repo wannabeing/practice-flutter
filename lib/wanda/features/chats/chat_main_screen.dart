@@ -73,6 +73,8 @@ class _ChatMainScreenState extends State<ChatMainScreen>
 
   // 🚀 채팅 상대 선택 페이지 이동 함수
   void _moveSelectChatScreen() {
+    _onPlusChat(); // 기존 열려있던 추가채팅화면 제거
+
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true, // 밑에서 위로 렌더링
@@ -99,12 +101,13 @@ class _ChatMainScreenState extends State<ChatMainScreen>
     // animation 동작했을 때
     if (_animationController.isCompleted) {
       await _animationController.reverse();
+      _isPlusTap = false;
     }
     // 처음 animation 동작할 때
     else {
       _animationController.forward();
+      _isPlusTap = true;
     }
-    _isPlusTap = !_isPlusTap;
 
     setState(() {});
   }
@@ -179,6 +182,12 @@ class _ChatMainScreenState extends State<ChatMainScreen>
               onPressed: () => _onPlusChat(),
               icon: const FaIcon(
                 FontAwesomeIcons.plus,
+              ),
+            ),
+            IconButton(
+              onPressed: () => _onPlusChat(),
+              icon: const FaIcon(
+                FontAwesomeIcons.ellipsis,
               ),
             ),
           ] else

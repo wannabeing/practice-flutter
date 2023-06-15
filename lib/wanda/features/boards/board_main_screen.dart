@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/boards/widgets/top_tabbar_view.dart';
+import 'package:may230517/wanda/features/boards/widgets/user_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/search_textfield_widget.dart';
-import 'package:may230517/wanda/features/boards/widgets/top_listview_widget.dart';
-import 'package:may230517/wanda/features/boards/widgets/user_listview_widget.dart';
 
 class BoardMainScreen extends StatefulWidget {
   const BoardMainScreen({super.key});
@@ -30,6 +30,66 @@ class _BoardMainScreenState extends State<BoardMainScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      length: _tabs.length,
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              pinned: true, // 고정
+              elevation: 1,
+              // ✅ 1. 검색창
+              title: const SearchTextField(),
+              // ✅ 2. 검색창 탭 바
+              bottom: TabBar(
+                onTap: (index) => _onUnfocus(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.width / 20,
+                ),
+                labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Sizes.width / 25,
+                ),
+                labelColor: Theme.of(context).primaryColor, // 셀렉트 컬러
+                unselectedLabelColor: Colors.grey.shade700,
+                indicatorColor: Theme.of(context).primaryColor, // 밑줄 컬러
+                isScrollable: true, // 탭 스크롤 여부
+                splashFactory: InkSplash.splashFactory, // 터치효과
+                splashBorderRadius:
+                    BorderRadius.circular(30), // 터치효과 borderadius
+                tabs: [
+                  for (var tab in _tabs)
+                    Tab(
+                      text: tab,
+                    ),
+                ],
+              ),
+            ),
+          ];
+        },
+        // ✅ 3. 탭 뷰
+        body: GestureDetector(
+          onTap: () => _onUnfocus(),
+          child: TabBarView(
+            children: [
+              // ✅ [Top]
+              const TopTabbarView(),
+              // ✅ [Users]
+              const UserTabbarView(),
+
+              // 나머지 뷰
+              for (var tab in _tabs.skip(2))
+                Center(
+                  child: Text(tab),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+/*
+  return DefaultTabController(
       length: _tabs.length,
       child: Scaffold(
         resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
@@ -134,8 +194,9 @@ class _BoardMainScreenState extends State<BoardMainScreen> {
         ),
       ),
     );
-  }
-}
+
+ */
+
 
 /*
               Scrollbar(

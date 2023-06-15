@@ -20,6 +20,7 @@ class TopListViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
@@ -30,13 +31,15 @@ class TopListViewWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // ✅ 1. 인기 순위
               Text(
-                "${index + 1}", // 인기 순위
+                "${index + 1}",
                 style: TextStyle(
                   fontSize: Sizes.width / 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              // ✅ 2. 프사/닉네임/팔로워숫자/팔로우버튼
               Expanded(
                 child: ListTile(
                   leading: CircleAvatar(
