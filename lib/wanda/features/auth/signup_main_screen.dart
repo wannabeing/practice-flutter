@@ -5,6 +5,7 @@ import 'package:may230517/wanda/features/auth/form_screens/name_form_screen.dart
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/login_main_screen.dart';
+import 'package:may230517/wanda/features/auth/widgets/auth_bottom_widget.dart';
 
 import 'package:may230517/wanda/features/auth/widgets/auth_btn.dart';
 
@@ -12,7 +13,7 @@ class SignupMainScreen extends StatelessWidget {
   const SignupMainScreen({super.key});
 
   // 🚀 로그인 페이지 이동 함수
-  void _onLoginTap(BuildContext context) {
+  void _moveLoginPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const LoginMainScreen(),
@@ -42,27 +43,33 @@ class SignupMainScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: Sizes.height / 10,
+                height: Sizes.height / 5,
               ),
-              const Text(
-                "완다에 들어오시죠",
-                textAlign: TextAlign.center,
-              ),
-              Gaps.v20,
-              const Text(
-                "완다에 대한 설멸ㅇ완다에 대한 설멸ㅇ완다에 대한 설멸ㅇ완다에 대한 설멸ㅇ완다에 대한 설멸ㅇ완다에 대한 설멸ㅇ.",
+              // ✅ 1. 타이틀
+              Text(
+                "완다 가입하기",
                 style: TextStyle(
-                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Sizes.width / 12,
+                ),
+              ),
+              // ✅ 2. 서브 타이틀
+              Text(
+                "회원가입하고 완다를 시작해보세요!",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.titleMedium!.color,
                 ),
                 textAlign: TextAlign.center,
               ),
-              Gaps.v20,
+              Gaps.vheight20,
+              // ✅ 3-1. 회원가입 위젯
               AuthButton(
                 icon: const FaIcon(FontAwesomeIcons.user),
                 text: "이메일로 회원가입",
                 onTap: () => _onEmailSignupTap(context),
               ),
-              Gaps.v16,
+              Gaps.vheight40,
+              // ✅ 3-2. 회원가입 위젯
               AuthButton(
                 icon: const FaIcon(FontAwesomeIcons.apple),
                 text: "애플계정으로 회원가입",
@@ -72,28 +79,9 @@ class SignupMainScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.grey.shade100,
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: Sizes.size20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("이미 계정이 있으신가요?"),
-              Gaps.h10,
-              GestureDetector(
-                onTap: () => _onLoginTap(context),
-                child: Text(
-                  "로그인",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      bottomNavigationBar: AuthBottomWidget(
+        type: AuthBottomType.signup,
+        onTap: _moveLoginPage,
       ),
     );
   }

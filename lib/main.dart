@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
+import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
 
-void main() {
+void main() async {
+  // 앱을 실행하기 전, 필요한 초기화작업을 수행하고 플러터엔진과 프레임워크를 연결시킨다.
+  // https://terry1213.github.io/flutter/flutter-widgetsflutterbindingensureinitialized/
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 앱 자체를 세로모드로 고정설정
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+    ],
+  );
   runApp(const App());
 }
 
@@ -21,10 +32,11 @@ class App extends StatelessWidget {
       home: Scaffold(
         resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
         backgroundColor: Colors.grey.shade50,
-        body: const NavMainScreen(),
+        body: const SignupMainScreen(),
       ),
+      themeMode: ThemeMode.system,
       theme: ThemeData(
-        fontFamily: "SWEET",
+        fontFamily: "SWEET", // 폰트 설정
         primaryColor: const Color(0xFF4F62D2),
         scaffoldBackgroundColor: Colors.grey.shade50,
         appBarTheme: AppBarTheme(
@@ -36,6 +48,36 @@ class App extends StatelessWidget {
             fontFamily: "SWEET",
             fontWeight: FontWeight.bold,
             fontSize: Sizes.size18,
+          ),
+        ),
+        textTheme: const TextTheme(
+          titleMedium: TextStyle(
+            color: Colors.black54,
+          ),
+          titleSmall: TextStyle(
+            color: Colors.black87,
+          ),
+        ),
+      ),
+      // ✅ 다크모드 테마
+      darkTheme: ThemeData(
+        fontFamily: "SWEET",
+        brightness: Brightness.dark, // 기본 값을 다크모드로 설정
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: const Color(0xFF4F62D2),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        textTheme: TextTheme(
+          titleMedium: TextStyle(
+            color: Colors.grey.shade50,
+          ),
+          titleSmall: const TextStyle(
+            color: Colors.black87,
           ),
         ),
       ),

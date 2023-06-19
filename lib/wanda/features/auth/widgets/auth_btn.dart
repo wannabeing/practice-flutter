@@ -21,9 +21,9 @@ class AuthButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: Sizes.size14,
-            horizontal: Sizes.size28,
+          padding: EdgeInsets.symmetric(
+            vertical: Sizes.height / 45,
+            horizontal: Sizes.width / 15,
           ),
           width: Sizes.width,
           decoration: BoxDecoration(

@@ -158,7 +158,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                       ),
                     ),
                     const Text(
-                      "이메일로 시작하기",
+                      "시작하기",
                       style: TextStyle(
                         fontSize: Sizes.size28,
                         fontWeight: FontWeight.bold,
