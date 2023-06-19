@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 
 class MyPageIntroduceBottomWidget extends StatelessWidget {
   final String avatarId, postLength, follower, following, nickname, descText;
@@ -54,18 +55,18 @@ class MyPageIntroduceBottomWidget extends StatelessWidget {
                         children: [
                           Text(
                             follower,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text("팔로워"),
+                          const Text("팔로워"),
                         ],
                       ),
                       Column(
                         children: [
                           Text(
                             following,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text("팔로잉"),
+                          const Text("팔로잉"),
                         ],
                       ),
                     ],
@@ -117,7 +118,9 @@ class MyPageIntroduceBottomWidget extends StatelessWidget {
                       vertical: Sizes.width / 40,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: Utils.isDarkMode(context)
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Text(

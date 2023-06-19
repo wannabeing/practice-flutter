@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 void main() async {
   // 앱을 실행하기 전, 필요한 초기화작업을 수행하고 플러터엔진과 프레임워크를 연결시킨다.
@@ -32,9 +32,10 @@ class App extends StatelessWidget {
       home: Scaffold(
         resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
         backgroundColor: Colors.grey.shade50,
-        body: const SignupMainScreen(),
+        body: const NavMainScreen(),
       ),
       themeMode: ThemeMode.system,
+      // ✅ 라이트모드 테마
       theme: ThemeData(
         fontFamily: "SWEET", // 폰트 설정
         primaryColor: const Color(0xFF4F62D2),
@@ -51,12 +52,13 @@ class App extends StatelessWidget {
           ),
         ),
         textTheme: const TextTheme(
-          titleMedium: TextStyle(
-            color: Colors.black54,
-          ),
           titleSmall: TextStyle(
             color: Colors.black87,
           ),
+        ),
+
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFF4F62D2), // input 커서 색상
         ),
       ),
       // ✅ 다크모드 테마
@@ -65,20 +67,30 @@ class App extends StatelessWidget {
         brightness: Brightness.dark, // 기본 값을 다크모드로 설정
         scaffoldBackgroundColor: Colors.black,
         primaryColor: const Color(0xFF4F62D2),
+
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           titleTextStyle: TextStyle(
             color: Colors.white,
+            fontFamily: "SWEET",
+            fontWeight: FontWeight.bold,
+            fontSize: Sizes.size18,
           ),
         ),
-        textTheme: TextTheme(
-          titleMedium: TextStyle(
-            color: Colors.grey.shade50,
-          ),
-          titleSmall: const TextStyle(
+
+        textTheme: const TextTheme(
+          titleSmall: TextStyle(
             color: Colors.black87,
           ),
+        ),
+
+        bottomAppBarTheme: const BottomAppBarTheme(
+          color: Colors.black,
+        ),
+
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFF4F62D2), // input 커서 색상
         ),
       ),
     );

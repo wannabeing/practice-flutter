@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
 import 'package:may230517/wanda/features/chats/chat_select_screen.dart';
 import 'package:may230517/wanda/features/chats/widgets/chat_list_widget.dart';
@@ -260,7 +261,9 @@ class _ChatMainScreenState extends State<ChatMainScreen>
             child: Container(
               height: Sizes.height / 10,
               decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
+                  color: Utils.isDarkMode(context)
+                      ? Colors.black
+                      : Colors.grey.shade50,
                   border: const Border(
                       bottom: BorderSide(
                     color: Colors.black,

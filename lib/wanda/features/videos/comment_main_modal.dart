@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/videos/widgets/comments/comment_input_widget.dart';
 import 'package:may230517/wanda/features/videos/widgets/comments/comment_text_widget.dart';
 
@@ -122,7 +123,9 @@ class _CommentMainModalState extends State<CommentMainModal> {
                         bottom: Sizes.height / 40,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Utils.isDarkMode(context)
+                            ? Colors.black
+                            : Colors.white,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 
 class SubmitButton extends StatelessWidget {
   final String text;
@@ -27,11 +27,13 @@ class SubmitButton extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _onTap(context),
         child: AnimatedContainer(
-          duration: MyConstants.duration300,
+          duration: Utils.duration300,
           decoration: BoxDecoration(
             color: isActive
                 ? Theme.of(context).primaryColor
-                : Colors.grey.shade300,
+                : Utils.isDarkMode(context)
+                    ? Colors.grey.shade500
+                    : Colors.grey.shade300,
             borderRadius: BorderRadius.circular(Sizes.size16),
           ),
           padding: const EdgeInsets.symmetric(
@@ -42,7 +44,7 @@ class SubmitButton extends StatelessWidget {
             style: TextStyle(
               color: isActive ? Colors.white : Colors.grey.shade600,
             ),
-            duration: MyConstants.duration300,
+            duration: Utils.duration300,
             child: Text(
               text,
               style: const TextStyle(

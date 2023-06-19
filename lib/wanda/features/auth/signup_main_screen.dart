@@ -34,49 +34,48 @@ class SignupMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size32,
-            vertical: Sizes.size24,
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: Sizes.height / 5,
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size32,
+          vertical: Sizes.size24,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: Sizes.height / 5,
+            ),
+            // ✅ 1. 타이틀
+            Text(
+              "완다 가입하기",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: Sizes.width / 12,
               ),
-              // ✅ 1. 타이틀
-              Text(
-                "완다 가입하기",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Sizes.width / 12,
-                ),
-              ),
-              // ✅ 2. 서브 타이틀
-              Text(
+            ),
+            // ✅ 2. 서브 타이틀
+            const Opacity(
+              opacity: 0.7,
+              child: Text(
                 "회원가입하고 완다를 시작해보세요!",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.titleMedium!.color,
-                ),
                 textAlign: TextAlign.center,
               ),
-              Gaps.vheight20,
-              // ✅ 3-1. 회원가입 위젯
-              AuthButton(
-                icon: const FaIcon(FontAwesomeIcons.user),
-                text: "이메일로 회원가입",
-                onTap: () => _onEmailSignupTap(context),
-              ),
-              Gaps.vheight40,
-              // ✅ 3-2. 회원가입 위젯
-              AuthButton(
-                icon: const FaIcon(FontAwesomeIcons.apple),
-                text: "애플계정으로 회원가입",
-                onTap: () => _onEmailSignupTap(context),
-              ),
-            ],
-          ),
+            ),
+            Gaps.vheight20,
+            // ✅ 3-1. 회원가입 위젯
+            AuthButton(
+              icon: const FaIcon(FontAwesomeIcons.user),
+              text: "이메일로 회원가입",
+              onTap: () => _onEmailSignupTap(context),
+            ),
+            Gaps.vheight40,
+            // ✅ 3-2. 회원가입 위젯
+            AuthButton(
+              icon: const FaIcon(FontAwesomeIcons.apple),
+              text: "애플계정으로 회원가입",
+              onTap: () => _onEmailSignupTap(context),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: AuthBottomWidget(

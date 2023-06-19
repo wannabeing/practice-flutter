@@ -38,15 +38,15 @@ class _CommentTextWidgetState extends State<CommentTextWidget> {
           child: Column(
             children: [
               Row(
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     "닉네임",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Gaps.h3,
-                  Text(
-                    "3일전",
-                    style: TextStyle(color: Colors.grey.shade600),
+                  Opacity(
+                    opacity: 0.6,
+                    child: Text("3일전"),
                   ),
                 ],
               ),
@@ -67,12 +67,14 @@ class _CommentTextWidgetState extends State<CommentTextWidget> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () => _onReadmore(),
-                        child: Text(
-                          "자세히보기",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade500,
+                        child: const Opacity(
+                          opacity: 0.6,
+                          child: Text(
+                            "자세히보기",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

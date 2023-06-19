@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
 
 // 채팅상대 선택하는 화면
@@ -59,7 +60,11 @@ class _ChatSelectScreenState extends State<ChatSelectScreen> {
             icon: Text(
               "확인",
               style: TextStyle(
-                color: _isChecked ? Colors.black : Colors.grey.shade500,
+                color: _isChecked
+                    ? Utils.isDarkMode(context)
+                        ? Colors.white // 다크모드(체크시)
+                        : Colors.black // 라이트모드(체크시)
+                    : Colors.grey.shade600, // 노체크
                 fontSize: Sizes.width / 24,
               ),
             ),

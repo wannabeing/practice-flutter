@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 
 class MyPageSliverPersistentTabbar extends SliverPersistentHeaderDelegate {
   @override
@@ -8,15 +9,17 @@ class MyPageSliverPersistentTabbar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     // tarbar
     return Container(
-      color: Colors.grey.shade50,
+      color: Utils.isDarkMode(context) ? Colors.black : Colors.grey.shade50,
       child: TabBar(
         labelPadding: const EdgeInsets.symmetric(
           vertical: Sizes.size10,
         ),
         indicatorSize: TabBarIndicatorSize.label,
         unselectedLabelColor: Colors.grey.shade500,
-        labelColor: Colors.grey.shade900,
-        indicatorColor: Colors.grey.shade900,
+        labelColor:
+            Utils.isDarkMode(context) ? Colors.white : Colors.grey.shade900,
+        indicatorColor:
+            Utils.isDarkMode(context) ? Colors.white : Colors.grey.shade900,
         tabs: [
           // indicator 너비때문에 pdding 설정함
           Padding(

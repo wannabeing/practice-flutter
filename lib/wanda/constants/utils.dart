@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
-class MyConstants {
+class Utils {
   static final List<Shadow> textShadow = [
     const Shadow(
       blurRadius: Sizes.size10,
@@ -16,4 +16,8 @@ class MyConstants {
   static const Duration duration300 = Duration(
     milliseconds: 300,
   );
+
+  static bool isDarkMode(BuildContext context) {
+    return MediaQuery.of(context).platformBrightness == Brightness.dark;
+  }
 }

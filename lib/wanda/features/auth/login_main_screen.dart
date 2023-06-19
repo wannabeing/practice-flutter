@@ -27,41 +27,40 @@ class LoginMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size32,
-            vertical: Sizes.size24,
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: Sizes.height / 5,
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size32,
+          vertical: Sizes.size24,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: Sizes.height / 5,
+            ),
+            // ✅ 1. 타이틀
+            Text(
+              "완다 시작하기",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: Sizes.width / 12,
               ),
-              // ✅ 1. 타이틀
-              Text(
-                "완다 시작하기",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Sizes.width / 12,
-                ),
-              ),
-              Gaps.vheight20,
-              // ✅ 2-1. 로그인 위젯
-              AuthButton(
-                icon: const FaIcon(FontAwesomeIcons.user),
-                text: "이메일로 시작하기",
-                onTap: () => _onEmailLoginTap(context),
-              ),
-              Gaps.vheight40,
-              // ✅ 2-2. 로그인 위젯
-              AuthButton(
-                icon: const FaIcon(FontAwesomeIcons.apple),
-                text: "애플계정으로 시작하기",
-                onTap: () {},
-              ),
-            ],
-          ),
+            ),
+            Gaps.vheight20,
+            // ✅ 2-1. 로그인 위젯
+            AuthButton(
+              icon: const FaIcon(FontAwesomeIcons.user),
+              text: "이메일로 시작하기",
+              onTap: () => _onEmailLoginTap(context),
+            ),
+            Gaps.vheight40,
+            // ✅ 2-2. 로그인 위젯
+            AuthButton(
+              icon: const FaIcon(FontAwesomeIcons.apple),
+              text: "애플계정으로 시작하기",
+              onTap: () {},
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: AuthBottomWidget(

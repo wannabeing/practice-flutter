@@ -29,7 +29,9 @@ class ChatListWidget extends StatelessWidget {
         foregroundImage: const NetworkImage(
             "https://avatars.githubusercontent.com/u/79440384"),
       ),
-      title: Text(nickname),
+      title: Text(
+        nickname,
+      ),
       subtitle: Text(lastChat),
       trailing: Text(
         lastChatTime,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
-import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/widgets/interest_widget.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
@@ -130,7 +130,7 @@ class _InterestScreenState extends State<InterestScreen> {
       appBar: AppBar(
         title: AnimatedOpacity(
           opacity: _showTitle ? 1 : 0,
-          duration: MyConstants.duration300,
+          duration: Utils.duration300,
           child: const Text("관심분야를 선택해주세요!"),
         ),
       ),
@@ -164,7 +164,7 @@ class _InterestScreenState extends State<InterestScreen> {
                 ),
                 Gaps.v10,
                 const Text(
-                  "*최대 5개만 선택 가능합니다.",
+                  "* 최대 5개만 선택 가능합니다.",
                   style: TextStyle(
                     fontSize: Sizes.size16,
                     color: Colors.red,
@@ -193,7 +193,9 @@ class _InterestScreenState extends State<InterestScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300), // 테두리 색상 설정
+          border: !Utils.isDarkMode(context)
+              ? Border.all(color: Colors.grey.shade300)
+              : null, // 테두리 색상 설정
         ),
         child: BottomAppBar(
           padding: const EdgeInsets.symmetric(
@@ -207,7 +209,7 @@ class _InterestScreenState extends State<InterestScreen> {
               GestureDetector(
                 onTap: () => _onSubmit(),
                 child: AnimatedContainer(
-                  duration: MyConstants.duration300, // 애니메이션 지속 시간 설정
+                  duration: Utils.duration300, // 애니메이션 지속 시간 설정
                   width: Sizes.width / 2.5,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size14,
@@ -233,7 +235,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   }
                 },
                 child: AnimatedContainer(
-                  duration: MyConstants.duration300, // 애니메이션 지속 시간 설정
+                  duration: Utils.duration300, // 애니메이션 지속 시간 설정
                   width: Sizes.width / 2.5,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size14,

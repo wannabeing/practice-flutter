@@ -49,10 +49,12 @@ class _SearchTextFieldState extends State<SearchTextField> {
       controller: _textEditingController,
       onChanged: (value) => _onSearchChanged(value), // onChagned
       onSubmitted: (value) => _onSearchSubmitted(value), // onSubmitted
-      cursorColor: Theme.of(context).primaryColor,
-
+      style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         hintText: "검색",
+        hintStyle: const TextStyle(
+          color: Colors.black54,
+        ),
         filled: true, // input 채우기
         fillColor: Colors.grey.shade300,
         contentPadding: const EdgeInsets.symmetric(

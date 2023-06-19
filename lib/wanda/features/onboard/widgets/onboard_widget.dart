@@ -60,13 +60,15 @@ class OnboardWidget extends StatelessWidget {
                 Gaps.vheight40,
                 Column(
                   children: [
-                    Text(
-                      firstSubTitle,
-                      style: TextStyle(
-                        fontSize: Sizes.size20,
-                        color: Colors.grey.shade600,
+                    Opacity(
+                      opacity: 0.6,
+                      child: Text(
+                        firstSubTitle,
+                        style: const TextStyle(
+                          fontSize: Sizes.size20,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                     Text(
                       secondSubTitle,
@@ -98,11 +100,13 @@ class OnboardWidget extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 Gaps.h5,
-                Text(
-                  bottomText,
-                  style: TextStyle(
-                    fontSize: Sizes.size20,
-                    color: Colors.grey.shade800,
+                Opacity(
+                  opacity: 0.8,
+                  child: Text(
+                    bottomText,
+                    style: const TextStyle(
+                      fontSize: Sizes.size20,
+                    ),
                   ),
                 ),
               ],

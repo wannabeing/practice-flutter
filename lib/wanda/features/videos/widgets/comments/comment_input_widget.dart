@@ -37,11 +37,15 @@ class _CommentInputWidgetState extends State<CommentInputWidget> {
       minLines: null, // 최소 줄 null로 해야 함
       maxLines: null, // 최대 줄 null로 해야 함
       cursorColor: Theme.of(context).primaryColor,
+      style: const TextStyle(color: Colors.black),
 
       decoration: InputDecoration(
         hintText: widget.hintText,
+        hintStyle: const TextStyle(
+          color: Colors.black54,
+        ),
         filled: true, // input 채우기
-        fillColor: Colors.grey.shade300,
+        fillColor: Colors.grey.shade200,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: Sizes.size16, // textfield 내부 padding
         ),

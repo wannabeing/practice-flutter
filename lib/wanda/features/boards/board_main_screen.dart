@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/boards/widgets/top_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/user_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/search_textfield_widget.dart';
@@ -13,8 +14,8 @@ class BoardMainScreen extends StatefulWidget {
 
 class _BoardMainScreenState extends State<BoardMainScreen> {
   final _tabs = [
-    "Top",
-    "Users",
+    "랭킹",
+    "쇼츠",
     "Videos",
     "Sounds",
     "LIVE",
@@ -50,7 +51,9 @@ class _BoardMainScreenState extends State<BoardMainScreen> {
                   fontSize: Sizes.width / 25,
                 ),
                 labelColor: Theme.of(context).primaryColor, // 셀렉트 컬러
-                unselectedLabelColor: Colors.grey.shade700,
+                unselectedLabelColor: Utils.isDarkMode(context)
+                    ? Colors.white70
+                    : Colors.grey.shade700,
                 indicatorColor: Theme.of(context).primaryColor, // 밑줄 컬러
                 isScrollable: true, // 탭 스크롤 여부
                 splashFactory: InkSplash.splashFactory, // 터치효과

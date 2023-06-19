@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
-import 'package:may230517/wanda/constants/myconstants.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/videos/comment_main_modal.dart';
 import 'package:may230517/wanda/features/videos/widgets/video_icon_widget.dart';
 import 'package:video_player/video_player.dart';
@@ -126,7 +126,7 @@ class _VideoWidgetState extends State<VideoWidget>
       value: 1.5, // 애니메이션 시작시점 값
       lowerBound: 1.0, // 애니메이션 최소 값
       upperBound: 1.5, // 애니메이션 최대 값
-      duration: MyConstants.duration300,
+      duration: Utils.duration300,
     );
   }
 
@@ -205,7 +205,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 },
                 child: AnimatedOpacity(
                   opacity: !_isVideoPlay ? 1 : 0, // 정지아이콘 100%
-                  duration: MyConstants.duration300,
+                  duration: Utils.duration300,
                   child: Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -247,14 +247,14 @@ class _VideoWidgetState extends State<VideoWidget>
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontSize: Sizes.size20,
-                      shadows: MyConstants.textShadow,
+                      shadows: Utils.textShadow,
                     ),
                   ),
                   Gaps.v10,
                   GestureDetector(
                     onTap: () => _toggleReadmore(),
                     child: AnimatedSize(
-                      duration: MyConstants.duration300,
+                      duration: Utils.duration300,
                       child: Text(
                         "설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란",
                         overflow: _isReadmore
@@ -263,7 +263,7 @@ class _VideoWidgetState extends State<VideoWidget>
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: Sizes.size16,
-                          shadows: MyConstants.textShadow,
+                          shadows: Utils.textShadow,
                         ),
                       ),
                     ),
@@ -280,7 +280,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
-                              shadows: MyConstants.textShadow,
+                              shadows: Utils.textShadow,
                             ),
                           ),
                           Text(
@@ -289,7 +289,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
-                              shadows: MyConstants.textShadow,
+                              shadows: Utils.textShadow,
                             ),
                           ),
                           Text(
@@ -298,7 +298,7 @@ class _VideoWidgetState extends State<VideoWidget>
                               color: Colors.white,
                               fontSize: Sizes.size16,
                               fontWeight: FontWeight.bold,
-                              shadows: MyConstants.textShadow,
+                              shadows: Utils.textShadow,
                             ),
                           ),
                         ],

@@ -17,8 +17,8 @@ class LogoutAlertWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       contentPadding: EdgeInsets.only(
-        left: Sizes.width / 10,
-        right: Sizes.width / 10,
+        left: Sizes.width / 6,
+        right: Sizes.width / 6,
         top: Sizes.height / 20,
         bottom: Sizes.height / 30,
       ),
@@ -68,7 +68,10 @@ class LogoutAlertWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                     color: Colors.grey.shade100,
                   ),
-                  child: const Text("취소"),
+                  child: const Text(
+                    "취소",
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
             ],
