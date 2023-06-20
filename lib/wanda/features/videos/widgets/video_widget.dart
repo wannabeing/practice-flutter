@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
@@ -321,9 +322,9 @@ class _VideoWidgetState extends State<VideoWidget>
             child: Column(
               children: [
                 // 1. 좋아요
-                const VideoIconWidget(
+                VideoIconWidget(
                   faIconData: FontAwesomeIcons.thumbsUp,
-                  dataText: "300",
+                  dataText: S.of(context).videoLikes(1111),
                 ),
                 Gaps.vheight40,
                 // 2. 공유하기
@@ -335,9 +336,9 @@ class _VideoWidgetState extends State<VideoWidget>
                 // 3. 댓글
                 GestureDetector(
                   onTap: () => _onTapComment(context),
-                  child: const VideoIconWidget(
+                  child: VideoIconWidget(
                     faIconData: FontAwesomeIcons.book,
-                    dataText: "300",
+                    dataText: S.of(context).videoComments(999999),
                   ),
                 ),
                 Gaps.vheight40,

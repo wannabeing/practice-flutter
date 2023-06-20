@@ -6,6 +6,7 @@ import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
 import 'package:may230517/wanda/features/chats/chat_select_screen.dart';
 import 'package:may230517/wanda/features/chats/widgets/chat_list_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatMainScreen extends StatefulWidget {
   const ChatMainScreen({super.key});
@@ -28,7 +29,7 @@ class _ChatMainScreenState extends State<ChatMainScreen>
     (index) => ChatListWidget(
       nickname: "닉네임 $index",
       lastChat: "마지막 대화",
-      lastChatTime: "오후 3:30",
+      lastChatTime: timeago.format(DateTime.now()),
       index: index,
       onTap: _moveDetailChatScreen,
       onLongPress: _onDel,

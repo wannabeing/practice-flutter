@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
@@ -58,7 +59,7 @@ class _CommentMainModalState extends State<CommentMainModal> {
               ),
               Gaps.hwidth40,
               Text(
-                "123",
+                S.of(context).videoComments(1231),
                 style: TextStyle(
                   fontSize: Sizes.size18,
                   color: Colors.grey.shade500,

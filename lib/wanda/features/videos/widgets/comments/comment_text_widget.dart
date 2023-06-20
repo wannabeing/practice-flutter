@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class CommentTextWidget extends StatefulWidget {
   const CommentTextWidget({
@@ -38,15 +40,17 @@ class _CommentTextWidgetState extends State<CommentTextWidget> {
           child: Column(
             children: [
               Row(
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "닉네임",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Gaps.h3,
                   Opacity(
                     opacity: 0.6,
-                    child: Text("3일전"),
+                    child: Text(
+                      timeago.format(DateTime.now()),
+                    ),
                   ),
                 ],
               ),
@@ -95,7 +99,9 @@ class _CommentTextWidgetState extends State<CommentTextWidget> {
               size: Sizes.width / 20,
             ),
             Gaps.v5,
-            const Text("123"),
+            Text(
+              S.of(context).videoCommentLikes(7291),
+            ),
           ],
         ),
       ],

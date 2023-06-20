@@ -1,0 +1,43 @@
+{
+  "@videoLikes": {
+    "description": "비디오 좋아요 개수입니다.",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "@videoComments": {
+    "description": "비디오 댓글 개수입니다.",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "@videoCommentLikes": {
+    "description": "비디오 댓글의 좋아요 개수입니다.",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "@videoCommentDate": {
+    "description": "비디오 댓글의 날짜입니다.",
+    "placeholders": {
+      "value": {
+        "type": "DateTime",
+        "format": "compact",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "videoLikes": "{value}",
+  "videoComments": "{value}",
+  "videoCommentLikes": "{value}",
+  "videoCommentDate": "{value}"
+}
