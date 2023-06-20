@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
@@ -50,6 +51,9 @@ const interests = [
 class InterestScreen extends StatefulWidget {
   const InterestScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "interests";
+
   @override
   State<InterestScreen> createState() => _InterestScreenState();
 }
@@ -64,12 +68,7 @@ class _InterestScreenState extends State<InterestScreen> {
     // 스킵하기 클릭
     if (_interestList.isEmpty) {}
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const NavMainScreen(),
-      ),
-    );
+    context.go(NavMainScreen.routeName);
   }
 
   /*
@@ -139,9 +138,9 @@ class _InterestScreenState extends State<InterestScreen> {
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.size32,
-              vertical: Sizes.size24,
+            padding: EdgeInsets.symmetric(
+              horizontal: Sizes.width / 15,
+              vertical: Sizes.height / 20,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

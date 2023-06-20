@@ -5,8 +5,17 @@ import 'package:may230517/wanda/features/boards/widgets/top_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/user_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/search_textfield_widget.dart';
 
+enum BoardTabTypes { ranking, shorts }
+
 class BoardMainScreen extends StatefulWidget {
-  const BoardMainScreen({super.key});
+  const BoardMainScreen({
+    super.key,
+    BoardTabTypes? boardTabTypes,
+  }) : boardTabTypes = boardTabTypes ?? BoardTabTypes.ranking;
+
+  // 🌐 RouteName
+  static String routeName = "/boards";
+  final BoardTabTypes boardTabTypes;
 
   @override
   State<BoardMainScreen> createState() => _BoardMainScreenState();
@@ -28,10 +37,21 @@ class _BoardMainScreenState extends State<BoardMainScreen> {
     FocusScope.of(context).unfocus();
   }
 
+  // 🚀 탭 선택 함수
+  int setInitialTab(BoardTabTypes tabType) {
+    switch (tabType) {
+      case BoardTabTypes.ranking:
+        return 0;
+      case BoardTabTypes.shorts:
+        return 1;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: _tabs.length,
+      initialIndex: setInitialTab(widget.boardTabTypes),
       child: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [

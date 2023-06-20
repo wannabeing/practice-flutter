@@ -6,7 +6,15 @@ import 'package:may230517/wanda/features/videos/widgets/video_widget.dart';
 import '../../constants/gaps.dart';
 
 class VideoMainScreen extends StatefulWidget {
-  const VideoMainScreen({super.key});
+  const VideoMainScreen({
+    super.key,
+    required this.videoId,
+  });
+
+  // 🌐 RouteName
+  static String routeName = "/videos/:id";
+
+  final String videoId;
 
   @override
   State<VideoMainScreen> createState() => _VideoMainScreenState();

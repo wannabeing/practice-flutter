@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 
 class UserExitAlertWidget extends StatelessWidget {
   const UserExitAlertWidget({super.key});
@@ -8,7 +9,7 @@ class UserExitAlertWidget extends StatelessWidget {
 
   // 🚀 취소 버튼 함수
   void _onCancel(BuildContext context) {
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/form_screens/email_form_screen.dart';
@@ -8,6 +9,9 @@ import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 
 class NameFormScreen extends StatefulWidget {
   const NameFormScreen({super.key});
+
+  // 🌐 RouteName
+  static String routeName = "username";
 
   @override
   State<NameFormScreen> createState() => _NameFormScreenState();
@@ -26,12 +30,7 @@ class _NameFormScreenState extends State<NameFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getNameValid() != null) return;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const EmailFormScreen(),
-      ),
-    );
+    context.push(EmailFormScreen.routeName);
   }
 
   // 🚀 닉네임 유효성 검사 함수
@@ -69,9 +68,9 @@ class _NameFormScreenState extends State<NameFormScreen> {
       child: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size28,
-            vertical: Sizes.size24,
+          padding: EdgeInsets.symmetric(
+            horizontal: Sizes.width / 15,
+            vertical: Sizes.height / 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

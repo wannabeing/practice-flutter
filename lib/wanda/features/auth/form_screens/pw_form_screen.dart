@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/form_screens/birth_form_screen.dart';
@@ -8,6 +9,9 @@ import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 
 class PwFormScreen extends StatefulWidget {
   const PwFormScreen({super.key});
+
+  // 🌐 RouteName
+  static String routeName = "pw";
 
   @override
   State<PwFormScreen> createState() => _PwFormScreenState();
@@ -54,12 +58,7 @@ class _PwFormScreenState extends State<PwFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getPwValid() != null || !_getPwLength()) return;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const BirthFormScreen(),
-      ),
-    );
+    context.push(BirthFormScreen.routeName);
   }
 
   @override
@@ -87,9 +86,9 @@ class _PwFormScreenState extends State<PwFormScreen> {
       child: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size28,
-            vertical: Sizes.size24,
+          padding: EdgeInsets.symmetric(
+            horizontal: Sizes.width / 15,
+            vertical: Sizes.height / 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

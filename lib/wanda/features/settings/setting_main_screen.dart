@@ -6,6 +6,9 @@ import 'package:may230517/wanda/features/settings/widgets/user_exit_alert_widget
 class SettingMainScreen extends StatelessWidget {
   const SettingMainScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "/settings";
+
   // 🚀 로그아웃 모달창 함수
   void _showLogoutModal(BuildContext context) {
     showDialog(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
@@ -16,7 +17,7 @@ class CommentMainModal extends StatefulWidget {
 class _CommentMainModalState extends State<CommentMainModal> {
   // 🚀 모달창 닫기 함수
   void _onClose() {
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   // 🚀 키보드창 닫기 함수

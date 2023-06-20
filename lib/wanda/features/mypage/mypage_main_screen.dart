@@ -4,24 +4,49 @@ import 'package:may230517/wanda/features/mypage/widgets/introduce/title_widget.d
 import 'package:may230517/wanda/features/mypage/widgets/post_tabbar_view.dart';
 import 'package:may230517/wanda/features/mypage/widgets/persistent_tabbar.dart';
 
+enum MyPageTabType { feed, shorts, likes }
+
 class MyPageMainScreen extends StatefulWidget {
-  const MyPageMainScreen({super.key});
+  const MyPageMainScreen({
+    super.key,
+    required this.userId,
+    MyPageTabType? tabtype,
+  }) : tabtype = tabtype ?? MyPageTabType.feed;
+
+  // 🌐 RouteName
+  static String routeName = "/users/:id";
+
+  final String userId;
+  final MyPageTabType tabtype;
 
   @override
   State<MyPageMainScreen> createState() => _MyPageMainScreenState();
 }
 
 class _MyPageMainScreenState extends State<MyPageMainScreen> {
+  // 🚀 탭 선택 함수
+  int setInitialTab(MyPageTabType tabType) {
+    switch (tabType) {
+      case MyPageTabType.feed:
+        return 0;
+      case MyPageTabType.shorts:
+        return 1;
+      case MyPageTabType.likes:
+        return 2;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // 마이페이지는 3개의 탭을 갖는다
+      length: MyPageTabType.values.length, // 마이페이지는 3개의 탭을 갖는다
+      initialIndex: setInitialTab(widget.tabtype),
       child: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             // ✅ 1. appbar title
-            const MypageIntroduceTitleWidget(
-              userId: "아이디",
+            MypageIntroduceTitleWidget(
+              userId: widget.userId,
             ),
             // ✅ 2. appbar bottom
             const MyPageIntroduceBottomWidget(

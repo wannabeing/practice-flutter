@@ -6,7 +6,15 @@ import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/videos/widgets/comments/comment_input_widget.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({super.key});
+  const ChatDetailScreen({
+    super.key,
+    required this.chatOppId,
+  });
+
+  // 🌐 RouteName
+  static String routeName = ":id";
+
+  final String chatOppId;
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();

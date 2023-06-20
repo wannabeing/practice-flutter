@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/form_screens/pw_form_screen.dart';
@@ -8,6 +9,9 @@ import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 
 class EmailFormScreen extends StatefulWidget {
   const EmailFormScreen({super.key});
+
+  // 🌐 RouteName
+  static String routeName = "email";
 
   @override
   State<EmailFormScreen> createState() => _EmailFormScreenState();
@@ -38,12 +42,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getEmailValid() != null) return;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const PwFormScreen(),
-      ),
-    );
+    context.push(PwFormScreen.routeName);
   }
 
   @override
@@ -71,9 +70,9 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
       child: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size28,
-            vertical: Sizes.size24,
+          padding: EdgeInsets.symmetric(
+            horizontal: Sizes.width / 15,
+            vertical: Sizes.height / 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

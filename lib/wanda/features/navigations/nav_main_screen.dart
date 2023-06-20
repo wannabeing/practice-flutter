@@ -11,6 +11,9 @@ import 'package:may230517/wanda/features/videos/video_main_screen.dart';
 class NavMainScreen extends StatefulWidget {
   const NavMainScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "/";
+
   @override
   State<NavMainScreen> createState() => _NavMainScreenState();
 }
@@ -51,7 +54,9 @@ class _NavMainScreenState extends State<NavMainScreen> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0, // false 상태가 되어야 렌더링
-            child: const VideoMainScreen(),
+            child: const VideoMainScreen(
+              videoId: "videoID",
+            ),
           ),
           Offstage(
             offstage: _selectedIndex != 1, // false 상태가 되어야 렌더링
@@ -67,7 +72,9 @@ class _NavMainScreenState extends State<NavMainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 4, // false 상태가 되어야 렌더링
-            child: const MyPageMainScreen(),
+            child: const MyPageMainScreen(
+              userId: "유저 아이디",
+            ),
           ),
         ],
       ),

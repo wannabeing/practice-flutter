@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/interest_screen.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 class LoginFormScreen extends StatefulWidget {
   const LoginFormScreen({super.key});
+
+  // 🌐 RouteName
+  static String routeName = "form";
 
   @override
   State<LoginFormScreen> createState() => _LoginFormScreenState();
@@ -34,12 +38,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         // ✅ TextFormField의 onSaved 실행
         _globalKey.currentState!.save();
         // ✅ 페이지 이동
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const InterestScreen(),
-          ),
-        );
+        context.go(NavMainScreen.routeName);
       }
     }
   }

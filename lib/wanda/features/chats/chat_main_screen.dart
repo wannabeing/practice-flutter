@@ -11,6 +11,9 @@ import 'package:timeago/timeago.dart' as timeago;
 class ChatMainScreen extends StatefulWidget {
   const ChatMainScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "/chats";
+
   @override
   State<ChatMainScreen> createState() => _ChatMainScreenState();
 }
@@ -92,7 +95,9 @@ class _ChatMainScreenState extends State<ChatMainScreen>
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return const ChatDetailScreen();
+          return const ChatDetailScreen(
+            chatOppId: "메인에서 디테일로",
+          );
         },
       ),
     );

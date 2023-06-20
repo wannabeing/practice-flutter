@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/interest_screen.dart';
@@ -9,13 +10,15 @@ import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 class BirthFormScreen extends StatefulWidget {
   const BirthFormScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "birth";
+
   @override
   State<BirthFormScreen> createState() => _BirthFormScreenState();
 }
 
 class _BirthFormScreenState extends State<BirthFormScreen> {
   final TextEditingController _textController = TextEditingController();
-  final FocusNode _focusNode = FocusNode(); // 텍스트필드 포커스를 위한 변수
   String _textValue = '';
 
   // 🚀 키보드창 언포커스 함수
@@ -27,12 +30,7 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getBirthValid() != null) return;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const InterestScreen(),
-      ),
-    );
+    context.go(InterestScreen.routeName);
   }
 
   // 🚀 생년월일 유효성 검사 함수
@@ -63,10 +61,6 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
   @override
   void initState() {
     super.initState();
-    // 🚀 함수시작 시, 텍스트필드창 포커스
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(_focusNode);
-    });
 
     // 🚀 Text값 변수에 저장
     _textController.addListener(() {
@@ -78,7 +72,6 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _textController.dispose();
     super.dispose();
   }
@@ -90,9 +83,9 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
       child: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size28,
-            vertical: Sizes.size24,
+          padding: EdgeInsets.symmetric(
+            horizontal: Sizes.width / 15,
+            vertical: Sizes.height / 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +108,6 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
               Gaps.v20,
               InputWidget(
                 controller: _textController,
-                focusNode: _focusNode,
                 onSubmitted: _nextScreen,
                 type: "birth",
                 hintText: "생일 선택",

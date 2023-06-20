@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
@@ -6,6 +7,9 @@ import 'package:may230517/wanda/features/onboard/widgets/onboard_widget.dart';
 
 class OnboardMainScreen extends StatefulWidget {
   const OnboardMainScreen({super.key});
+
+  // 🌐 RouteName
+  static String routeName = "/onboarding";
 
   @override
   State<OnboardMainScreen> createState() => _OnboardMainScreenState();
@@ -32,12 +36,7 @@ class _OnboardMainScreenState extends State<OnboardMainScreen>
 
   // 🚀 다음 스크린으로 이동
   void _nextScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignupMainScreen(),
-      ),
-    );
+    context.go(SignupMainScreen.routeName);
   }
 
   @override
@@ -93,6 +92,7 @@ class _OnboardMainScreenState extends State<OnboardMainScreen>
           ],
         ),
         bottomNavigationBar: BottomAppBar(
+          color: Colors.grey.shade50,
           elevation: 0,
           padding: const EdgeInsets.symmetric(
             vertical: Sizes.size32,

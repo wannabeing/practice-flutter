@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/form_screens/login_form_screen.dart';
@@ -9,19 +10,17 @@ import 'package:may230517/wanda/features/auth/widgets/auth_btn.dart';
 class LoginMainScreen extends StatelessWidget {
   const LoginMainScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "/login";
+
   // 🚀 회원가입 페이지 이동 함수
   void _moveLoginPage(BuildContext context) {
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   // 🚀 이메일 로그인 페이지 이동 함수
   void _onEmailLoginTap(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginFormScreen(),
-      ),
-    );
+    context.push(LoginFormScreen.routeName);
   }
 
   @override

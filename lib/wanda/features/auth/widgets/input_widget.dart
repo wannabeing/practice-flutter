@@ -8,8 +8,8 @@ class InputWidget extends StatefulWidget {
   final TextEditingController controller;
   final String type;
   final String hintText;
+  final bool setFocusNode; // input창 포커스 여부
   final String? errorText;
-  final FocusNode? focusNode;
   final int? maxLength;
 
   const InputWidget({
@@ -17,12 +17,13 @@ class InputWidget extends StatefulWidget {
     required this.controller,
     String? hintText,
     String? type,
+    bool? setFocusNode,
     this.errorText,
     this.onSubmitted,
-    this.focusNode,
     this.maxLength,
   })  : type = type ?? "default",
-        hintText = hintText ?? "";
+        hintText = hintText ?? "",
+        setFocusNode = setFocusNode ?? true;
 
   @override
   State<InputWidget> createState() => _InputWidgetState();
@@ -30,6 +31,7 @@ class InputWidget extends StatefulWidget {
 
 class _InputWidgetState extends State<InputWidget> {
   bool _isObscure = false; // 암호화해서 보여주기
+  final FocusNode _focusNode = FocusNode(); // 텍스트필드 포커스를 위한 변수
 
   // 🚀 키보드 형식 설정 함수
   TextInputType _getKeyboardType() {
@@ -111,6 +113,11 @@ class _InputWidgetState extends State<InputWidget> {
   void initState() {
     super.initState();
 
+    // 🚀 함수시작 시, 텍스트필드창 포커스
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
+
     // 비밀번호 위젯이면, 텍스트 암호화 설정
     if (widget.type == "pw") {
       setState(() {
@@ -120,11 +127,17 @@ class _InputWidgetState extends State<InputWidget> {
   }
 
   @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
       maxLength: widget.maxLength,
       controller: widget.controller,
-      focusNode: widget.focusNode,
+      focusNode: _focusNode, // 텍스트필드 자동 포커스
       onEditingComplete: _onSubmitted,
       keyboardType: _getKeyboardType(),
       autocorrect: false,

@@ -27,7 +27,6 @@ class AuthBottomWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Colors.grey.shade100,
       elevation: 1,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: Sizes.height / 40),
@@ -36,8 +35,8 @@ class AuthBottomWidget extends StatelessWidget {
           children: [
             Text(
               _setDesc(type),
-              style: TextStyle(
-                color: Theme.of(context).textTheme.titleSmall!.color,
+              style: const TextStyle(
+                color: Colors.black,
               ),
             ),
             Gaps.h10,

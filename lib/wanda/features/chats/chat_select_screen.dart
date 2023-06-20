@@ -8,13 +8,15 @@ import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
 class ChatSelectScreen extends StatefulWidget {
   const ChatSelectScreen({super.key});
 
+  // 🌐 RouteName
+  static String routeName = "select";
+
   @override
   State<ChatSelectScreen> createState() => _ChatSelectScreenState();
 }
 
 class _ChatSelectScreenState extends State<ChatSelectScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  final bool _isSelected = false; // 대화상대 선택 여부
   bool _isChecked = false; //test
 
   // test
@@ -29,7 +31,9 @@ class _ChatSelectScreenState extends State<ChatSelectScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return const ChatDetailScreen();
+          return const ChatDetailScreen(
+            chatOppId: "셀렉에서 디테일로",
+          );
         },
       ),
     );

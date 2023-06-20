@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
+import 'package:may230517/wanda/router.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
@@ -29,19 +29,16 @@ void main() async {
 // google이 만들었으니까 Material을 기본으로 가자..
 
 // 항상 Scaffold(구조)를 설정하자.
-// body Padding (h: 32, v: 24)
+// body Padding (h: width/15, v: height/20)
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       title: "may",
-      home: Scaffold(
-        resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
-        backgroundColor: Colors.grey.shade50,
-        body: const NavMainScreen(),
-      ),
+
       // 번역에 필요한 리소스 제공 설정
       localizationsDelegates: const [
         S.delegate, // vscode extension
@@ -61,6 +58,7 @@ class App extends StatelessWidget {
         fontFamily: "SWEET", // 폰트 설정
         primaryColor: const Color(0xFF4F62D2),
         scaffoldBackgroundColor: Colors.grey.shade50,
+
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.grey.shade50,
           foregroundColor: Colors.black,
@@ -76,6 +74,10 @@ class App extends StatelessWidget {
           titleSmall: TextStyle(
             color: Colors.black87,
           ),
+        ),
+
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: Colors.grey.shade200, // 배경 색상
         ),
 
         textSelectionTheme: const TextSelectionThemeData(
@@ -106,8 +108,8 @@ class App extends StatelessWidget {
           ),
         ),
 
-        bottomAppBarTheme: const BottomAppBarTheme(
-          color: Colors.black,
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: Colors.grey.shade100, // 배경 색상
         ),
 
         textSelectionTheme: const TextSelectionThemeData(
