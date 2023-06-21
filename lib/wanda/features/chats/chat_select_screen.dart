@@ -28,7 +28,7 @@ class _ChatSelectScreenState extends State<ChatSelectScreen> {
 
   // 🚀 채팅 디테일 페이지로 이동 함수
   void _moveChatDetailScreen() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) {
           return const ChatDetailScreen(

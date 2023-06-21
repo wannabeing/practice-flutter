@@ -58,7 +58,7 @@ class S {
     final String valueString = valueNumberFormat.format(value);
 
     return Intl.message(
-      valueString,
+      '$valueString',
       name: 'videoLikes',
       desc: '비디오 좋아요 개수입니다.',
       args: [valueString],
@@ -73,7 +73,7 @@ class S {
     final String valueString = valueNumberFormat.format(value);
 
     return Intl.message(
-      valueString,
+      '$valueString',
       name: 'videoComments',
       desc: '비디오 댓글 개수입니다.',
       args: [valueString],
@@ -88,7 +88,7 @@ class S {
     final String valueString = valueNumberFormat.format(value);
 
     return Intl.message(
-      valueString,
+      '$valueString',
       name: 'videoCommentLikes',
       desc: '비디오 댓글의 좋아요 개수입니다.',
       args: [valueString],
@@ -102,7 +102,7 @@ class S {
     final String valueString = valueDateFormat.format(value);
 
     return Intl.message(
-      valueString,
+      '$valueString',
       name: 'videoCommentDate',
       desc: '비디오 댓글의 날짜입니다.',
       args: [valueString],

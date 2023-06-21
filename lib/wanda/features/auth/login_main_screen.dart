@@ -28,9 +28,9 @@ class LoginMainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.size32,
-          vertical: Sizes.size24,
+        padding: EdgeInsets.symmetric(
+          horizontal: Sizes.width / 15,
+          vertical: Sizes.height / 20,
         ),
         child: Column(
           children: [

@@ -51,6 +51,13 @@ dependencies:
     sdk: flutter
   intl: any
 
+  camera: ^0.10.5+2
+  permission_handler: ^10.2.0
+  image_picker: ^0.8.9
+  camerawesome: ^1.4.0
+  path_provider: ^2.0.15
+  vector_math: ^2.1.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
