@@ -5,7 +5,7 @@ import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/videos/comment_main_modal.dart';
-import 'package:may230517/wanda/features/videos/widgets/video_icon_widget.dart';
+import 'package:may230517/wanda/features/videos/widgets/mains/video_icon_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

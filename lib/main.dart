@@ -52,7 +52,7 @@ class App extends StatelessWidget {
         Locale("ko"),
       ],
 
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       // ✅ 라이트모드 테마
       theme: ThemeData(
         fontFamily: "SWEET", // 폰트 설정

@@ -5,8 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/videos/video_preview_screen.dart';
+import 'package:may230517/wanda/features/videos/widgets/recordings/re_loading_widget.dart';
+import 'package:may230517/wanda/features/videos/widgets/recordings/re_toggle_icon_widget.dart';
+import 'package:may230517/wanda/features/videos/widgets/recordings/recording_button.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:vector_math/vector_math_64.dart' as Vector;
+// ignore: depend_on_referenced_packages
+import 'package:vector_math/vector_math_64.dart' as vector;
 
 class VideoRecordingScreen extends StatefulWidget {
   const VideoRecordingScreen({super.key});
@@ -15,13 +20,12 @@ class VideoRecordingScreen extends StatefulWidget {
   State<VideoRecordingScreen> createState() => _VideoRecordingScreenState();
 }
 
-class _VideoRecordingScreenState extends State<VideoRecordingScreen>
-    with WidgetsBindingObserver {
+class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
   bool _hasPermission = false; // 카메라&마이크 권한 여부
   bool _camMode = true; // 카메라 전/후면모드 설정 (true: 후면모드)
   bool _camFlash = false; // 카메라 플래쉬 설정 (false: 안켜짐)
-  bool _isAppLeaved = false; // 사용자가 앱을 떠났는지 여부 (false: 안떠남)
 
+  // 줌 인&아웃 변수
   double _scale = 1.0;
   double _prevScale = 1.0;
 
@@ -63,16 +67,21 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     // 카메라 전/후면모드 설정
     final cameras = await availableCameras();
     _cameraController = CameraController(
-      cameras[_camMode == _camMode ? 0 : 1],
+      cameras[_camMode ? 0 : 1],
       ResolutionPreset.veryHigh,
       imageFormatGroup: ImageFormatGroup.bgra8888,
     );
     await _cameraController.initialize(); // 카메라 초기화
-    await _cameraController.prepareForVideoRecording(); // IOS 카메라를 위한 세팅
+    await _cameraController.prepareForVideoRecording(); // IOS 영상녹화 싱크를 위한 세팅
     setState(() {});
   }
 
-  // 카메라 전/후면모드 변경 함수
+  // 🚀 페이지 닫기 함수
+  void _onClose() {
+    context.pop();
+  }
+
+  // 🚀 카메라 전/후면모드 변경 함수
   Future<void> _toggleCamMode() async {
     _camMode = !_camMode;
 
@@ -80,7 +89,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     setState(() {});
   }
 
-  // 카메라 플래쉬 변경 함수
+  // 🚀 카메라 플래쉬 변경 함수
   Future<void> _toggleFlashMode() async {
     if (!_camMode) return; // 카메라 전면모드일 경우, 함수 종료
 
@@ -93,71 +102,22 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     setState(() {});
   }
 
-  // 녹화 시작 함수
-  Future<void> _startRecording() async {
-    if (_cameraController.value.isRecordingVideo) return; // 녹화 중일 경우, 함수 종료
+  // 🚀 갤러리 선택 함수
+  Future<void> _pickVideo() async {
+    final fromGallery =
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
 
-    await _cameraController.startVideoRecording(); // 녹화 시작
-  }
-
-  // 녹화 종료 함수
-  Future<void> _stopRecording() async {
-    if (!_cameraController.value.isRecordingVideo) {
-      return; // 녹화 중이지 않을 경우, 함수 종료
-    }
-
-    final video = await _cameraController.stopVideoRecording(); // 녹화된 영상 변수
-    if (!mounted) return; // context를 async에서 사용했을 때 생기는 문제때문에 추가
-
-    // 녹화 종료 후, 프리뷰 페이지 이동
-    print(video.path);
-  }
-
-  // 갤러리 영상 선택 시 함수
-  Future<void> _initGallery() async {
-    final video = await ImagePicker().pickVideo(
-      source: ImageSource.gallery,
-      maxDuration: const Duration(seconds: 15),
-    );
-    if (video == null) return;
-
-    final videoSize = await video.length();
-    // 비디오 용량 100MB 제한
-    if (videoSize > 100000000) {
-      return await _showAlert();
-    }
-    // 페이지 이동
+    // 갤러리 영상 갖고 페이지 이동
+    if (fromGallery == null) return;
     if (!mounted) return;
-    print(video.path);
-  }
-
-  // 용량 초과 알림창 함수
-  Future<void> _showAlert() async {
-    print("max");
-  }
-
-  // 사용자가 앱을 떠났음을 감지하는 함수
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    // 권한이 없거나 카메라가 실행되지 않으면 return
-    if (!_hasPermission || !_cameraController.value.isInitialized) return;
-
-    // 앱을 떠났을 때 카메라 dispose
-    if (state == AppLifecycleState.paused) {
-      _isAppLeaved = true;
-      setState(() {});
-      _cameraController.dispose();
-    }
-    // 앱에 다시 돌아왔을 때, 권한설정부터 시작
-    else if (state == AppLifecycleState.resumed) {
-      _isAppLeaved = false;
-      setState(() {});
-      await _initPermission();
-    }
-  }
-
-  void _onClose() {
-    context.pop();
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return VideoPreviewScreen(
+          video: fromGallery,
+          isGalleryVideo: true,
+        );
+      },
+    ));
   }
 
   @override
@@ -165,16 +125,15 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     super.initState();
 
     _initPermission(); // 권한요청 함수
-    WidgetsBinding.instance.addObserver(this); // 사용자가 앱을 떠났음을 감지하기 위해 추가
   }
 
   @override
   void dispose() {
-    // cameraController가 존재할 때만 dispose
-    if (_hasPermission || _isAppLeaved) {
+    super.dispose();
+    // 사용자 권한이 있고 카메라컨트롤러가 초기화 된 상태일 경우에만 dispose -> 페이지 나갔을 때
+    if (_hasPermission && _cameraController.value.isInitialized) {
       _cameraController.dispose();
     }
-    super.dispose();
   }
 
   @override
@@ -183,19 +142,17 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
       backgroundColor: Colors.black,
       body: _hasPermission && _cameraController.value.isInitialized
           ? SafeArea(
+              // ✅ 줌인/아웃기능 구현
               child: GestureDetector(
                 onScaleStart: (details) {
                   _prevScale = _scale;
                   setState(() {});
                 },
                 onScaleUpdate: (details) {
+                  // 1.0보다 작을 시, 줌아웃 안함
                   if (_prevScale * details.scale >= 1.0) {
                     _scale = _prevScale * details.scale;
                   }
-                  setState(() {});
-                },
-                onScaleEnd: (details) {
-                  _prevScale = _scale;
                   setState(() {});
                 },
                 child: Container(
@@ -204,9 +161,11 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Transform(
+                    // 카메라 줌 인&아웃시, 가운데 고정
                     alignment: FractionalOffset.center,
+                    // 카메라 줌 인&아웃 애니메이션
                     transform: Matrix4.diagonal3(
-                        Vector.Vector3(_scale, _scale, _scale)),
+                        vector.Vector3(_scale, _scale, _scale)),
                     child: CameraPreview(
                       _cameraController,
                       child: Padding(
@@ -218,23 +177,25 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // ✅ 1. 닫기버튼
-                            GestureDetector(
-                              onTap: () => _onClose(),
-                              child: Container(
-                                padding: EdgeInsetsDirectional.symmetric(
-                                  horizontal: Sizes.width / 20,
-                                  vertical: Sizes.height / 40,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // ❌ 1-1. 녹화 로딩 바 (미구현)
+                                Container(
+                                  width: double.infinity,
+                                  height: Sizes.height / 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white70,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                                decoration: const BoxDecoration(
-                                  color: Colors.black45,
-                                  shape: BoxShape.circle,
+                                Gaps.vheight40,
+                                // ✅ 1-2. 닫기버튼
+                                ReToggleIconButton(
+                                  onTap: () => _onClose(),
+                                  iconData: FontAwesomeIcons.xmark,
                                 ),
-                                child: const FaIcon(
-                                  FontAwesomeIcons.xmark,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -242,42 +203,12 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                                 Column(
                                   children: [
                                     // ✅ 2-1. 플래쉬 버튼
-                                    GestureDetector(
-                                      onTap: () => _onClose(),
-                                      child: Container(
-                                        padding:
-                                            EdgeInsetsDirectional.symmetric(
-                                          horizontal: Sizes.width / 20,
-                                          vertical: Sizes.height / 40,
-                                        ),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.black45,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const FaIcon(
-                                          FontAwesomeIcons.xmark,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    // ✅
-                                    GestureDetector(
-                                      onTap: () => _onClose(),
-                                      child: Container(
-                                        padding:
-                                            EdgeInsetsDirectional.symmetric(
-                                          horizontal: Sizes.width / 20,
-                                          vertical: Sizes.height / 40,
-                                        ),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.black45,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const FaIcon(
-                                          FontAwesomeIcons.xmark,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                                    ReToggleIconButton(
+                                      onTap: () => _toggleFlashMode(),
+                                      iconData: Icons.flashlight_off_rounded,
+                                      changeIconData:
+                                          Icons.flashlight_on_rounded,
+                                      isChange: _camFlash,
                                     ),
                                   ],
                                 ),
@@ -286,56 +217,19 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                  onTap: () => _onClose(),
-                                  child: Container(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                      horizontal: Sizes.width / 20,
-                                      vertical: Sizes.height / 40,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black45,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const FaIcon(
-                                      FontAwesomeIcons.xmark,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                // ✅ 3-1. 갤러리 버튼
+                                ReToggleIconButton(
+                                  onTap: () => _pickVideo(),
+                                  iconData: FontAwesomeIcons.image,
                                 ),
-                                GestureDetector(
-                                  onTap: () => _onClose(),
-                                  child: Container(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                      horizontal: Sizes.width / 20,
-                                      vertical: Sizes.height / 40,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black45,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const FaIcon(
-                                      FontAwesomeIcons.xmark,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                // ✅ 3-2. 녹화 버튼
+                                RecordingButton(
+                                  cameraController: _cameraController,
                                 ),
-                                GestureDetector(
-                                  onTap: () => _onClose(),
-                                  child: Container(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                      horizontal: Sizes.width / 20,
-                                      vertical: Sizes.height / 40,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black45,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const FaIcon(
-                                      FontAwesomeIcons.xmark,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                // ✅ 3-3. 카메라 전환 버튼
+                                ReToggleIconButton(
+                                  onTap: () => _toggleCamMode(),
+                                  iconData: FontAwesomeIcons.cameraRotate,
                                 ),
                               ],
                             ),
@@ -347,22 +241,8 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                 ),
               ),
             )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    SizedBox(height: Sizes.height / 3),
-                    const CircularProgressIndicator.adaptive(
-                        backgroundColor: Colors.white),
-                    Gaps.vheight40,
-                    const Text(
-                      "로딩중...",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
+          : ReLoadingWidget(
+              onTap: () => _pickVideo(),
             ),
     );
   }
