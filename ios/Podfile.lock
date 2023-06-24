@@ -1,13 +1,9 @@
 PODS:
   - camera_avfoundation (0.0.1):
     - Flutter
-  - camerawesome (0.0.1):
-    - Flutter
-    - JPSVolumeButtonHandler
   - Flutter (1.0.0)
   - image_picker_ios (0.0.1):
     - Flutter
-  - JPSVolumeButtonHandler (1.0.5)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -23,7 +19,6 @@ PODS:
 
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
-  - camerawesome (from `.symlinks/plugins/camerawesome/ios`)
   - Flutter (from `Flutter`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
@@ -32,15 +27,9 @@ DEPENDENCIES:
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
 
-SPEC REPOS:
-  trunk:
-    - JPSVolumeButtonHandler
-
 EXTERNAL SOURCES:
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
-  camerawesome:
-    :path: ".symlinks/plugins/camerawesome/ios"
   Flutter:
     :path: Flutter
   image_picker_ios:
@@ -58,10 +47,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
-  camerawesome: 1e06540f60158809bc70f398ed1ac2cf93fe4188
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
-  JPSVolumeButtonHandler: 53110330c9168ed325def93eabff39f0fe3e8082
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   permission_handler_apple: 8f116445eff3c0e7c65ad60f5fef5490aa94b4e4
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c

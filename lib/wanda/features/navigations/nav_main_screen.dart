@@ -6,7 +6,7 @@ import 'package:may230517/wanda/features/chats/chat_main_screen.dart';
 import 'package:may230517/wanda/features/mypage/mypage_main_screen.dart';
 import 'package:may230517/wanda/features/navigations/widgets/camera_btn_widget.dart';
 import 'package:may230517/wanda/features/navigations/widgets/nav_tab_widget.dart';
-import 'package:may230517/wanda/features/videos/video_main_screen.dart';
+import 'package:may230517/wanda/features/videos/views/video_main_screen.dart';
 
 class NavMainScreen extends StatefulWidget {
   const NavMainScreen({super.key});

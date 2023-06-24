@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/videos/video_preview_screen.dart';
-import 'package:may230517/wanda/features/videos/widgets/recordings/re_loading_widget.dart';
-import 'package:may230517/wanda/features/videos/widgets/recordings/re_toggle_icon_widget.dart';
-import 'package:may230517/wanda/features/videos/widgets/recordings/recording_button.dart';
+import 'package:may230517/wanda/features/videos/views/video_preview_screen.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/recordings/re_loading_widget.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/recordings/re_toggle_icon_widget.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/recordings/recording_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 // ignore: depend_on_referenced_packages
 import 'package:vector_math/vector_math_64.dart' as vector;
@@ -104,6 +104,8 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
 
   // 🚀 갤러리 선택 함수
   Future<void> _pickVideo() async {
+    // 갤러리 권한 없으면 return
+
     final fromGallery =
         await ImagePicker().pickVideo(source: ImageSource.gallery);
 

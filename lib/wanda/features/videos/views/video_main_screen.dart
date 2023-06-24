@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/videos/widgets/mains/video_widget.dart';
-
-import '../../constants/gaps.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/mains/video_widget.dart';
 
 class VideoMainScreen extends StatefulWidget {
   const VideoMainScreen({

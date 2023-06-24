@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/settings/setting_main_screen.dart';
+import 'package:may230517/wanda/features/settings/views/setting_main_screen.dart';
 
 class MypageIntroduceTitleWidget extends StatelessWidget {
   final String userId;

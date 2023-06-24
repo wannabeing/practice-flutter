@@ -4,7 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/videos/video_preview_screen.dart';
+import 'package:may230517/wanda/features/videos/views/video_preview_screen.dart';
 
 class RecordingButton extends StatefulWidget {
   const RecordingButton({

@@ -4,8 +4,8 @@ import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/videos/comment_main_modal.dart';
-import 'package:may230517/wanda/features/videos/widgets/mains/video_icon_widget.dart';
+import 'package:may230517/wanda/features/videos/views/comment_main_modal.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/mains/video_icon_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -102,7 +102,7 @@ class _VideoWidgetState extends State<VideoWidget>
     setState(() {});
 
     // 비디오컨트롤러 리스너 등록
-    _videoPlayerController.addListener(() {
+    _videoPlayerController.addListener(() async {
       _onVideoListener();
     });
   }

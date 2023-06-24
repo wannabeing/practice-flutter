@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/videos/widgets/comments/comment_input_widget.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/comments/comment_input_widget.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen({

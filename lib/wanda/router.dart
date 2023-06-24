@@ -14,8 +14,9 @@ import 'package:may230517/wanda/features/chats/chat_select_screen.dart';
 import 'package:may230517/wanda/features/mypage/mypage_main_screen.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 import 'package:may230517/wanda/features/onboard/onboard_main_screen.dart';
-import 'package:may230517/wanda/features/settings/setting_main_screen.dart';
-import 'package:may230517/wanda/features/videos/video_main_screen.dart';
+import 'package:may230517/wanda/features/settings/views/setting_main_screen.dart';
+
+import 'features/videos/views/video_main_screen.dart';
 
 final router = GoRouter(
   initialLocation: NavMainScreen.routeName,

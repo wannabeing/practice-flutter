@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/videos/video_recording_screen.dart';
+import 'package:may230517/wanda/features/videos/views/video_recording_screen.dart';
 
 class CameraBtnWidget extends StatefulWidget {
   const CameraBtnWidget({super.key});

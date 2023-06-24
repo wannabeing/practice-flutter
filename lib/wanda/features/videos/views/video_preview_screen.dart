@@ -92,7 +92,9 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                           // ✅ 1. 영상 미리보기
                           GestureDetector(
                             onTap: () => _onTapVideoPlayer(),
-                            child: SizedBox(
+                            child: Container(
+                              constraints:
+                                  BoxConstraints(maxWidth: Sizes.width / 2),
                               height: Sizes.height / 4,
                               child: AspectRatio(
                                 aspectRatio:

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:may230517/wanda/features/settings/widgets/logout_alert_widget.dart';
-import 'package:may230517/wanda/features/settings/widgets/user_exit_alert_widget.dart';
+import 'package:may230517/wanda/features/settings/views/widgets/logout_alert_widget.dart';
+import 'package:may230517/wanda/features/settings/views/widgets/user_exit_alert_widget.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
+import 'package:provider/provider.dart';
 
 class SettingMainScreen extends StatelessWidget {
   const SettingMainScreen({super.key});
@@ -46,6 +48,31 @@ class SettingMainScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          // ✅ 다크모드 설정
+          SwitchListTile.adaptive(
+            value: context.watch<SettingConfigViewModel>().getConfigDarkTheme,
+            onChanged: (value) {
+              context.read<SettingConfigViewModel>().setDarkTheme(value);
+            },
+            title: const Text("다크모드"),
+          ),
+          // ✅ 비디오 오토플레이
+          SwitchListTile.adaptive(
+            value:
+                context.watch<SettingConfigViewModel>().getConfigVideoAutoplay,
+            onChanged: (value) {
+              context.read<SettingConfigViewModel>().setVideoAutoplay(value);
+            },
+            title: const Text("비디오 오토플레이"),
+          ),
+          // // ✅ 비디오 음소거
+          SwitchListTile.adaptive(
+            value: context.watch<SettingConfigViewModel>().getConfigVideoMute,
+            onChanged: (value) {
+              context.read<SettingConfigViewModel>().setVideoMute(value);
+            },
+            title: const Text("비디오 음소거"),
+          ),
           // ✅ 로그아웃
           ListTile(
             onTap: () => _showLogoutModal(context),
