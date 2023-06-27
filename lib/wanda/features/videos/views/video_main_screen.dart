@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/mains/video_widget.dart';
+import 'package:may230517/wanda/features/videos/vms/video_main_vm.dart';
 
-class VideoMainScreen extends StatefulWidget {
+class VideoMainScreen extends ConsumerStatefulWidget {
   const VideoMainScreen({
     super.key,
     required this.videoId,
@@ -16,10 +18,10 @@ class VideoMainScreen extends StatefulWidget {
   final String videoId;
 
   @override
-  State<VideoMainScreen> createState() => _VideoMainScreenState();
+  ConsumerState<VideoMainScreen> createState() => _VideoMainScreenState();
 }
 
-class _VideoMainScreenState extends State<VideoMainScreen> {
+class _VideoMainScreenState extends ConsumerState<VideoMainScreen> {
   final PageController _pageController = PageController();
   final _nextPageDuration = const Duration(milliseconds: 200);
   final _nextPageCurve = Curves.linear;
@@ -51,42 +53,52 @@ class _VideoMainScreenState extends State<VideoMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Gaps.hwidth40,
-            const FaIcon(
-              FontAwesomeIcons.playstation,
-              color: Colors.white,
-            ),
-            Gaps.h5,
-            Text(
-              "쇼츠",
-              style: TextStyle(
-                fontSize: Sizes.width / 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+    return ref.watch(videoMainProvider).when(
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+          error: (error, stackTrace) => Center(
+            child: Text("ERROR : $error"),
+          ),
+          data: (videoList) {
+            return Scaffold(
+              resizeToAvoidBottomInset: false, // 키보드창에 의한 화면 resize false
+              appBar: AppBar(
+                backgroundColor: Theme.of(context).primaryColor,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Gaps.hwidth40,
+                    const FaIcon(
+                      FontAwesomeIcons.playstation,
+                      color: Colors.white,
+                    ),
+                    Gaps.h5,
+                    Text(
+                      "쇼츠",
+                      style: TextStyle(
+                        fontSize: Sizes.width / 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: 3,
-        onPageChanged: (value) => _onPageChanged(value),
-        itemBuilder: (context, index) {
-          return VideoWidget(
-            index: index,
-            onVideoFinished: _onVideoFinished,
-          );
-        },
-        scrollDirection: Axis.vertical,
-      ),
-    );
+              body: PageView.builder(
+                controller: _pageController,
+                itemCount: videoList.length,
+                onPageChanged: (value) => _onPageChanged(value),
+                itemBuilder: (context, index) {
+                  return VideoWidget(
+                    index: index,
+                    onVideoFinished: _onVideoFinished,
+                  );
+                },
+                scrollDirection: Axis.vertical,
+              ),
+            );
+          },
+        );
   }
 }

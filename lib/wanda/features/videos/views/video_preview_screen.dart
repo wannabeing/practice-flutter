@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/videos/models/video_model.dart';
+import 'package:may230517/wanda/features/videos/vms/video_main_vm.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPreviewScreen extends StatefulWidget {
+class VideoPreviewScreen extends ConsumerStatefulWidget {
   const VideoPreviewScreen({
     super.key,
     required this.video,
@@ -18,10 +21,10 @@ class VideoPreviewScreen extends StatefulWidget {
   final bool isGalleryVideo;
 
   @override
-  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
+  ConsumerState<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
 }
 
-class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
+class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late VideoPlayerController _videoPlayerController;
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -53,6 +56,12 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     }
 
     setState(() {});
+  }
+
+  // 🚀 다음 클릭 함수
+  void _onNext() {
+    final VideoModel video = VideoModel(title: "${DateTime.now()}");
+    ref.read(videoMainProvider.notifier).uploadVideo(video);
   }
 
   @override
@@ -174,7 +183,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
             ),
             // ⭐️ 다음버튼
             GestureDetector(
-              onTap: () {},
+              // ❓isLoading
+              onTap: ref.watch(videoMainProvider).isLoading
+                  ? () {}
+                  : () => _onNext(),
               child: AnimatedContainer(
                 duration: Utils.duration300, // 애니메이션 지속 시간 설정
                 width: Sizes.width / 2.5,
@@ -183,13 +195,18 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                   horizontal: Sizes.size28,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  // ❓isLoading
+                  color: ref.watch(videoMainProvider).isLoading
+                      ? Colors.grey.shade300
+                      : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(Sizes.size14),
                 ),
                 child: Text(
                   "다음",
                   style: TextStyle(
-                    color: Colors.grey.shade800,
+                    color: ref.watch(videoMainProvider).isLoading
+                        ? Colors.grey.shade800
+                        : Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),

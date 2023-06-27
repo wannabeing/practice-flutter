@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/features/videos/views/comment_main_modal.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/mains/video_icon_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class VideoWidget extends StatefulWidget {
+class VideoWidget extends ConsumerStatefulWidget {
   final int index;
   final Function onVideoFinished;
   const VideoWidget({
@@ -19,10 +21,10 @@ class VideoWidget extends StatefulWidget {
   });
 
   @override
-  State<VideoWidget> createState() => _VideoWidgetState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _VideoWidgetState();
 }
 
-class _VideoWidgetState extends State<VideoWidget>
+class _VideoWidgetState extends ConsumerState<VideoWidget>
     with SingleTickerProviderStateMixin {
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/goodhair.mp4");
@@ -30,6 +32,8 @@ class _VideoWidgetState extends State<VideoWidget>
 
   bool _isVideoPlay = true; // 비디오 실행 여부
   bool _isReadmore = false; // 비디오 상세보기 여부
+  late bool _configVideoAutoplay; // 사용자 설정 비디오오토플레이 여부
+  late bool _configVideoMute; // 사용자 설정 비디오뮤트 여부
 
   // 🚀 화면 클릭 함수
   void _onTap() {
@@ -99,12 +103,21 @@ class _VideoWidgetState extends State<VideoWidget>
   // 🚀 [1]. 비디오컨트롤러 시작 함수
   Future<void> _initVideoPlayer() async {
     await _videoPlayerController.initialize(); // 비디오컨트롤러 초기화
-    setState(() {});
 
     // 비디오컨트롤러 리스너 등록
     _videoPlayerController.addListener(() async {
       _onVideoListener();
     });
+
+    // 비디오 오토플레이 설정 OFF시, 자동재생 X
+    if (_configVideoAutoplay == false) {
+      _isVideoPlay = false;
+    }
+    // 비디오 음소거 설정 ON시, 음소거
+    if (_configVideoMute == true) {
+      await _videoPlayerController.setVolume(0.0);
+    }
+    setState(() {});
   }
 
   // 🚀 [2]. 비디오컨트롤러 리스너 함수
@@ -134,6 +147,10 @@ class _VideoWidgetState extends State<VideoWidget>
   @override
   void initState() {
     super.initState();
+    // 사용자 설정값 가져오기
+    _configVideoAutoplay = ref.read(settingConfigProvider).videoAutoplay;
+    _configVideoMute = ref.read(settingConfigProvider).videoMute;
+
     _initVideoPlayer(); // 비디오컨트롤러 초기화
     _initAnimation(); // 애니메이션컨트롤러 초기화
   }
@@ -166,32 +183,6 @@ class _VideoWidgetState extends State<VideoWidget>
               onTap: () => _onTap(),
             ),
           ),
-          // ✅ 타이틀
-          // Positioned(
-          //   top: 0,
-          //   child: Container(
-          //     width: Sizes.width,
-          //     height: Sizes.height / 8,
-          //     alignment: Alignment.bottomLeft,
-          //     padding: const EdgeInsets.only(bottom: 20),
-          //     decoration: BoxDecoration(
-          //       color: Theme.of(context).primaryColor,
-          //     ),
-          //     child: Row(
-          //       children: const [
-          //         Gaps.h20,
-          //         Text(
-          //           "Shorts",
-          //           style: TextStyle(
-          //             fontSize: Sizes.size22,
-          //             fontWeight: FontWeight.bold,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           // ✅ 재생/멈춤 아이콘
           Positioned.fill(
             child: IgnorePointer(

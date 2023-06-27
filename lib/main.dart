@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/settings/repos/setting_config_repo.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/router.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -32,11 +32,12 @@ void main() async {
   final settingConfigRepository = SettingConfigRepository(preferences);
 
   runApp(
-    // Provider(ViewModel) 초기화
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => SettingConfigViewModel(settingConfigRepository),
+    // Riverpod 설정 위젯으로 감싸기
+    // 로컬저장소를 설정하기 위해 override 사용
+    ProviderScope(
+      overrides: [
+        settingConfigProvider.overrideWith(
+          () => SettingConfigViewModel(settingConfigRepository),
         ),
       ],
       child: const App(),

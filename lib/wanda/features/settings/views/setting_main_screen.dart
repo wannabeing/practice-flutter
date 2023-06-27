@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/features/settings/views/widgets/logout_alert_widget.dart';
 import 'package:may230517/wanda/features/settings/views/widgets/user_exit_alert_widget.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
-import 'package:provider/provider.dart';
 
-class SettingMainScreen extends StatelessWidget {
+class SettingMainScreen extends ConsumerWidget {
   const SettingMainScreen({super.key});
 
   // 🌐 RouteName
@@ -41,7 +41,7 @@ class SettingMainScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("설정"),
@@ -50,26 +50,31 @@ class SettingMainScreen extends StatelessWidget {
         children: [
           // ✅ 다크모드 설정
           SwitchListTile.adaptive(
-            value: context.watch<SettingConfigViewModel>().getConfigDarkTheme,
+            value: ref.watch(settingConfigProvider).darkTheme,
             onChanged: (value) {
-              context.read<SettingConfigViewModel>().setDarkTheme(value);
+              ref
+                  .read(settingConfigProvider.notifier)
+                  .setConfigDarkTheme(value);
             },
             title: const Text("다크모드"),
           ),
           // ✅ 비디오 오토플레이
           SwitchListTile.adaptive(
-            value:
-                context.watch<SettingConfigViewModel>().getConfigVideoAutoplay,
+            value: ref.watch(settingConfigProvider).videoAutoplay,
             onChanged: (value) {
-              context.read<SettingConfigViewModel>().setVideoAutoplay(value);
+              ref
+                  .read(settingConfigProvider.notifier)
+                  .setConfigVideoAutoplay(value);
             },
             title: const Text("비디오 오토플레이"),
           ),
           // // ✅ 비디오 음소거
           SwitchListTile.adaptive(
-            value: context.watch<SettingConfigViewModel>().getConfigVideoMute,
+            value: ref.watch(settingConfigProvider).videoMute,
             onChanged: (value) {
-              context.read<SettingConfigViewModel>().setVideoMute(value);
+              ref
+                  .read(settingConfigProvider.notifier)
+                  .setConfigVideoMute(value);
             },
             title: const Text("비디오 음소거"),
           ),
