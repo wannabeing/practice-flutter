@@ -30,7 +30,7 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getBirthValid() != null) return;
 
-    context.go(InterestScreen.routeName);
+    context.goNamed(InterestScreen.routeName);
   }
 
   // 🚀 생년월일 유효성 검사 함수

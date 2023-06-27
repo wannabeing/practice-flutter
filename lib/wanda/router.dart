@@ -34,26 +34,31 @@ final router = GoRouter(
         // signup/interests
         GoRoute(
           path: InterestScreen.routeName,
+          name: InterestScreen.routeName,
           builder: (context, state) => const InterestScreen(),
         ),
         // signup/birth
         GoRoute(
           path: BirthFormScreen.routeName,
+          name: BirthFormScreen.routeName,
           builder: (context, state) => const BirthFormScreen(),
         ),
         // signup/email
         GoRoute(
           path: EmailFormScreen.routeName,
+          name: EmailFormScreen.routeName,
           builder: (context, state) => const EmailFormScreen(),
         ),
         // signup/username
         GoRoute(
           path: NameFormScreen.routeName,
+          name: NameFormScreen.routeName,
           builder: (context, state) => const NameFormScreen(),
         ),
         // signup/pw
         GoRoute(
           path: PwFormScreen.routeName,
+          name: PwFormScreen.routeName,
           builder: (context, state) => const PwFormScreen(),
         ),
       ],

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
 // 채팅상대 선택하는 화면
-class ChatSelectScreen extends StatefulWidget {
+class ChatSelectScreen extends ConsumerStatefulWidget {
   const ChatSelectScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "select";
 
   @override
-  State<ChatSelectScreen> createState() => _ChatSelectScreenState();
+  ConsumerState<ChatSelectScreen> createState() => _ChatSelectScreenState();
 }
 
-class _ChatSelectScreenState extends State<ChatSelectScreen> {
+class _ChatSelectScreenState extends ConsumerState<ChatSelectScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   bool _isChecked = false; //test
 
@@ -65,7 +66,7 @@ class _ChatSelectScreenState extends State<ChatSelectScreen> {
               "확인",
               style: TextStyle(
                 color: _isChecked
-                    ? Utils.isDarkMode(context)
+                    ? ref.watch(settingConfigProvider).darkTheme
                         ? Colors.white // 다크모드(체크시)
                         : Colors.black // 라이트모드(체크시)
                     : Colors.grey.shade600, // 노체크

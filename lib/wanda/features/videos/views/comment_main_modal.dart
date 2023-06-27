@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/comments/comment_input_widget.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/comments/comment_text_widget.dart';
 
-class CommentMainModal extends StatefulWidget {
+class CommentMainModal extends ConsumerStatefulWidget {
   const CommentMainModal({super.key});
 
   @override
-  State<CommentMainModal> createState() => _CommentMainModalState();
+  ConsumerState<CommentMainModal> createState() => _CommentMainModalState();
 }
 
-class _CommentMainModalState extends State<CommentMainModal> {
+class _CommentMainModalState extends ConsumerState<CommentMainModal> {
   // 🚀 모달창 닫기 함수
   void _onClose() {
     context.pop();
@@ -125,7 +126,7 @@ class _CommentMainModalState extends State<CommentMainModal> {
                         bottom: Sizes.height / 40,
                       ),
                       decoration: BoxDecoration(
-                        color: Utils.isDarkMode(context)
+                        color: ref.watch(settingConfigProvider).darkTheme
                             ? Colors.black
                             : Colors.white,
                         boxShadow: [

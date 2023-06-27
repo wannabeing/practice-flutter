@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
-class MyPageIntroduceBottomWidget extends StatelessWidget {
+class MyPageIntroduceBottomWidget extends ConsumerWidget {
   final String avatarId, postLength, follower, following, nickname, descText;
   const MyPageIntroduceBottomWidget({
     super.key,
@@ -21,7 +22,7 @@ class MyPageIntroduceBottomWidget extends StatelessWidget {
   void _onMsg() {}
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -118,13 +119,18 @@ class MyPageIntroduceBottomWidget extends StatelessWidget {
                       vertical: Sizes.width / 40,
                     ),
                     decoration: BoxDecoration(
-                      color: Utils.isDarkMode(context)
+                      color: ref.watch(settingConfigProvider).darkTheme
                           ? Colors.grey.shade800
                           : Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Text(
+                    child: Text(
                       "메시지",
+                      style: TextStyle(
+                        color: ref.watch(settingConfigProvider).darkTheme
+                            ? Colors.black
+                            : null,
+                      ),
                     ),
                   ),
                 ),

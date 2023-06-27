@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/comments/comment_input_widget.dart';
 
-class ChatDetailScreen extends StatefulWidget {
+class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({
     super.key,
     required this.chatOppId,
@@ -17,10 +18,10 @@ class ChatDetailScreen extends StatefulWidget {
   final String chatOppId;
 
   @override
-  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+  ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
 
-class _ChatDetailScreenState extends State<ChatDetailScreen> {
+class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   // 🚀 메시지 제출 함수
   void _onSubmit() {
     _onCloseKeyboard(); // 키보드창 닫기 함수
@@ -118,7 +119,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       bottom: Sizes.height / 40,
                     ),
                     decoration: BoxDecoration(
-                      color: Utils.isDarkMode(context)
+                      color: ref.watch(settingConfigProvider).darkTheme
                           ? Colors.black
                           : Colors.white,
                       boxShadow: [

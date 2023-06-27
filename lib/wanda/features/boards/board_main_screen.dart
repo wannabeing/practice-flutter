@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/boards/widgets/top_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/user_tabbar_view.dart';
 import 'package:may230517/wanda/features/boards/widgets/search_textfield_widget.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
 enum BoardTabTypes { ranking, shorts }
 
-class BoardMainScreen extends StatefulWidget {
+class BoardMainScreen extends ConsumerStatefulWidget {
   const BoardMainScreen({
     super.key,
     BoardTabTypes? boardTabTypes,
@@ -18,10 +19,10 @@ class BoardMainScreen extends StatefulWidget {
   final BoardTabTypes boardTabTypes;
 
   @override
-  State<BoardMainScreen> createState() => _BoardMainScreenState();
+  ConsumerState<BoardMainScreen> createState() => _BoardMainScreenState();
 }
 
-class _BoardMainScreenState extends State<BoardMainScreen> {
+class _BoardMainScreenState extends ConsumerState<BoardMainScreen> {
   final _tabs = [
     "랭킹",
     "쇼츠",
@@ -71,7 +72,7 @@ class _BoardMainScreenState extends State<BoardMainScreen> {
                   fontSize: Sizes.width / 25,
                 ),
                 labelColor: Theme.of(context).primaryColor, // 셀렉트 컬러
-                unselectedLabelColor: Utils.isDarkMode(context)
+                unselectedLabelColor: ref.watch(settingConfigProvider).darkTheme
                     ? Colors.white70
                     : Colors.grey.shade700,
                 indicatorColor: Theme.of(context).primaryColor, // 밑줄 컬러

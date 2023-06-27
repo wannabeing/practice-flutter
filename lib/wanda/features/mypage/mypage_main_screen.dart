@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/features/mypage/widgets/introduce/bottom_widget.dart';
 import 'package:may230517/wanda/features/mypage/widgets/introduce/title_widget.dart';
 import 'package:may230517/wanda/features/mypage/widgets/post_tabbar_view.dart';
 import 'package:may230517/wanda/features/mypage/widgets/persistent_tabbar.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
 enum MyPageTabType { feed, shorts, likes }
 
-class MyPageMainScreen extends StatefulWidget {
+class MyPageMainScreen extends ConsumerStatefulWidget {
   const MyPageMainScreen({
     super.key,
     required this.userId,
@@ -20,10 +22,10 @@ class MyPageMainScreen extends StatefulWidget {
   final MyPageTabType tabtype;
 
   @override
-  State<MyPageMainScreen> createState() => _MyPageMainScreenState();
+  ConsumerState<MyPageMainScreen> createState() => _MyPageMainScreenState();
 }
 
-class _MyPageMainScreenState extends State<MyPageMainScreen> {
+class _MyPageMainScreenState extends ConsumerState<MyPageMainScreen> {
   // 🚀 탭 선택 함수
   int setInitialTab(MyPageTabType tabType) {
     switch (tabType) {
@@ -61,7 +63,9 @@ class _MyPageMainScreenState extends State<MyPageMainScreen> {
             // ✅ 3. appbar tabbar (탭 바)
             SliverPersistentHeader(
               pinned: true,
-              delegate: MyPageSliverPersistentTabbar(),
+              delegate: MyPageSliverPersistentTabbar(
+                isDarkTheme: ref.watch(settingConfigProvider).darkTheme,
+              ),
             ),
           ];
         },

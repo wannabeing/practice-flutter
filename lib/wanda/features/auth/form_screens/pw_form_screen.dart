@@ -58,7 +58,7 @@ class _PwFormScreenState extends State<PwFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getPwValid() != null || !_getPwLength()) return;
 
-    context.push(BirthFormScreen.routeName);
+    context.pushNamed(BirthFormScreen.routeName);
   }
 
   @override

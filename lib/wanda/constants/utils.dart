@@ -17,10 +17,6 @@ class Utils {
   static const Duration duration300 = Duration(
     milliseconds: 300,
   );
-
-  static bool isDarkMode(BuildContext context) {
-    return MediaQuery.of(context).platformBrightness == Brightness.dark;
-  }
 }
 
 // ✅ 날짜 포맷팅 함수

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
 import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
 import 'package:may230517/wanda/features/onboard/widgets/onboard_widget.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
-class OnboardMainScreen extends StatefulWidget {
+class OnboardMainScreen extends ConsumerStatefulWidget {
   const OnboardMainScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "/onboarding";
 
   @override
-  State<OnboardMainScreen> createState() => _OnboardMainScreenState();
+  ConsumerState<OnboardMainScreen> createState() => _OnboardMainScreenState();
 }
 
-class _OnboardMainScreenState extends State<OnboardMainScreen>
+class _OnboardMainScreenState extends ConsumerState<OnboardMainScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isActive = false;
@@ -63,7 +65,7 @@ class _OnboardMainScreenState extends State<OnboardMainScreen>
         appBar: AppBar(
           bottom: PreferredSize(
             preferredSize:
-                Size.fromHeight(Sizes.height / 20), // TabPageSelector의 높이 지정
+                Size.fromHeight(Sizes.height / 40), // TabPageSelector의 높이 지정
             child: TabPageSelector(
               controller: _tabController,
               selectedColor: Theme.of(context).primaryColor,
@@ -92,7 +94,9 @@ class _OnboardMainScreenState extends State<OnboardMainScreen>
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.grey.shade50,
+          color: ref.watch(settingConfigProvider).darkTheme
+              ? Colors.black
+              : Colors.grey.shade50,
           elevation: 0,
           padding: const EdgeInsets.symmetric(
             vertical: Sizes.size32,

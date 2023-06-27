@@ -50,11 +50,11 @@ void main() async {
 
 // 항상 Scaffold(구조)를 설정하자.
 // body Padding (h: width/15, v: height/20)
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       routerConfig: router, // GoRouter 라이브러리
       title: "may",
@@ -72,7 +72,10 @@ class App extends StatelessWidget {
         Locale("ko"),
       ],
 
-      themeMode: ThemeMode.light,
+      themeMode: ref.watch(settingConfigProvider).darkTheme
+          ? ThemeMode.dark
+          : ThemeMode.light,
+
       // ✅ 라이트모드 테마
       theme: ThemeData(
         fontFamily: "SWEET", // 폰트 설정

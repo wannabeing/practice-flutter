@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/widgets/interest_widget.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
 // 관심분야 예시 리스트
 const interests = [
@@ -48,17 +50,17 @@ const interests = [
   "Home & Garden",
 ];
 
-class InterestScreen extends StatefulWidget {
+class InterestScreen extends ConsumerStatefulWidget {
   const InterestScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "interests";
 
   @override
-  State<InterestScreen> createState() => _InterestScreenState();
+  ConsumerState<InterestScreen> createState() => _InterestScreenState();
 }
 
-class _InterestScreenState extends State<InterestScreen> {
+class _InterestScreenState extends ConsumerState<InterestScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<String> _interestList = []; // 사용자의 관심분야 목록
   bool _showTitle = false; // appBar Title 활성화 여부
@@ -125,6 +127,9 @@ class _InterestScreenState extends State<InterestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 사용자 설정 다크모드 여부 가져오기
+    final isDarkTheme = ref.watch(settingConfigProvider).darkTheme;
+
     return Scaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
@@ -192,7 +197,7 @@ class _InterestScreenState extends State<InterestScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: !Utils.isDarkMode(context)
+          border: isDarkTheme
               ? Border.all(color: Colors.grey.shade300)
               : null, // 테두리 색상 설정
         ),
@@ -220,9 +225,12 @@ class _InterestScreenState extends State<InterestScreen> {
                     ),
                     borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
-                  child: const Text(
+                  child: Text(
                     "스킵하기",
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isDarkTheme ? Colors.black : null,
+                    ),
                   ),
                 ),
               ),

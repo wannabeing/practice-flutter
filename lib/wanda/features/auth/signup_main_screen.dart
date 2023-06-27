@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:may230517/wanda/features/auth/form_screens/name_form_screen.dart';
+import 'package:may230517/wanda/features/auth/form_screens/email_form_screen.dart';
 
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
@@ -22,7 +22,7 @@ class SignupMainScreen extends StatelessWidget {
 
   // 🚀 이메일 회원가입 페이지 이동 함수
   void _onEmailSignupTap(BuildContext context) {
-    context.push(NameFormScreen.routeName);
+    context.pushNamed(EmailFormScreen.routeName);
   }
 
   @override

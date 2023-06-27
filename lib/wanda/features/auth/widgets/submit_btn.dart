@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
-class SubmitButton extends StatelessWidget {
+class SubmitButton extends ConsumerWidget {
   final String text;
   final VoidCallback onTap;
   final bool isActive;
@@ -21,7 +23,7 @@ class SubmitButton extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FractionallySizedBox(
       widthFactor: 1,
       child: GestureDetector(
@@ -31,7 +33,7 @@ class SubmitButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: isActive
                 ? Theme.of(context).primaryColor
-                : Utils.isDarkMode(context)
+                : ref.watch(settingConfigProvider).darkTheme
                     ? Colors.grey.shade500
                     : Colors.grey.shade300,
             borderRadius: BorderRadius.circular(Sizes.size16),

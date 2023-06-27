@@ -42,7 +42,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getEmailValid() != null) return;
 
-    context.push(PwFormScreen.routeName);
+    context.pushNamed(PwFormScreen.routeName);
   }
 
   @override

@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
 import 'package:may230517/wanda/features/chats/chat_select_screen.dart';
 import 'package:may230517/wanda/features/chats/widgets/chat_list_widget.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ChatMainScreen extends StatefulWidget {
+class ChatMainScreen extends ConsumerStatefulWidget {
   const ChatMainScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "/chats";
 
   @override
-  State<ChatMainScreen> createState() => _ChatMainScreenState();
+  ConsumerState<ChatMainScreen> createState() => _ChatMainScreenState();
 }
 
-class _ChatMainScreenState extends State<ChatMainScreen>
+class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late final AnimationController _animationController = AnimationController(
@@ -267,7 +268,7 @@ class _ChatMainScreenState extends State<ChatMainScreen>
             child: Container(
               height: Sizes.height / 10,
               decoration: BoxDecoration(
-                  color: Utils.isDarkMode(context)
+                  color: ref.watch(settingConfigProvider).darkTheme
                       ? Colors.black
                       : Colors.grey.shade50,
                   border: const Border(
