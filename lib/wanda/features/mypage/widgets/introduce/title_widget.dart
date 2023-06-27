@@ -6,6 +6,7 @@ import 'package:may230517/wanda/features/settings/views/setting_main_screen.dart
 
 class MypageIntroduceTitleWidget extends StatelessWidget {
   final String userId;
+
   const MypageIntroduceTitleWidget({
     super.key,
     required this.userId,

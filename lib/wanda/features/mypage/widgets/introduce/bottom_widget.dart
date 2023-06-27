@@ -6,6 +6,7 @@ import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
 class MyPageIntroduceBottomWidget extends ConsumerWidget {
   final String avatarId, postLength, follower, following, nickname, descText;
+
   const MyPageIntroduceBottomWidget({
     super.key,
     required this.avatarId,
@@ -128,7 +129,7 @@ class MyPageIntroduceBottomWidget extends ConsumerWidget {
                       "메시지",
                       style: TextStyle(
                         color: ref.watch(settingConfigProvider).darkTheme
-                            ? Colors.black
+                            ? Colors.white
                             : null,
                       ),
                     ),

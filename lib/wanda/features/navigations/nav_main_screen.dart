@@ -19,7 +19,7 @@ class NavMainScreen extends StatefulWidget {
 }
 
 class _NavMainScreenState extends State<NavMainScreen> {
-  int _selectedIndex = 1; // 선택한 탭의 인덱스 번호
+  int _selectedIndex = 4; // 선택한 탭의 인덱스 번호
 
   final screens = [
     const Center(

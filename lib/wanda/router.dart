@@ -71,6 +71,7 @@ final router = GoRouter(
         // login/form
         GoRoute(
           path: LoginFormScreen.routeName,
+          name: LoginFormScreen.routeName,
           builder: (context, state) => const LoginFormScreen(),
         ),
       ],
