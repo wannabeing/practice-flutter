@@ -10,29 +10,37 @@ import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
-  // 앱을 실행하기 전, 필요한 초기화작업을 수행하고 플러터엔진과 프레임워크를 연결시킨다.
+  // ✅ 앱을 실행하기 전, 필요한 초기화작업을 수행하고 플러터엔진과 프레임워크를 연결시킨다.
   // https://terry1213.github.io/flutter/flutter-widgetsflutterbindingensureinitialized/
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 시간 포맷팅 (영어/한국어 동일 포맷 설정)
+  // ✅ Firebase 초기화
+  // https://firebase.google.com/docs/flutter/setup?hl=ko&platform=ios
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // ✅ 시간 포맷팅 (영어/한국어 동일 포맷 설정)
   timeago.setLocaleMessages("en", KrCustomMessages());
   timeago.setLocaleMessages("kr", KrCustomMessages());
 
-  // 앱 자체를 세로모드로 고정설정
+  // ✅ 앱 자체를 세로모드로 고정설정
   await SystemChrome.setPreferredOrientations(
     [
       DeviceOrientation.portraitUp,
     ],
   );
 
-  // 로컬저장소 초기화
+  // ✅ 로컬저장소 및 사용자설정 초기화
   final preferences = await SharedPreferences.getInstance();
   final settingConfigRepository = SettingConfigRepository(preferences);
 
   runApp(
-    // Riverpod 설정 위젯으로 감싸기
+    // ✅ Riverpod 설정 위젯으로 감싸기
     // 로컬저장소를 설정하기 위해 override 사용
     ProviderScope(
       overrides: [
@@ -56,7 +64,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      routerConfig: router, // GoRouter 라이브러리
+      routerConfig: ref.watch(routerProvider), // GoRouter + Provider
       title: "may",
 
       // 번역에 필요한 리소스 제공 설정

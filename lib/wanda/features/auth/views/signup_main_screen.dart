@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:may230517/wanda/features/auth/form_screens/email_form_screen.dart';
+import 'package:may230517/wanda/features/auth/views/form_screens/email_form_screen.dart';
 
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/login_main_screen.dart';
-import 'package:may230517/wanda/features/auth/widgets/auth_bottom_widget.dart';
+import 'package:may230517/wanda/features/auth/views/login_main_screen.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/auth_bottom_widget.dart';
 
-import 'package:may230517/wanda/features/auth/widgets/auth_btn.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/auth_btn.dart';
 
 class SignupMainScreen extends StatelessWidget {
   const SignupMainScreen({super.key});

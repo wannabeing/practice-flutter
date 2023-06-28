@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/form_screens/email_form_screen.dart';
+import 'package:may230517/wanda/features/auth/views/form_screens/pw_form_screen.dart';
 
-import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
-import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
 
-class NameFormScreen extends StatefulWidget {
-  const NameFormScreen({super.key});
+class EmailFormScreen extends ConsumerStatefulWidget {
+  const EmailFormScreen({super.key});
 
   // 🌐 RouteName
-  static String routeName = "username";
+  static String routeName = "email";
 
   @override
-  State<NameFormScreen> createState() => _NameFormScreenState();
+  ConsumerState<EmailFormScreen> createState() => _EmailFormScreenState();
 }
 
-class _NameFormScreenState extends State<NameFormScreen> {
+class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
   final TextEditingController _textController = TextEditingController();
   String _textValue = '';
 
@@ -26,21 +28,30 @@ class _NameFormScreenState extends State<NameFormScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  // 🚀 스크린 이동 함수
-  void _nextScreen() {
-    if (_textValue.isEmpty || _getNameValid() != null) return;
-
-    context.push(EmailFormScreen.routeName);
-  }
-
-  // 🚀 닉네임 유효성 검사 함수
-  String? _getNameValid() {
+  // 🚀 이메일 유효성 검사 함수
+  String? _getEmailValid() {
     if (_textValue.isEmpty) return null;
 
-    if (_textValue.length > 8) {
-      return "닉네임은 8자 이하입니다.";
+    final regExp = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    if (!regExp.hasMatch(_textValue)) {
+      return "이메일 형식에 맞게 입력해주세요.";
     }
     return null;
+  }
+
+  // 🚀 스크린 이동 함수
+  void _nextScreen() {
+    if (_textValue.isEmpty || _getEmailValid() != null) return;
+
+    // Provider state에 저장
+    final state = ref.read(signupProvider.notifier).state;
+    ref.read(signupProvider.notifier).state = {
+      ...state,
+      "email": _textValue,
+    };
+    // 스크린 이동
+    context.pushNamed(PwFormScreen.routeName);
   }
 
   @override
@@ -76,32 +87,25 @@ class _NameFormScreenState extends State<NameFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "닉네임 입력",
+                "이메일 입력",
                 style: TextStyle(
                   fontSize: Sizes.size28,
                   fontWeight: FontWeight.bold,
-                ),
-              ),
-              Gaps.v10,
-              Text(
-                "나중에 변경할 수 있습니다.",
-                style: TextStyle(
-                  fontSize: Sizes.size16,
-                  color: Colors.grey.shade600,
                 ),
               ),
               Gaps.v20,
               InputWidget(
                 controller: _textController,
                 onSubmitted: _nextScreen,
-                hintText: "닉네임",
-                errorText: _getNameValid(),
+                hintText: "이메일 입력",
+                errorText: _getEmailValid(),
+                type: "email",
               ),
               Gaps.v40,
               SubmitButton(
                 text: "다음",
                 onTap: _nextScreen,
-                isActive: _textValue.isNotEmpty && _getNameValid() == null,
+                isActive: _textValue.isNotEmpty && _getEmailValid() == null,
               ),
             ],
           ),

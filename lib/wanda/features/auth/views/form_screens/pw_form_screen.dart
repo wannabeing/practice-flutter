@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/form_screens/birth_form_screen.dart';
-import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
-import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/views/form_screens/birth_form_screen.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
 
-class PwFormScreen extends StatefulWidget {
+class PwFormScreen extends ConsumerStatefulWidget {
   const PwFormScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "pw";
 
   @override
-  State<PwFormScreen> createState() => _PwFormScreenState();
+  ConsumerState<PwFormScreen> createState() => _PwFormScreenState();
 }
 
-class _PwFormScreenState extends State<PwFormScreen> {
+class _PwFormScreenState extends ConsumerState<PwFormScreen> {
   final TextEditingController _textController = TextEditingController();
   String _textValue = '';
   bool _isPwValid = false;
@@ -58,6 +60,13 @@ class _PwFormScreenState extends State<PwFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getPwValid() != null || !_getPwLength()) return;
 
+    // Provider state에 저장
+    final state = ref.read(signupProvider.notifier).state;
+    ref.read(signupProvider.notifier).state = {
+      ...state,
+      "pw": _textValue,
+    };
+    // 스크린 이동
     context.pushNamed(BirthFormScreen.routeName);
   }
 

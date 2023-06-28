@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
-class LogoutAlertWidget extends StatelessWidget {
+class LogoutAlertWidget extends ConsumerWidget {
   const LogoutAlertWidget({super.key});
 
   // 🚀 로그아웃 버튼 함수
-  void _onLogout() {}
+  Future<void> _onLogout(WidgetRef ref, BuildContext context) async {
+    await ref.read(authProvider.notifier).signOut();
+    // ignore: use_build_context_synchronously
+    context.go(NavMainScreen.routeName);
+  }
 
   // 🚀 취소 버튼 함수
   void _onCancel(BuildContext context) {
@@ -15,18 +22,13 @@ class LogoutAlertWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
-      contentPadding: EdgeInsets.only(
-        left: Sizes.width / 6,
-        right: Sizes.width / 6,
-        top: Sizes.height / 20,
-        bottom: Sizes.height / 30,
-      ),
       elevation: 0,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Gaps.vheight40,
           Text(
             "정말 로그아웃 하시겠어요?",
             style: TextStyle(
@@ -36,13 +38,13 @@ class LogoutAlertWidget extends StatelessWidget {
           ),
           Gaps.vheight20,
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
-                onTap: () => _onLogout(),
+                onTap: () => _onLogout(ref, context),
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: Sizes.width / 18,
+                    horizontal: Sizes.width / 15,
                     vertical: Sizes.size14,
                   ),
                   decoration: BoxDecoration(

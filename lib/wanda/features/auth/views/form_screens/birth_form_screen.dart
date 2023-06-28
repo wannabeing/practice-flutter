@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/interest_screen.dart';
-
-import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
-import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/views/interest_screen.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
 
 class BirthFormScreen extends StatefulWidget {
   const BirthFormScreen({super.key});

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/form_screens/pw_form_screen.dart';
+import 'package:may230517/wanda/features/auth/views/form_screens/email_form_screen.dart';
 
-import 'package:may230517/wanda/features/auth/widgets/input_widget.dart';
-import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
 
-class EmailFormScreen extends StatefulWidget {
-  const EmailFormScreen({super.key});
+class NameFormScreen extends StatefulWidget {
+  const NameFormScreen({super.key});
 
   // 🌐 RouteName
-  static String routeName = "email";
+  static String routeName = "username";
 
   @override
-  State<EmailFormScreen> createState() => _EmailFormScreenState();
+  State<NameFormScreen> createState() => _NameFormScreenState();
 }
 
-class _EmailFormScreenState extends State<EmailFormScreen> {
+class _NameFormScreenState extends State<NameFormScreen> {
   final TextEditingController _textController = TextEditingController();
   String _textValue = '';
 
@@ -26,23 +26,21 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  // 🚀 이메일 유효성 검사 함수
-  String? _getEmailValid() {
-    if (_textValue.isEmpty) return null;
-
-    final regExp = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    if (!regExp.hasMatch(_textValue)) {
-      return "이메일 형식에 맞게 입력해주세요.";
-    }
-    return null;
-  }
-
   // 🚀 스크린 이동 함수
   void _nextScreen() {
-    if (_textValue.isEmpty || _getEmailValid() != null) return;
+    if (_textValue.isEmpty || _getNameValid() != null) return;
 
-    context.pushNamed(PwFormScreen.routeName);
+    context.push(EmailFormScreen.routeName);
+  }
+
+  // 🚀 닉네임 유효성 검사 함수
+  String? _getNameValid() {
+    if (_textValue.isEmpty) return null;
+
+    if (_textValue.length > 8) {
+      return "닉네임은 8자 이하입니다.";
+    }
+    return null;
   }
 
   @override
@@ -78,25 +76,32 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "이메일 입력",
+                "닉네임 입력",
                 style: TextStyle(
                   fontSize: Sizes.size28,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+              Gaps.v10,
+              Text(
+                "나중에 변경할 수 있습니다.",
+                style: TextStyle(
+                  fontSize: Sizes.size16,
+                  color: Colors.grey.shade600,
                 ),
               ),
               Gaps.v20,
               InputWidget(
                 controller: _textController,
                 onSubmitted: _nextScreen,
-                hintText: "이메일 입력",
-                errorText: _getEmailValid(),
-                type: "email",
+                hintText: "닉네임",
+                errorText: _getNameValid(),
               ),
               Gaps.v40,
               SubmitButton(
                 text: "다음",
                 onTap: _nextScreen,
-                isActive: _textValue.isNotEmpty && _getEmailValid() == null,
+                isActive: _textValue.isNotEmpty && _getNameValid() == null,
               ),
             ],
           ),

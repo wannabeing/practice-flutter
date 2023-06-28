@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/auth/widgets/interest_widget.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/interest_widget.dart';
+import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
@@ -67,6 +68,8 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
 
   // 🚀 버튼 함수 (스킵 & 다음)
   void _onSubmit() {
+    ref.read(authProvider.notifier).signUp();
+
     // 스킵하기 클릭
     if (_interestList.isEmpty) {}
 
@@ -225,13 +228,15 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
                     ),
                     borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
-                  child: Text(
-                    "스킵하기",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: isDarkTheme ? Colors.black : null,
-                    ),
-                  ),
+                  child: !ref.watch(authProvider).isLoading
+                      ? Text(
+                          "스킵하기",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: isDarkTheme ? Colors.black : null,
+                          ),
+                        )
+                      : const CircularProgressIndicator.adaptive(),
                 ),
               ),
               // ⭐️ 다음버튼
@@ -254,15 +259,17 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
                         : Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
-                  child: Text(
-                    "다음",
-                    style: TextStyle(
-                      color: _interestList.isNotEmpty
-                          ? Colors.white
-                          : Colors.grey.shade800,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  child: !ref.watch(authProvider).isLoading
+                      ? Text(
+                          "다음",
+                          style: TextStyle(
+                            color: _interestList.isNotEmpty
+                                ? Colors.white
+                                : Colors.grey.shade800,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : const CircularProgressIndicator.adaptive(),
                 ),
               ),
             ],

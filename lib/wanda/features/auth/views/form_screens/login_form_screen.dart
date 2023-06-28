@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 class LoginFormScreen extends StatefulWidget {

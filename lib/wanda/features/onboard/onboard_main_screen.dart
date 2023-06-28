@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/signup_main_screen.dart';
-import 'package:may230517/wanda/features/auth/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/views/signup_main_screen.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
 import 'package:may230517/wanda/features/onboard/widgets/onboard_widget.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
