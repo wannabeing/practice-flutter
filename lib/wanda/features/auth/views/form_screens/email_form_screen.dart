@@ -22,6 +22,7 @@ class EmailFormScreen extends ConsumerStatefulWidget {
 class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
   final TextEditingController _textController = TextEditingController();
   String _textValue = '';
+  bool _existEmail = false; // 이메일 중복 여부 (false: 기본값)
 
   // 🚀 키보드창 언포커스 함수
   void _onUnfocusKeyboard() {
@@ -29,8 +30,13 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
   }
 
   // 🚀 이메일 유효성 검사 함수
-  String? _getEmailValid() {
+  String? _getEmailValid({String? text}) {
     if (_textValue.isEmpty) return null;
+
+    // 매개변수를 전달받으면 해당 텍스트를 에러메시지로 출력
+    if (text != null) {
+      return text;
+    }
 
     final regExp = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -41,17 +47,32 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
   }
 
   // 🚀 스크린 이동 함수
-  void _nextScreen() {
+  void _nextScreen() async {
     if (_textValue.isEmpty || _getEmailValid() != null) return;
 
-    // Provider state에 저장
-    final state = ref.read(signupProvider.notifier).state;
-    ref.read(signupProvider.notifier).state = {
-      ...state,
-      "email": _textValue,
-    };
-    // 스크린 이동
-    context.pushNamed(PwFormScreen.routeName);
+    // 중복 이메일인지 firebase auth 확인
+    final isValid =
+        await ref.read(authProvider.notifier).isValidEmail(_textValue);
+
+    // ✅ 이메일 중복되지 않으면 진행
+    if (isValid) {
+      // Provider state에 저장
+      final state = ref.read(signupProvider.notifier).state;
+      ref.read(signupProvider.notifier).state = {
+        ...state,
+        "email": _textValue,
+      };
+
+      // 스크린 이동
+      if (context.mounted) {
+        context.pushNamed(PwFormScreen.routeName);
+      }
+    }
+    // ❌ 이메일 중복이면 Error 메시지 출력
+    else {
+      _existEmail = true;
+      setState(() {});
+    }
   }
 
   @override
@@ -62,6 +83,7 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
     _textController.addListener(() {
       setState(() {
         _textValue = _textController.text;
+        _existEmail = false;
       });
     });
   }
@@ -100,6 +122,7 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
                 hintText: "이메일 입력",
                 errorText: _getEmailValid(),
                 type: "email",
+                existEmail: _existEmail,
               ),
               Gaps.v40,
               SubmitButton(

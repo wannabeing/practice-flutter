@@ -11,6 +11,7 @@ class InputWidget extends StatefulWidget {
   final bool setFocusNode; // input창 포커스 여부
   final String? errorText;
   final int? maxLength;
+  final bool? existEmail; // 이메일 중복 여부 (true: 중복)
 
   const InputWidget({
     super.key,
@@ -18,12 +19,14 @@ class InputWidget extends StatefulWidget {
     String? hintText,
     String? type,
     bool? setFocusNode,
+    bool? existEmail,
     this.errorText,
     this.onSubmitted,
     this.maxLength,
   })  : type = type ?? "default",
         hintText = hintText ?? "",
-        setFocusNode = setFocusNode ?? true;
+        setFocusNode = setFocusNode ?? true,
+        existEmail = existEmail ?? false;
 
   @override
   State<InputWidget> createState() => _InputWidgetState();
@@ -145,7 +148,7 @@ class _InputWidgetState extends State<InputWidget> {
       cursorColor: Theme.of(context).primaryColor,
       decoration: InputDecoration(
         suffix: _setSurfix(),
-        errorText: widget.errorText,
+        errorText: widget.existEmail! ? "이미 존재하는 이메일입니다." : widget.errorText,
         errorStyle: const TextStyle(
           fontSize: Sizes.size14,
         ),

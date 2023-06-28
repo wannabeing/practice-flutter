@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
 
 class AuthViewModel extends AsyncNotifier {
@@ -15,7 +17,7 @@ class AuthViewModel extends AsyncNotifier {
   }
 
   // =============================================
-  // 🚀 signup() firebase_auth 요청 함수
+  // 🚀 signup() firebase_auth 회원가입 요청 함수
   // =============================================
   Future<void> signUp() async {
     // 🌈 SET Loading
@@ -36,7 +38,7 @@ class AuthViewModel extends AsyncNotifier {
   }
 
   // =============================================
-  // 🚀 signout() firebase_auth 요청 함수
+  // 🚀 signout() firebase_auth 로그아웃 요청 함수
   // =============================================
   Future<void> signOut() async {
     // 🌈 SET Loading
@@ -48,6 +50,45 @@ class AuthViewModel extends AsyncNotifier {
         return await _authRepository.signOutWithFIrebaseAuth();
       },
     );
+  }
+
+  // =============================================
+  // 🚀 login() firebase_auth 로그인 요청 함수
+  // =============================================
+  Future<void> login({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    // 🌈 SET Loading
+    state = const AsyncValue.loading();
+
+    // 🚀 Firebase SignIn 요청
+    state = await AsyncValue.guard(
+      () async {
+        return await _authRepository.signInWithPassword(
+          email,
+          password,
+        );
+      },
+    );
+
+    // ❌ Error
+    if (state.hasError) {
+      // 커스텀 에러스낵바 보여주기
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          errorSnackBar(state.error),
+        );
+      }
+    }
+  }
+
+  // =============================================
+  // 🚀 isValidEmail() firebase_auth 이메일 중복확인 함수
+  // =============================================
+  Future<bool> isValidEmail(String email) async {
+    return await _authRepository.fetchValidEmail(email);
   }
 }
 

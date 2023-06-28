@@ -54,3 +54,15 @@ class KrCustomMessages implements LookupMessages {
   @override
   String wordSeparator() => ' ';
 }
+
+// ✅ firebase Error 스낵바
+SnackBar errorSnackBar(Object? errorMsg) {
+  return SnackBar(
+    showCloseIcon: true,
+    closeIconColor: Colors.white,
+    content: Text(
+      "$errorMsg",
+      textAlign: TextAlign.center,
+    ),
+  );
+}

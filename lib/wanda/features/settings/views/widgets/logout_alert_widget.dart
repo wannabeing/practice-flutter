@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/auth/views/login_main_screen.dart';
 import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
-import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 class LogoutAlertWidget extends ConsumerWidget {
   const LogoutAlertWidget({super.key});
@@ -12,8 +12,10 @@ class LogoutAlertWidget extends ConsumerWidget {
   // 🚀 로그아웃 버튼 함수
   Future<void> _onLogout(WidgetRef ref, BuildContext context) async {
     await ref.read(authProvider.notifier).signOut();
-    // ignore: use_build_context_synchronously
-    context.go(NavMainScreen.routeName);
+
+    if (context.mounted) {
+      context.go(LoginMainScreen.routeName);
+    }
   }
 
   // 🚀 취소 버튼 함수
