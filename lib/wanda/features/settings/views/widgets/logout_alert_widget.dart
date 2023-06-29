@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/views/login_main_screen.dart';
+import 'package:may230517/wanda/features/auth/views/signup_main_screen.dart';
 import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
 
 class LogoutAlertWidget extends ConsumerWidget {
@@ -14,7 +14,7 @@ class LogoutAlertWidget extends ConsumerWidget {
     await ref.read(authProvider.notifier).signOut();
 
     if (context.mounted) {
-      context.go(LoginMainScreen.routeName);
+      context.go(SignupMainScreen.routeName);
     }
   }
 

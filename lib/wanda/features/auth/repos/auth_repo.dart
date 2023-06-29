@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GithubAuthProvider _githubAuthProvider = GithubAuthProvider();
 
   // =============================================
   // 🚀 firebase Auth 가져오기(GET) 함수
@@ -11,6 +12,9 @@ class AuthRepository {
   User? get currentUser => _firebaseAuth.currentUser;
   bool get isLoggedIn => currentUser != null; // true: 로그인, false: 비로그인
 
+  // =============================================
+  // 🚀 firebase auth 이메일중복 확인
+  // =============================================
   Future<bool> fetchValidEmail(String email) async {
     // 특정 이메일 주소에 대해 등록된 인증 방법을 확인하고, 인증 방법이 비어있는지 여부를 반환
     final result = await _firebaseAuth.fetchSignInMethodsForEmail(email);
@@ -23,9 +27,8 @@ class AuthRepository {
   }
 
   // =============================================
-  // 🚀 firebase Auth 설정(SET) 함수
+  // 🚀 firebase auth 회원가입
   // =============================================
-
   Future<void> signupWithPassword(String email, String password) async {
     await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
@@ -33,11 +36,24 @@ class AuthRepository {
     );
   }
 
+  // =============================================
+  // 🚀 github 회원가입
+  // =============================================
+  Future<void> signupWithGitHub() async {
+    await _firebaseAuth.signInWithProvider(_githubAuthProvider);
+  }
+
+  // =============================================
+  // 🚀 firebase auth 로그아웃
+  // =============================================
   Future<void> signOutWithFIrebaseAuth() async {
     await _firebaseAuth.signOut();
   }
 
-  Future<void> signInWithPassword(String email, String password) async {
+  // =============================================
+  // 🚀 firebase auth 로그인
+  // =============================================
+  Future<void> loginWithPassword(String email, String password) async {
     await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,

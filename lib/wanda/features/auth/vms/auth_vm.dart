@@ -63,10 +63,10 @@ class AuthViewModel extends AsyncNotifier {
     // 🌈 SET Loading
     state = const AsyncValue.loading();
 
-    // 🚀 Firebase SignIn 요청
+    // 🚀 Firebase login 요청
     state = await AsyncValue.guard(
       () async {
-        return await _authRepository.signInWithPassword(
+        return await _authRepository.loginWithPassword(
           email,
           password,
         );
@@ -90,8 +90,17 @@ class AuthViewModel extends AsyncNotifier {
   // =============================================
   // 🚀 isValidEmail() firebase_auth 이메일 중복확인 함수
   // =============================================
-  Future<bool> isValidEmail(String email) async {
-    return await _authRepository.fetchValidEmail(email);
+  Future<void> isValidEmail(String email) async {
+    // 🌈 SET Loading
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(
+      () async {
+        return await _authRepository.fetchValidEmail(email);
+      },
+    );
+
+    // return await _authRepository.fetchValidEmail(email);
   }
 }
 

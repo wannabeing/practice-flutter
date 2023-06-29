@@ -49,10 +49,13 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
   // 🚀 스크린 이동 함수
   void _nextScreen() async {
     if (_textValue.isEmpty || _getEmailValid() != null) return;
+    _onUnfocusKeyboard();
 
     // 중복 이메일인지 firebase auth 확인
-    final isValid =
-        await ref.read(authProvider.notifier).isValidEmail(_textValue);
+    await ref.read(authProvider.notifier).isValidEmail(_textValue);
+    // state 값 (TRUE/FALSE) 가져오기
+    // ignore: invalid_use_of_protected_member
+    final isValid = await ref.read(authProvider.notifier).state.value;
 
     // ✅ 이메일 중복되지 않으면 진행
     if (isValid) {
@@ -105,29 +108,50 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
             horizontal: Sizes.width / 15,
             vertical: Sizes.height / 20,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              const Text(
-                "이메일 입력",
-                style: TextStyle(
-                  fontSize: Sizes.size28,
-                  fontWeight: FontWeight.bold,
+              IgnorePointer(
+                ignoring: ref.watch(authProvider).isLoading,
+                child: Opacity(
+                  opacity: ref.watch(authProvider).isLoading ? 0.5 : 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "이메일 입력",
+                        style: TextStyle(
+                          fontSize: Sizes.size28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gaps.v20,
+                      InputWidget(
+                        controller: _textController,
+                        onSubmitted: _nextScreen,
+                        hintText: "이메일 입력",
+                        errorText:
+                            _existEmail ? "이미 존재하는 이메일입니다." : _getEmailValid(),
+                        type: "email",
+                      ),
+                      Gaps.v40,
+                      SubmitButton(
+                        text: "다음",
+                        onTap: _nextScreen,
+                        isActive: _textValue.isNotEmpty &&
+                            _getEmailValid() == null &&
+                            !_existEmail,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Gaps.v20,
-              InputWidget(
-                  controller: _textController,
-                  onSubmitted: _nextScreen,
-                  hintText: "이메일 입력",
-                  errorText: _existEmail ? "이미 존재하는 이메일입니다." : _getEmailValid(),
-                  type: "email"),
-              Gaps.v40,
-              SubmitButton(
-                text: "다음",
-                onTap: _nextScreen,
-                isActive: _textValue.isNotEmpty && _getEmailValid() == null,
-              ),
+
+              // ✅ 로딩바
+              if (ref.watch(authProvider).isLoading)
+                const Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator.adaptive(),
+                ),
             ],
           ),
         ),
