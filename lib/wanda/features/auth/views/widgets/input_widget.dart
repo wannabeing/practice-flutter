@@ -4,29 +4,36 @@ import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
 class InputWidget extends StatefulWidget {
-  final VoidCallback? onSubmitted;
+  final Function? onSubmitted;
+  final Function? onNext;
   final TextEditingController controller;
   final String type;
   final String hintText;
   final bool setFocusNode; // input창 포커스 여부
+  final TextInputAction textInputAction; // input창 액션 설정
+  final String? labelText;
   final String? errorText;
   final int? maxLength;
-  final bool? existEmail; // 이메일 중복 여부 (true: 중복)
 
   const InputWidget({
     super.key,
+    // 꼭 필요한 변수
     required this.controller,
+    // null이지만 생성할 때 초기화되는 변수
     String? hintText,
     String? type,
     bool? setFocusNode,
-    bool? existEmail,
+    TextInputAction? textInputAction,
+    // null이어도 되는 변수
+    this.labelText,
     this.errorText,
-    this.onSubmitted,
     this.maxLength,
+    this.onSubmitted,
+    this.onNext,
   })  : type = type ?? "default",
         hintText = hintText ?? "",
-        setFocusNode = setFocusNode ?? true,
-        existEmail = existEmail ?? false;
+        setFocusNode = setFocusNode ?? false,
+        textInputAction = textInputAction ?? TextInputAction.done;
 
   @override
   State<InputWidget> createState() => _InputWidgetState();
@@ -52,6 +59,15 @@ class _InputWidgetState extends State<InputWidget> {
   void _onSubmitted() {
     if (widget.onSubmitted != null) {
       widget.onSubmitted!();
+    } else {
+      return;
+    }
+  }
+
+  // 🚀 null이 아닌 상속받은 함수 실행
+  void _onNext() {
+    if (widget.onNext != null) {
+      widget.onNext!();
     } else {
       return;
     }
@@ -118,7 +134,9 @@ class _InputWidgetState extends State<InputWidget> {
 
     // 🚀 함수시작 시, 텍스트필드창 포커스
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(_focusNode);
+      if (widget.setFocusNode) {
+        FocusScope.of(context).requestFocus(_focusNode);
+      }
     });
 
     // 비밀번호 위젯이면, 텍스트 암호화 설정
@@ -141,23 +159,30 @@ class _InputWidgetState extends State<InputWidget> {
       maxLength: widget.maxLength,
       controller: widget.controller,
       focusNode: _focusNode, // 텍스트필드 자동 포커스
-      onEditingComplete: _onSubmitted,
+      onEditingComplete: () => _onSubmitted(), // TextInputAction.done
+      onSubmitted: (value) => _onNext(), // TextInputAction.next
+      textInputAction: widget.textInputAction,
       keyboardType: _getKeyboardType(),
       autocorrect: false,
       obscureText: _isObscure,
       cursorColor: Theme.of(context).primaryColor,
       decoration: InputDecoration(
         suffix: _setSurfix(),
-        errorText: widget.existEmail! ? "이미 존재하는 이메일입니다." : widget.errorText,
+
+        errorText: widget.errorText,
         errorStyle: const TextStyle(
           fontSize: Sizes.size14,
         ),
+
         hintText: widget.hintText,
-        labelText: widget.type == "birth" ? "생년월일 8자리" : null,
+
+        labelText: widget.labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.always, // labelText 고정
         labelStyle: TextStyle(
           color: Theme.of(context).primaryColor,
           fontSize: Sizes.size20,
         ),
+
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Theme.of(context).primaryColor,

@@ -110,6 +110,7 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
                 onSubmitted: _nextScreen,
                 type: "birth",
                 hintText: "생일 선택",
+                labelText: "생년월일 8자리",
                 errorText: _getBirthValid(),
                 maxLength: 8,
               ),

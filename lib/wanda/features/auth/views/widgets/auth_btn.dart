@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
-class AuthButton extends StatelessWidget {
+class AuthButton extends ConsumerWidget {
   final String text;
   final FaIcon icon;
   final VoidCallback onTap;
@@ -15,23 +17,23 @@ class AuthButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FractionallySizedBox(
       widthFactor: 1,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.symmetric(
-            vertical: Sizes.height / 45,
-            horizontal: Sizes.width / 15,
+            vertical: Sizes.height / 50,
+            horizontal: Sizes.width / 10,
           ),
-          width: Sizes.width,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey.shade300,
-              width: 2,
+              color: ref.watch(settingConfigProvider).darkTheme
+                  ? Colors.white70
+                  : Colors.black45,
             ),
-            borderRadius: BorderRadius.circular(Sizes.size16),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Stack(
             alignment: Alignment.center,
@@ -42,9 +44,9 @@ class AuthButton extends StatelessWidget {
               ),
               Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: Sizes.size16,
+                  fontSize: Sizes.width / 20,
                 ),
               ),
             ],

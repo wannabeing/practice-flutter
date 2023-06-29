@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
 
 class AuthViewModel extends AsyncNotifier {
@@ -75,12 +75,15 @@ class AuthViewModel extends AsyncNotifier {
 
     // ❌ Error
     if (state.hasError) {
-      // 커스텀 에러스낵바 보여주기
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          errorSnackBar(state.error),
-        );
-      }
+      // 에러코드 & 에러메시지
+      // https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
+      final errorCode = ((state.error) as FirebaseException).code.toString();
+
+      // 에러메시지 EXPOSE
+      state = AsyncValue.error(
+        errorCode,
+        StackTrace.current,
+      );
     }
   }
 

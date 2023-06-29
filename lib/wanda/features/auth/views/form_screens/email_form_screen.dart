@@ -117,13 +117,11 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
               ),
               Gaps.v20,
               InputWidget(
-                controller: _textController,
-                onSubmitted: _nextScreen,
-                hintText: "이메일 입력",
-                errorText: _getEmailValid(),
-                type: "email",
-                existEmail: _existEmail,
-              ),
+                  controller: _textController,
+                  onSubmitted: _nextScreen,
+                  hintText: "이메일 입력",
+                  errorText: _existEmail ? "이미 존재하는 이메일입니다." : _getEmailValid(),
+                  type: "email"),
               Gaps.v40,
               SubmitButton(
                 text: "다음",

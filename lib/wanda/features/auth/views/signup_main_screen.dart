@@ -39,20 +39,31 @@ class SignupMainScreen extends StatelessWidget {
               height: Sizes.height / 5,
             ),
             // ✅ 1. 타이틀
-            Text(
-              "완다 가입하기",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: Sizes.width / 12,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "완다",
+                  style: TextStyle(
+                    fontSize: Sizes.width / 10,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Text(
+                  " 가입하기",
+                  style: TextStyle(
+                    fontSize: Sizes.width / 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
             // ✅ 2. 서브 타이틀
             const Opacity(
               opacity: 0.7,
-              child: Text(
-                "회원가입하고 완다를 시작해보세요!",
-                textAlign: TextAlign.center,
-              ),
+              child: Text("회원가입하고 완다를 시작해보세요!"),
             ),
             Gaps.vheight20,
             // ✅ 3-1. 회원가입 위젯
@@ -65,8 +76,8 @@ class SignupMainScreen extends StatelessWidget {
             // ✅ 3-2. 회원가입 위젯
             AuthButton(
               icon: const FaIcon(FontAwesomeIcons.apple),
-              text: "애플계정으로 회원가입",
-              onTap: () => _onEmailSignupTap(context),
+              text: "미구현",
+              onTap: () => {},
             ),
           ],
         ),
