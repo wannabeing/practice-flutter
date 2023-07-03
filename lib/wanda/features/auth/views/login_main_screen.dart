@@ -23,7 +23,24 @@ class LoginMainScreen extends ConsumerWidget {
 
   // 🚀 깃허브 로그인 페이지 이동 함수
   Future<void> _onLoginGitHub(BuildContext context, WidgetRef ref) async {
-    await ref.read(socialAuthProvider.notifier).ghSignUp();
+    await ref.read(socialAuthProvider.notifier).githubSignup();
+
+    // ❌ 계정 에러 발생 시
+    if (ref.read(socialAuthProvider).hasError) {
+      final errorCode = ref.read(socialAuthProvider).error.toString();
+      print(errorCode);
+    }
+    // ✅ 존재하는 계정이면 페이지 이동
+    else {
+      if (context.mounted) {
+        context.go(NavMainScreen.routeName);
+      }
+    }
+  }
+
+  // 🚀 구글 로그인 페이지 이동 함수
+  Future<void> _onLoginGoogle(BuildContext context, WidgetRef ref) async {
+    await ref.read(socialAuthProvider.notifier).googleSignup();
 
     // ❌ 계정 에러 발생 시
     if (ref.read(socialAuthProvider).hasError) {
@@ -109,6 +126,12 @@ class LoginMainScreen extends ConsumerWidget {
                           text: "깃허브로 시작하기",
                           icon: const FaIcon(FontAwesomeIcons.github),
                           onTap: () => _onLoginGitHub(context, ref),
+                        ),
+                        Gaps.vheight40,
+                        AuthButton(
+                          text: "구글계정으로 시작하기",
+                          icon: const FaIcon(FontAwesomeIcons.google),
+                          onTap: () => _onLoginGoogle(context, ref),
                         ),
                       ],
                     ),

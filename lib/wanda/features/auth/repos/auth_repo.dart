@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -37,10 +38,31 @@ class AuthRepository {
   }
 
   // =============================================
-  // 🚀 github 회원가입
+  // 🚀 github 회원가입/로그인
   // =============================================
-  Future<void> signupWithGitHub() async {
+  Future<void> loginWithGithub() async {
     await _firebaseAuth.signInWithProvider(_githubAuthProvider);
+  }
+
+  // =============================================
+  // 🚀 google 회원가입/로그인
+  // =============================================
+  Future<void> loginWithGoogle() async {
+    // displayName, email, id, photoUrl
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   // =============================================

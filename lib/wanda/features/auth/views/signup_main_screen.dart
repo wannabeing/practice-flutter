@@ -29,9 +29,25 @@ class SignupMainScreen extends ConsumerWidget {
   }
 
   // 🚀 깃허브 로그인 페이지 이동 함수
-
   Future<void> _onLoginGitHub(BuildContext context, WidgetRef ref) async {
-    await ref.read(socialAuthProvider.notifier).ghSignUp();
+    await ref.read(socialAuthProvider.notifier).githubSignup();
+
+    // ❌ 계정 에러 발생 시
+    if (ref.read(socialAuthProvider).hasError) {
+      final errorCode = ref.read(socialAuthProvider).error.toString();
+      print(errorCode);
+    }
+    // ✅ 존재하는 계정이면 페이지 이동
+    else {
+      if (context.mounted) {
+        context.go(NavMainScreen.routeName);
+      }
+    }
+  }
+
+  // 🚀 구글 로그인 페이지 이동 함수
+  Future<void> _onLoginGoogle(BuildContext context, WidgetRef ref) async {
+    await ref.read(socialAuthProvider.notifier).googleSignup();
 
     // ❌ 계정 에러 발생 시
     if (ref.read(socialAuthProvider).hasError) {
@@ -105,6 +121,13 @@ class SignupMainScreen extends ConsumerWidget {
                       icon: const FaIcon(FontAwesomeIcons.github),
                       text: "깃허브로 회원가입",
                       onTap: () => _onLoginGitHub(context, ref),
+                    ),
+                    Gaps.vheight40,
+                    // ✅ 3-3. 구글 회원가입 위젯
+                    AuthButton(
+                      icon: const FaIcon(FontAwesomeIcons.google),
+                      text: "구글계정으로 회원가입",
+                      onTap: () => _onLoginGoogle(context, ref),
                     ),
                   ],
                 ),

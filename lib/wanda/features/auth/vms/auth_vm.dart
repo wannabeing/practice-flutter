@@ -99,8 +99,6 @@ class AuthViewModel extends AsyncNotifier {
         return await _authRepository.fetchValidEmail(email);
       },
     );
-
-    // return await _authRepository.fetchValidEmail(email);
   }
 }
 
