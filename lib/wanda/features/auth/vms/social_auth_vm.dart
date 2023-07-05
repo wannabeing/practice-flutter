@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
+import 'package:may230517/wanda/features/auth/vms/user_vm.dart';
 
 class SocialAuthViewModel extends AsyncNotifier {
   // =============================================
@@ -21,7 +22,19 @@ class SocialAuthViewModel extends AsyncNotifier {
     // 🚀 Firebase SignUp 요청
     state = await AsyncValue.guard(
       () async {
-        return await ref.read(authRepo).loginWithGithub();
+        // 유저정보 Provider
+        final userVM = ref.read(userProvider.notifier);
+
+        // [REQUEST] firebase_auth에 저장된 사용자 정보
+        final userCredential = await ref.read(authRepo).loginWithGithub();
+
+        // ✅ DB에 유저모델 생성 및 저장
+        if (userCredential.user != null) {
+          await userVM.createUserModel(
+            userCredential: userCredential,
+            socialAuth: true,
+          );
+        }
       },
     );
 
@@ -49,7 +62,17 @@ class SocialAuthViewModel extends AsyncNotifier {
     // 🚀 Firebase SignUp/Login 요청
     state = await AsyncValue.guard(
       () async {
-        return await ref.read(authRepo).loginWithGoogle();
+        // 유저정보 Provider
+        final userVM = ref.read(userProvider.notifier);
+
+        // [REQUEST] firebase_auth에 저장된 사용자 정보
+        final userCredential = await ref.read(authRepo).loginWithGoogle();
+
+        // ✅ DB에 유저모델 생성 및 저장
+        await userVM.createUserModel(
+          userCredential: userCredential,
+          socialAuth: true,
+        );
       },
     );
 

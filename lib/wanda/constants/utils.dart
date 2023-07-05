@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:timeago/timeago.dart';
 
@@ -17,6 +18,18 @@ class Utils {
   static const Duration duration300 = Duration(
     milliseconds: 300,
   );
+
+  // ✅ 날짜 yyyyMMdd 형식 출력 함수
+  static String getTodayDate() {
+    final now = DateTime.now();
+    final formatter = DateFormat('yyyyMMdd');
+    final formattedDate = formatter.format(now);
+    return formattedDate;
+  }
+
+  static String getAvatarURL(String uid) {
+    return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/avatarIMGs%2F$uid?alt=media";
+  }
 }
 
 // ✅ 날짜 포맷팅 함수

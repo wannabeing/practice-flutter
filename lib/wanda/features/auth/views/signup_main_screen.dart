@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:may230517/wanda/features/auth/views/form_screens/email_form_screen.dart';
 
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/auth/views/form_screens/name_form_screen.dart';
 import 'package:may230517/wanda/features/auth/views/login_main_screen.dart';
+import 'package:may230517/wanda/features/auth/views/widgets/auth_alert_widget.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/auth_bottom_widget.dart';
 
 import 'package:may230517/wanda/features/auth/views/widgets/auth_btn.dart';
@@ -25,19 +26,30 @@ class SignupMainScreen extends ConsumerWidget {
 
   // 🚀 이메일 회원가입 페이지 이동 함수
   void _onEmailSignupTap(BuildContext context) {
-    context.pushNamed(EmailFormScreen.routeName);
+    context.pushNamed(NameFormScreen.routeName);
   }
 
   // 🚀 깃허브 로그인 페이지 이동 함수
   Future<void> _onLoginGitHub(BuildContext context, WidgetRef ref) async {
+    // firebase 요청
     await ref.read(socialAuthProvider.notifier).githubSignup();
 
     // ❌ 계정 에러 발생 시
     if (ref.read(socialAuthProvider).hasError) {
-      final errorCode = ref.read(socialAuthProvider).error.toString();
-      print(errorCode);
+      // 중복이메일: account-exists-with-different-credential
+      ref.read(socialAuthProvider).error.toString();
+
+      // 🚀 중복 계정 에러 알림창 함수 실행
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AuthAlertWidget();
+          },
+        );
+      }
     }
-    // ✅ 존재하는 계정이면 페이지 이동
+    // ✅ 성공시 페이지 이동
     else {
       if (context.mounted) {
         context.go(NavMainScreen.routeName);
@@ -47,14 +59,25 @@ class SignupMainScreen extends ConsumerWidget {
 
   // 🚀 구글 로그인 페이지 이동 함수
   Future<void> _onLoginGoogle(BuildContext context, WidgetRef ref) async {
+    // firebase 요청
     await ref.read(socialAuthProvider.notifier).googleSignup();
 
     // ❌ 계정 에러 발생 시
     if (ref.read(socialAuthProvider).hasError) {
-      final errorCode = ref.read(socialAuthProvider).error.toString();
-      print(errorCode);
+      // 중복이메일: account-exists-with-different-credential
+      ref.read(socialAuthProvider).error.toString();
+
+      // 🚀 중복 계정 에러 알림창 함수 실행
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AuthAlertWidget();
+          },
+        );
+      }
     }
-    // ✅ 존재하는 계정이면 페이지 이동
+    // ✅ 성공시 페이지 이동
     else {
       if (context.mounted) {
         context.go(NavMainScreen.routeName);

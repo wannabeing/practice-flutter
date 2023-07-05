@@ -7,7 +7,7 @@ import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/views/form_screens/birth_form_screen.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
-import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 
 class PwFormScreen extends ConsumerStatefulWidget {
   const PwFormScreen({super.key});
@@ -60,7 +60,7 @@ class _PwFormScreenState extends ConsumerState<PwFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getPwValid() != null || !_getPwLength()) return;
 
-    // Provider state에 저장
+    // Signup Provider state에 저장
     final state = ref.read(signupProvider.notifier).state;
     ref.read(signupProvider.notifier).state = {
       ...state,
@@ -116,6 +116,7 @@ class _PwFormScreenState extends ConsumerState<PwFormScreen> {
                 hintText: "비밀번호 입력",
                 errorText: _getPwValid(),
                 type: "pw",
+                setFocusNode: true,
               ),
               Gaps.v16,
               const Text("비밀번호는 아래 조건을 만족해야합니다."),

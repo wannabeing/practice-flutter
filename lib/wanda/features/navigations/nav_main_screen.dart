@@ -72,9 +72,7 @@ class _NavMainScreenState extends State<NavMainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 4, // false 상태가 되어야 렌더링
-            child: const MyPageMainScreen(
-              userId: "유저 아이디",
-            ),
+            child: const MyPageMainScreen(),
           ),
         ],
       ),

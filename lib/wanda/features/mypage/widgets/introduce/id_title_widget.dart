@@ -5,11 +5,11 @@ import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/settings/views/setting_main_screen.dart';
 
 class MypageIntroduceTitleWidget extends StatelessWidget {
-  final String userId;
+  final String email;
 
   const MypageIntroduceTitleWidget({
     super.key,
-    required this.userId,
+    required this.email,
   });
 
   // 🚀 설정스크린 이동 함수
@@ -24,10 +24,10 @@ class MypageIntroduceTitleWidget extends StatelessWidget {
       title: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          userId, // userID
+          email, // email
           textAlign: TextAlign.left,
           style: TextStyle(
-            fontSize: Sizes.width / 17,
+            fontSize: Sizes.width / 20,
           ),
         ),
       ),

@@ -30,8 +30,9 @@ class AuthRepository {
   // =============================================
   // 🚀 firebase auth 회원가입
   // =============================================
-  Future<void> signupWithPassword(String email, String password) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
+  Future<UserCredential> signupWithPassword(
+      String email, String password) async {
+    return await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -40,36 +41,31 @@ class AuthRepository {
   // =============================================
   // 🚀 github 회원가입/로그인
   // =============================================
-  Future<void> loginWithGithub() async {
-    await _firebaseAuth.signInWithProvider(_githubAuthProvider);
+  Future<UserCredential> loginWithGithub() async {
+    return await _firebaseAuth.signInWithProvider(_githubAuthProvider);
   }
 
   // =============================================
   // 🚀 google 회원가입/로그인
   // =============================================
-  Future<void> loginWithGoogle() async {
+  Future<UserCredential> loginWithGoogle() async {
     // displayName, email, id, photoUrl
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
+    if (googleUser == null) {
+      throw FirebaseException(plugin: "test");
+    }
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
     // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-  // =============================================
-  // 🚀 firebase auth 로그아웃
-  // =============================================
-  Future<void> signOutWithFIrebaseAuth() async {
-    await _firebaseAuth.signOut();
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   // =============================================
@@ -80,6 +76,13 @@ class AuthRepository {
       email: email,
       password: password,
     );
+  }
+
+  // =============================================
+  // 🚀 firebase auth 로그아웃
+  // =============================================
+  Future<void> signOutWithFIrebaseAuth() async {
+    await _firebaseAuth.signOut();
   }
 }
 

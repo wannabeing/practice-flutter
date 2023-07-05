@@ -4,8 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
+import 'package:may230517/wanda/features/auth/vms/user_vm.dart';
 
-class AuthViewModel extends AsyncNotifier {
+class EmailAuthViewModel extends AsyncNotifier {
   late final AuthRepository _authRepository;
 
   // =============================================
@@ -25,16 +26,37 @@ class AuthViewModel extends AsyncNotifier {
 
     // 사용자가 작성한 ID/PW
     final signupForm = ref.read(signupProvider);
+    // 유저정보 Provider
+    final userVM = ref.read(userProvider.notifier);
 
     // 🚀 Firebase SignUp 요청
     state = await AsyncValue.guard(
       () async {
-        return await _authRepository.signupWithPassword(
+        // [REQUEST] firebase_auth에 저장된 사용자 정보
+        final userCredential = await _authRepository.signupWithPassword(
           signupForm["email"],
           signupForm["pw"],
         );
+        // DB에 유저모델 생성 및 저장 ✅
+        if (userCredential.user != null) {
+          await userVM.createUserModel(
+            userCredential: userCredential,
+          );
+        }
       },
     );
+
+    // ❌ Error
+    if (state.hasError) {
+      // 에러코드 & 에러메시지
+      final errorCode = ((state.error) as FirebaseException).code.toString();
+
+      // 에러메시지 EXPOSE
+      state = AsyncValue.error(
+        errorCode,
+        StackTrace.current,
+      );
+    }
   }
 
   // =============================================
@@ -102,8 +124,8 @@ class AuthViewModel extends AsyncNotifier {
   }
 }
 
-final authProvider = AsyncNotifierProvider<AuthViewModel, void>(
-  () => AuthViewModel(),
+final emailAuthProvider = AsyncNotifierProvider<EmailAuthViewModel, void>(
+  () => EmailAuthViewModel(),
 );
 
 // 사용자 회원가입 정보 담는 Provider

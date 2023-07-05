@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/views/interest_screen.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 
-class BirthFormScreen extends StatefulWidget {
+class BirthFormScreen extends ConsumerStatefulWidget {
   const BirthFormScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "birth";
 
   @override
-  State<BirthFormScreen> createState() => _BirthFormScreenState();
+  ConsumerState<BirthFormScreen> createState() => _BirthFormScreenState();
 }
 
-class _BirthFormScreenState extends State<BirthFormScreen> {
+class _BirthFormScreenState extends ConsumerState<BirthFormScreen> {
   final TextEditingController _textController = TextEditingController();
   String _textValue = '';
 
@@ -29,6 +31,13 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getBirthValid() != null) return;
 
+    // Signup Provider state에 저장
+    final state = ref.read(signupProvider.notifier).state;
+    ref.read(signupProvider.notifier).state = {
+      ...state,
+      "birth": _textValue,
+    };
+    // 스크린 이동
     context.goNamed(InterestScreen.routeName);
   }
 
@@ -113,6 +122,7 @@ class _BirthFormScreenState extends State<BirthFormScreen> {
                 labelText: "생년월일 8자리",
                 errorText: _getBirthValid(),
                 maxLength: 8,
+                setFocusNode: true,
               ),
               Gaps.v40,
               SubmitButton(

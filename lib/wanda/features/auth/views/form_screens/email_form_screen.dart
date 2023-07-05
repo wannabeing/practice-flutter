@@ -7,7 +7,7 @@ import 'package:may230517/wanda/features/auth/views/form_screens/pw_form_screen.
 
 import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
-import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 
 class EmailFormScreen extends ConsumerStatefulWidget {
   const EmailFormScreen({super.key});
@@ -52,14 +52,14 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
     _onUnfocusKeyboard();
 
     // 중복 이메일인지 firebase auth 확인
-    await ref.read(authProvider.notifier).isValidEmail(_textValue);
+    await ref.read(emailAuthProvider.notifier).isValidEmail(_textValue);
     // state 값 (TRUE/FALSE) 가져오기
     // ignore: invalid_use_of_protected_member
-    final isValid = await ref.read(authProvider.notifier).state.value;
+    final isValid = await ref.read(emailAuthProvider.notifier).state.value;
 
     // ✅ 이메일 중복되지 않으면 진행
     if (isValid) {
-      // Provider state에 저장
+      // Signup Provider state에 저장
       final state = ref.read(signupProvider.notifier).state;
       ref.read(signupProvider.notifier).state = {
         ...state,
@@ -111,9 +111,9 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
           child: Stack(
             children: [
               IgnorePointer(
-                ignoring: ref.watch(authProvider).isLoading,
+                ignoring: ref.watch(emailAuthProvider).isLoading,
                 child: Opacity(
-                  opacity: ref.watch(authProvider).isLoading ? 0.5 : 1,
+                  opacity: ref.watch(emailAuthProvider).isLoading ? 0.5 : 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -132,6 +132,7 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
                         errorText:
                             _existEmail ? "이미 존재하는 이메일입니다." : _getEmailValid(),
                         type: "email",
+                        setFocusNode: true,
                       ),
                       Gaps.v40,
                       SubmitButton(
@@ -147,7 +148,7 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
               ),
 
               // ✅ 로딩바
-              if (ref.watch(authProvider).isLoading)
+              if (ref.watch(emailAuthProvider).isLoading)
                 const Align(
                   alignment: Alignment.center,
                   child: CircularProgressIndicator.adaptive(),

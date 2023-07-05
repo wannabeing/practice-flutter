@@ -161,10 +161,7 @@ final routerProvider = Provider((ref) {
             tabType = MyPageTabType.feed;
           }
 
-          return MyPageMainScreen(
-            userId: id,
-            tabtype: tabType,
-          );
+          return const MyPageMainScreen();
         },
       ),
       // ✅ 7. 설정 페이지 (settings)

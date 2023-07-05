@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/mypage/widgets/introduce/widgets/id_avatar_widget.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
 class MyPageIntroduceBottomWidget extends ConsumerWidget {
-  final String avatarId, postLength, follower, following, nickname, descText;
+  final String avatarURL,
+      postLength,
+      follower,
+      following,
+      displayName,
+      descText;
 
   const MyPageIntroduceBottomWidget({
     super.key,
-    required this.avatarId,
+    required this.avatarURL,
     required this.postLength,
     required this.follower,
     required this.following,
-    required this.nickname,
+    required this.displayName,
     required this.descText,
   });
 
@@ -36,9 +42,8 @@ class MyPageIntroduceBottomWidget extends ConsumerWidget {
             // ✅ 1. 프로필/게시물/팔로워/팔로잉
             Row(
               children: [
-                CircleAvatar(
-                  radius: Sizes.width / 10,
-                  foregroundImage: NetworkImage(avatarId),
+                IntroduceAvatarWidget(
+                  avatarURL: avatarURL,
                 ),
                 Expanded(
                   child: Row(
@@ -79,7 +84,7 @@ class MyPageIntroduceBottomWidget extends ConsumerWidget {
             Gaps.vheight40,
             // ✅ 2. 닉네임
             Text(
-              nickname,
+              displayName,
               style: TextStyle(
                   fontSize: Sizes.width / 25, fontWeight: FontWeight.bold),
             ),

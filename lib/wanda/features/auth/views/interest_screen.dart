@@ -5,7 +5,7 @@ import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/interest_widget.dart';
-import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
@@ -67,12 +67,22 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
   bool _showTitle = false; // appBar Title 활성화 여부
 
   // 🚀 버튼 함수 (스킵 & 다음)
-  void _onSubmit() {
-    ref.read(authProvider.notifier).signUp();
-
+  Future<void> _onSubmit() async {
     // 스킵하기 클릭
-    if (_interestList.isEmpty) {}
+    if (_interestList.isEmpty) {
+      _interestList.add("empty");
+    }
+    // Signup Provider state에 저장
+    final state = ref.read(signupProvider.notifier).state;
+    ref.read(signupProvider.notifier).state = {
+      ...state,
+      "interests": _interestList,
+    };
+    // firebase auth 회원가입
+    await ref.read(emailAuthProvider.notifier).signUp();
 
+    //  스크린 이동
+    if (!mounted) return;
     context.go(NavMainScreen.routeName);
   }
 
@@ -228,7 +238,7 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
                     ),
                     borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
-                  child: !ref.watch(authProvider).isLoading
+                  child: !ref.watch(emailAuthProvider).isLoading
                       ? Text(
                           "스킵하기",
                           textAlign: TextAlign.center,
@@ -241,7 +251,7 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
               ),
               // ⭐️ 다음버튼
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (_interestList.isNotEmpty) {
                     return _onSubmit();
                   }
@@ -259,7 +269,7 @@ class _InterestScreenState extends ConsumerState<InterestScreen> {
                         : Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(Sizes.size14),
                   ),
-                  child: !ref.watch(authProvider).isLoading
+                  child: !ref.watch(emailAuthProvider).isLoading
                       ? Text(
                           "다음",
                           style: TextStyle(

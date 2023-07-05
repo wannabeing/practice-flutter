@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
@@ -6,18 +7,19 @@ import 'package:may230517/wanda/features/auth/views/form_screens/email_form_scre
 
 import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 
-class NameFormScreen extends StatefulWidget {
+class NameFormScreen extends ConsumerStatefulWidget {
   const NameFormScreen({super.key});
 
   // 🌐 RouteName
   static String routeName = "username";
 
   @override
-  State<NameFormScreen> createState() => _NameFormScreenState();
+  ConsumerState<NameFormScreen> createState() => _NameFormScreenState();
 }
 
-class _NameFormScreenState extends State<NameFormScreen> {
+class _NameFormScreenState extends ConsumerState<NameFormScreen> {
   final TextEditingController _textController = TextEditingController();
   String _textValue = '';
 
@@ -30,7 +32,14 @@ class _NameFormScreenState extends State<NameFormScreen> {
   void _nextScreen() {
     if (_textValue.isEmpty || _getNameValid() != null) return;
 
-    context.push(EmailFormScreen.routeName);
+    // Signup Provider state에 저장
+    final state = ref.read(signupProvider.notifier).state;
+    ref.read(signupProvider.notifier).state = {
+      ...state,
+      "username": _textValue,
+    };
+
+    context.pushNamed(EmailFormScreen.routeName);
   }
 
   // 🚀 닉네임 유효성 검사 함수
@@ -96,6 +105,7 @@ class _NameFormScreenState extends State<NameFormScreen> {
                 onSubmitted: _nextScreen,
                 hintText: "닉네임",
                 errorText: _getNameValid(),
+                setFocusNode: true,
               ),
               Gaps.v40,
               SubmitButton(

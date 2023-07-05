@@ -5,7 +5,7 @@ import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/input_widget.dart';
 import 'package:may230517/wanda/features/auth/views/widgets/submit_btn.dart';
-import 'package:may230517/wanda/features/auth/vms/auth_vm.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 
 class LoginFormScreen extends ConsumerStatefulWidget {
@@ -36,15 +36,15 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
     _onUnfocusKeyboard();
 
     // ✅ firebase auth 로그인
-    await ref.read(authProvider.notifier).login(
+    await ref.read(emailAuthProvider.notifier).login(
           email: _email,
           password: _pw,
           context: context,
         );
 
     // ❌ 계정 에러 발생 시
-    if (ref.read(authProvider).hasError) {
-      final errorCode = ref.read(authProvider).error.toString();
+    if (ref.read(emailAuthProvider).hasError) {
+      final errorCode = ref.read(emailAuthProvider).error.toString();
       _setErrorMsg(errorCode);
     }
     // ✅ 존재하는 계정이면 페이지 이동
@@ -55,6 +55,7 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
     }
   }
 
+  // 🚀 firebase 에러메시지 SET 함수
   void _setErrorMsg(String errorCode) {
     switch (errorCode) {
       case "user-not-found":
@@ -187,7 +188,7 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
               ),
               Gaps.vheight40,
               // ✅ 이메일 로그인 버튼
-              !ref.watch(authProvider).isLoading
+              !ref.watch(emailAuthProvider).isLoading
                   ? SubmitButton(
                       text: "이메일로 로그인",
                       onTap: () => _onLoginTap(),
