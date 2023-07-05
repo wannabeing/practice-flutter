@@ -36,11 +36,10 @@ class SignupMainScreen extends ConsumerWidget {
 
     // ❌ 계정 에러 발생 시
     if (ref.read(socialAuthProvider).hasError) {
-      // 중복이메일: account-exists-with-different-credential
-      ref.read(socialAuthProvider).error.toString();
+      final errorCode = ref.read(socialAuthProvider).error.toString();
 
       // 🚀 중복 계정 에러 알림창 함수 실행
-      if (context.mounted) {
+      if (context.mounted && errorCode == "existEmail") {
         showDialog(
           context: context,
           builder: (context) {
@@ -89,6 +88,7 @@ class SignupMainScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: Sizes.width / 15,

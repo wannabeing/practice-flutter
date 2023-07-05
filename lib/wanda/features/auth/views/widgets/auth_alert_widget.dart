@@ -27,13 +27,15 @@ class AuthAlertWidget extends ConsumerWidget {
         children: [
           Gaps.vheight40,
           Text(
-            text ?? "이미 존재하는 계정입니다.",
+            text ?? "ERROR",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: Sizes.width / 22,
             ),
           ),
-          Gaps.vheight20,
+          Gaps.vheight60,
+          const Text("이미 존재하는 계정입니다."),
+          Gaps.vheight30,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

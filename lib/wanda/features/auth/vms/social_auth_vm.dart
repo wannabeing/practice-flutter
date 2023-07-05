@@ -42,8 +42,18 @@ class SocialAuthViewModel extends AsyncNotifier {
     if (state.hasError) {
       // 에러코드 & 에러메시지
       // https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithemailandpassword
-      final errorCode = ((state.error) as FirebaseException).code.toString();
+      String errorCode = ((state.error) as FirebaseException).code.toString();
 
+      // 중복이메일: account-exists-with-different-credential
+      // 취소: web-context-cancelled
+      switch (errorCode) {
+        case "web-context-cancelled":
+          errorCode = "cancel";
+          break;
+        case "account-exists-with-different-credential":
+          errorCode = "existEmail";
+          break;
+      }
       // 에러메시지 EXPOSE
       state = AsyncValue.error(
         errorCode,

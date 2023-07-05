@@ -33,13 +33,21 @@ class LogoutAlertWidget extends ConsumerWidget {
         children: [
           Gaps.vheight40,
           Text(
-            "정말 로그아웃 하시겠어요?",
+            "로그아웃",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: Sizes.width / 22,
             ),
           ),
-          Gaps.vheight20,
+          Gaps.vheight60,
+          const Opacity(
+            opacity: 0.7,
+            child: Text(
+              "정말 로그아웃 하시겠어요?",
+              style: TextStyle(),
+            ),
+          ),
+          Gaps.vheight30,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

@@ -164,6 +164,8 @@ final routerProvider = Provider((ref) {
           return const MyPageMainScreen();
         },
       ),
+      // ✅ 7. 마이 페이지 프로필 수정 (settings)
+
       // ✅ 7. 설정 페이지 (settings)
       GoRoute(
         path: SettingMainScreen.routeName,

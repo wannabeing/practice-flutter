@@ -28,7 +28,7 @@ class Utils {
   }
 
   static String getAvatarURL(String uid) {
-    return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/avatarIMGs%2F$uid?alt=media";
+    return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/avatarIMGs%2F$uid?alt=media&nocache=${DateTime.now().toString()}";
   }
 }
 

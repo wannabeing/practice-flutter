@@ -50,6 +50,7 @@ class AvatarImgViewModel extends AsyncNotifier<void> {
   // 🚀 DB 유저 아바타URL 업데이트 함수
   // =============================================
   Future<void> upadateUserAvatarURL() async {
+    // 🌈 SET Loading
     state = const AsyncValue.loading();
 
     final uid = ref.read(authRepo).currentUser!.uid;
@@ -58,20 +59,22 @@ class AvatarImgViewModel extends AsyncNotifier<void> {
 
     // ✅ 수정하고자하는 유저의 데이터가 존재하다면
     if (json != null) {
-      state = await AsyncValue.guard(() async {
-        // ✅ 수정한 유저모델
-        final user = UserModel.fromJson(json);
-        final editUser = user.copoyModel(avatarURL: newAvatarURL);
+      state = await AsyncValue.guard(
+        () async {
+          // ✅ 수정한 유저모델
+          final user = UserModel.fromJson(json);
+          final editUser = user.copoyModel(avatarURL: newAvatarURL);
 
-        // ✅ userProvider state값을 갱신 (그래야 사용자단이 업데이트)
-        ref.read(userProvider.notifier).state = AsyncValue.data(editUser);
+          // ✅ userProvider state값을 갱신 (그래야 사용자단이 업데이트)
+          ref.read(userProvider.notifier).state = AsyncValue.data(editUser);
 
-        // ✅ firebase 업데이트 요청
-        _userRepository.updateUserCollection(
-          uid: uid,
-          editData: {"avatarURL": newAvatarURL},
-        );
-      });
+          // ✅ firebase 업데이트 요청
+          await _userRepository.updateUserCollection(
+            uid: uid,
+            editData: {"avatarURL": newAvatarURL},
+          );
+        },
+      );
 
       // ❌ Error
       if (state.hasError) {

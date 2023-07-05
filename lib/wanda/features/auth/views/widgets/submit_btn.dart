@@ -45,6 +45,7 @@ class SubmitButton extends ConsumerWidget {
           child: AnimatedDefaultTextStyle(
             style: TextStyle(
               color: isActive ? Colors.white : Colors.grey.shade600,
+              fontFamily: "SWEET", // 폰트 설정
             ),
             duration: Utils.duration300,
             child: Text(

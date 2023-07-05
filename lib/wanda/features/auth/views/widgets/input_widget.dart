@@ -42,6 +42,7 @@ class InputWidget extends StatefulWidget {
 class _InputWidgetState extends State<InputWidget> {
   bool _isObscure = false; // 암호화해서 보여주기
   final FocusNode _focusNode = FocusNode(); // 텍스트필드 포커스를 위한 변수
+  bool _isKeyboadFocus = false; // 키보드 포커스 여부
 
   // 🚀 키보드 형식 설정 함수
   TextInputType _getKeyboardType() {
@@ -138,6 +139,15 @@ class _InputWidgetState extends State<InputWidget> {
         FocusScope.of(context).requestFocus(_focusNode);
       }
     });
+    // 🚀 텍스트필드 포커스이면 해당 변수 true (xMark와 관련있음)
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _isKeyboadFocus = true;
+      } else {
+        _isKeyboadFocus = false;
+      }
+      setState(() {});
+    });
 
     // 비밀번호 위젯이면, 텍스트 암호화 설정
     if (widget.type == "pw") {
@@ -167,8 +177,7 @@ class _InputWidgetState extends State<InputWidget> {
       obscureText: _isObscure,
       cursorColor: Theme.of(context).primaryColor,
       decoration: InputDecoration(
-        suffix: _setSurfix(),
-
+        suffix: _isKeyboadFocus ? _setSurfix() : null,
         errorText: widget.errorText,
         errorStyle: const TextStyle(
           fontSize: Sizes.size14,

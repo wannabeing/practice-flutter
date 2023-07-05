@@ -68,6 +68,40 @@ class UserViewModel extends AsyncNotifier<UserModel> {
     // state에 UserModel 저장
     state = AsyncValue.data(userModel);
   }
+
+  Future<bool> updateUserModel({
+    required String newDisplayName,
+    required String newBirth,
+  }) async {
+    state = const AsyncValue.loading();
+
+    final uid = ref.read(authRepo).currentUser!.uid;
+    final json = await ref.read(userRepo).getUserCollection(uid);
+
+    if (json != null) {
+      // ✅ 수정한 유저모델
+      final user = UserModel.fromJson(json);
+      final editUser = user.copoyModel(
+        displayName: newDisplayName,
+        birth: newBirth,
+      );
+
+      // ✅ userProvider state값을 갱신 (그래야 사용자단이 업데이트)
+      state = AsyncValue.data(editUser);
+
+      // ✅ firebase 업데이트 요청
+      await _userRepository.updateUserCollection(
+        uid: uid,
+        editData: {
+          "displayName": newDisplayName,
+          "birth": newBirth,
+        },
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 final userProvider = AsyncNotifierProvider<UserViewModel, UserModel>(
