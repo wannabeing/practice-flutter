@@ -17,7 +17,7 @@ class UserRepository {
   }
 
   // =============================================
-  // 🚀 UPDATE userProfile
+  // 🚀 UPDATE User Collection
   // =============================================
   Future<void> updateUserCollection({
     required String uid, // 컬렉션 ID
@@ -27,11 +27,11 @@ class UserRepository {
   }
 
   // =============================================
-  // 🚀 DELETE userProfile
+  // 🚀 DELETE User Collection
   // =============================================
 
   // =============================================
-  // 🚀 GET userProfile
+  // 🚀 GET User Collection
   // =============================================
   Future<Map<String, dynamic>?> getUserCollection(String uid) async {
     final doc = await _db.collection("users").doc(uid).get();
@@ -39,10 +39,11 @@ class UserRepository {
   }
 
   // =============================================
-  // 🚀 UPLOAD FILE userAvatar
+  // 🚀 UPLOAD AvatarIMG FILE
   // =============================================
-  Future<void> putAvatarFile(File imgFile, String fileID) async {
-    await _storage.ref().child("avatarIMGs/$fileID").putFile(imgFile);
+  Future<TaskSnapshot> uploadAvatarIMG(
+      {required File imgFile, required String fileID}) async {
+    return await _storage.ref().child("avatarIMGs/$fileID").putFile(imgFile);
   }
 }
 

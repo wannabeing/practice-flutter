@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
+import 'package:may230517/wanda/constants/provider_watch_widget.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/videos/models/video_model.dart';
-import 'package:may230517/wanda/features/videos/vms/video_main_vm.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/previews/preview_text_field_widget.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/previews/preview_video_widget.dart';
+import 'package:may230517/wanda/features/videos/vms/video_upload_vm.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreviewScreen extends ConsumerStatefulWidget {
@@ -26,7 +30,11 @@ class VideoPreviewScreen extends ConsumerStatefulWidget {
 
 class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late VideoPlayerController _videoPlayerController;
-  final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _titleTextController = TextEditingController();
+  final TextEditingController _descTextController = TextEditingController();
+
+  String _title = '';
+  String _desc = '';
 
   Future<void> _initVideo() async {
     // 비디오컨트롤러 파일 세팅
@@ -58,10 +66,39 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
     setState(() {});
   }
 
+  // 🚀 동영상 제목 유효성 검사 함수
+  String? _getTitleValid() {
+    if (_title.isEmpty) return null;
+
+    if (_title.length > 15) {
+      return "10자 이하입니다.";
+    }
+
+    return null;
+  }
+
+  // 🚀 동영상 설명 유효성 검사 함수
+  String? _getDescValid() {
+    if (_title.isEmpty) return null;
+
+    if (_title.length > 20) {
+      return "20자 이하입니다.";
+    }
+    return null;
+  }
+
   // 🚀 다음 클릭 함수
-  void _onNext() {
-    final VideoModel video = VideoModel(title: "${DateTime.now()}");
-    ref.read(videoMainProvider.notifier).uploadVideo(video);
+  Future<void> _onNext() async {
+    // ✅ firestorage에 업로드 요청
+    await ref
+        .read(videoUploadProvider.notifier)
+        .uploadVideo(File(widget.video.path));
+
+    // ✅ 성공적으로 마쳤으면 메인페이지 이동
+    if (mounted) {
+      context.push(NavMainScreen.routeName);
+      context.pop();
+    }
   }
 
   @override
@@ -69,6 +106,15 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
     super.initState();
 
     _initVideo();
+
+    _titleTextController.addListener(() {
+      _title = _titleTextController.value.text;
+      setState(() {});
+    });
+    _descTextController.addListener(() {
+      _desc = _descTextController.value.text;
+      setState(() {});
+    });
   }
 
   @override
@@ -79,72 +125,64 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // videoUpload Provider 로딩여부
+    final videoUploadLoading = ref.watch(videoUploadProvider).isLoading;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("비디오 업로드"),
       ),
+      resizeToAvoidBottomInset: false,
       body: _videoPlayerController.value.isInitialized
-          ? GestureDetector(
-              onTap: () => _onUnfocusKeyboard(),
-              child: Container(
-                color: Colors.transparent,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Sizes.width / 20,
-                    vertical: Sizes.height / 40,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Row(
-                        children: [
-                          // ✅ 1. 영상 미리보기
-                          GestureDetector(
-                            onTap: () => _onTapVideoPlayer(),
-                            child: Container(
-                              constraints:
-                                  BoxConstraints(maxWidth: Sizes.width / 2),
-                              height: Sizes.height / 4,
-                              child: AspectRatio(
-                                aspectRatio:
-                                    _videoPlayerController.value.aspectRatio,
-                                child: Container(
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: VideoPlayer(
-                                    _videoPlayerController,
-                                  ),
+          ? ProviderWatchWidget(
+              isLoading: videoUploadLoading,
+              widget: GestureDetector(
+                onTap: () => _onUnfocusKeyboard(),
+                child: Container(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Sizes.width / 20,
+                      vertical: Sizes.height / 40,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            // ✅ 1. 영상 미리보기
+                            PreviewVideoWidget(
+                              videoPlayerController: _videoPlayerController,
+                              onTap: () => _onTapVideoPlayer(),
+                            ),
+                            Gaps.hwidth20,
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                PreviewTextFieldWidget(
+                                  textEditingController: _titleTextController,
+                                  labelText: "동영상 제목",
+                                  hintText: "동영상 제목 추가",
+                                  errorText: _getTitleValid(),
                                 ),
-                              ),
-                            ),
-                          ),
-                          Gaps.hwidth20,
-                          // ✅ 2. 동영상 제목 TextField
-                          Expanded(
-                            child: TextField(
-                              controller: _textEditingController,
-                              autocorrect: false,
-                              decoration: InputDecoration(
-                                labelText: "동영상 제목",
-                                hintText: "동영상 제목 추가",
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    color: Theme.of(context).primaryColor),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                                Gaps.vheight30,
+                                PreviewTextFieldWidget(
+                                  textEditingController: _descTextController,
+                                  labelText: "동영상 설명",
+                                  hintText: "동영상 설명 추가",
+                                  errorText: _getDescValid(),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             )
-          : null,
+          : const Center(child: CircularProgressIndicator.adaptive()),
       bottomNavigationBar: BottomAppBar(
         color: Colors.grey.shade50,
         elevation: 0,
@@ -183,10 +221,14 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
             ),
             // ⭐️ 다음버튼
             GestureDetector(
-              // ❓isLoading
-              onTap: ref.watch(videoMainProvider).isLoading
-                  ? () {}
-                  : () => _onNext(),
+              onTap: !videoUploadLoading &&
+                      _videoPlayerController.value.isInitialized &&
+                      _title.isNotEmpty &&
+                      _getTitleValid() == null &&
+                      _desc.isNotEmpty &&
+                      _getDescValid() == null
+                  ? () => _onNext()
+                  : null,
               child: AnimatedContainer(
                 duration: Utils.duration300, // 애니메이션 지속 시간 설정
                 width: Sizes.width / 2.5,
@@ -195,18 +237,23 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
                   horizontal: Sizes.size28,
                 ),
                 decoration: BoxDecoration(
-                  // ❓isLoading
-                  color: ref.watch(videoMainProvider).isLoading
-                      ? Colors.grey.shade300
-                      : Theme.of(context).primaryColor,
+                  color: _title.isNotEmpty &&
+                          _getTitleValid() == null &&
+                          _desc.isNotEmpty &&
+                          _getDescValid() == null
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(Sizes.size14),
                 ),
                 child: Text(
                   "다음",
                   style: TextStyle(
-                    color: ref.watch(videoMainProvider).isLoading
-                        ? Colors.grey.shade800
-                        : Colors.white,
+                    color: _title.isNotEmpty &&
+                            _getTitleValid() == null &&
+                            _desc.isNotEmpty &&
+                            _getDescValid() == null
+                        ? Colors.white
+                        : Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),

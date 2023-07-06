@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/mains/video_widget.dart';
-import 'package:may230517/wanda/features/videos/vms/video_main_vm.dart';
+import 'package:may230517/wanda/features/videos/vms/video_list_vm.dart';
 
 class VideoMainScreen extends ConsumerStatefulWidget {
   const VideoMainScreen({

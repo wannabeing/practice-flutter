@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
+import 'package:may230517/wanda/constants/provider_watch_widget.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/features/auth/views/form_screens/pw_form_screen.dart';
 
@@ -108,52 +109,37 @@ class _EmailFormScreenState extends ConsumerState<EmailFormScreen> {
             horizontal: Sizes.width / 15,
             vertical: Sizes.height / 20,
           ),
-          child: Stack(
-            children: [
-              IgnorePointer(
-                ignoring: ref.watch(emailAuthProvider).isLoading,
-                child: Opacity(
-                  opacity: ref.watch(emailAuthProvider).isLoading ? 0.5 : 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "이메일 입력",
-                        style: TextStyle(
-                          fontSize: Sizes.size28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Gaps.v20,
-                      InputWidget(
-                        controller: _textController,
-                        onSubmitted: _nextScreen,
-                        hintText: "이메일 입력",
-                        errorText:
-                            _existEmail ? "이미 존재하는 이메일입니다." : _getEmailValid(),
-                        type: "email",
-                        setFocusNode: true,
-                      ),
-                      Gaps.v40,
-                      SubmitButton(
-                        text: "다음",
-                        onTap: _nextScreen,
-                        isActive: _textValue.isNotEmpty &&
-                            _getEmailValid() == null &&
-                            !_existEmail,
-                      ),
-                    ],
+          child: ProviderWatchWidget(
+            isLoading: ref.watch(emailAuthProvider).isLoading,
+            widget: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "이메일 입력",
+                  style: TextStyle(
+                    fontSize: Sizes.size28,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-
-              // ✅ 로딩바
-              if (ref.watch(emailAuthProvider).isLoading)
-                const Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator.adaptive(),
+                Gaps.v20,
+                InputWidget(
+                  controller: _textController,
+                  onSubmitted: _nextScreen,
+                  hintText: "이메일 입력",
+                  errorText: _existEmail ? "이미 존재하는 이메일입니다." : _getEmailValid(),
+                  type: "email",
+                  setFocusNode: true,
                 ),
-            ],
+                Gaps.v40,
+                SubmitButton(
+                  text: "다음",
+                  onTap: _nextScreen,
+                  isActive: _textValue.isNotEmpty &&
+                      _getEmailValid() == null &&
+                      !_existEmail,
+                ),
+              ],
+            ),
           ),
         ),
       ),

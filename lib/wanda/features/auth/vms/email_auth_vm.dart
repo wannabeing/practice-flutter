@@ -69,7 +69,7 @@ class EmailAuthViewModel extends AsyncNotifier {
     // 🚀 Firebase SignOut 요청
     state = await AsyncValue.guard(
       () async {
-        return await _authRepository.signOutWithFIrebaseAuth();
+        await _authRepository.signOutWithFIrebaseAuth();
       },
     );
   }
@@ -88,7 +88,7 @@ class EmailAuthViewModel extends AsyncNotifier {
     // 🚀 Firebase login 요청
     state = await AsyncValue.guard(
       () async {
-        return await _authRepository.loginWithPassword(
+        await _authRepository.loginWithPassword(
           email,
           password,
         );

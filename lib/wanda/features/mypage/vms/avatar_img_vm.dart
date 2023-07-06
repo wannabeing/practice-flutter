@@ -31,12 +31,19 @@ class AvatarImgViewModel extends AsyncNotifier<void> {
     // 로그인 유저의 UID가 fileID가 된다.
     String fileID = ref.read(authRepo).currentUser!.uid;
 
-    // 🚀 fireStorage 요청
     state = await AsyncValue.guard(
       () async {
-        await _userRepository.putAvatarFile(imgFile, fileID);
-        // 🚀 유저 콜렉션 업데이트
-        await upadateUserAvatarURL();
+        // 🚀 FireStorage 저장
+        final result = await _userRepository.uploadAvatarIMG(
+          fileID: fileID,
+          imgFile: imgFile,
+        );
+
+        // ✅ 성공적으로 저장 시
+        if (result.metadata != null) {
+          // 🚀 유저 컬렉션 업데이트
+          await upadateUserAvatarURL();
+        }
       },
     );
 

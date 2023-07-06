@@ -37,7 +37,7 @@ class UserViewModel extends AsyncNotifier<UserModel> {
   }
 
   // =============================================
-  // 🚀 사용자가 입력한 정보로 DB에 유저모델 생성
+  // 🚀 사용자가 입력한 정보로 DB에 유저모델 생성 (CREATE)
   // =============================================
   Future<void> createUserModel({
     required UserCredential userCredential,
@@ -69,10 +69,12 @@ class UserViewModel extends AsyncNotifier<UserModel> {
     state = AsyncValue.data(userModel);
   }
 
-  Future<bool> updateUserModel({
-    required String newDisplayName,
-    required String newBirth,
-  }) async {
+  // =============================================
+  // 🚀 사용자가 입력한 정보로 DB에 유저모델 수정 (UPDATE)
+  // =============================================
+  Future<bool> updateUserModel(
+      {required String newDisplayName, required String newBirth}) async {
+    // 🌈 SET Loading
     state = const AsyncValue.loading();
 
     final uid = ref.read(authRepo).currentUser!.uid;

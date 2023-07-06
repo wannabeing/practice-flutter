@@ -32,13 +32,16 @@ class UserModel {
   // =============================================
   // ✅ JSON to 유저모델
   // =============================================
-  UserModel.fromJson(Map<String, dynamic> json)
-      : uid = json["uid"],
-        email = json["email"],
-        displayName = json["displayName"],
-        avatarURL = json["avatarURL"],
-        birth = json["birth"],
-        interests = json["interests"];
+  static UserModel fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      uid: json["uid"],
+      email: json["email"],
+      displayName: json["displayName"],
+      avatarURL: json["avatarURL"],
+      birth: json["birth"],
+      interests: json["interests"],
+    );
+  }
 
   // =============================================
   // ✅ 유저모델 to JSON
