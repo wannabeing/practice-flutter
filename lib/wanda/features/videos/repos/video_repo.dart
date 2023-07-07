@@ -13,7 +13,7 @@ class VideoRepository {
   // 🚀 CREATE Video Collection
   // =============================================
   Future<void> addVideoCollection(VideoModel video) async {
-    await _db.collection("videos").doc(video.vid).set(video.toJson());
+    await _db.collection("videos").add(video.toJson());
   }
 
   // =============================================
@@ -30,9 +30,9 @@ class VideoRepository {
   Future<TaskSnapshot> uploadFile({
     required File videoFile,
     required String uid,
-    required String vid,
+    required String title,
   }) async {
-    return await _storage.ref().child("videos/$uid/$vid").putFile(videoFile);
+    return await _storage.ref().child("videos/$uid/$title").putFile(videoFile);
   }
 }
 

@@ -44,7 +44,6 @@ class LogoutAlertWidget extends ConsumerWidget {
             opacity: 0.7,
             child: Text(
               "정말 로그아웃 하시겠어요?",
-              style: TextStyle(),
             ),
           ),
           Gaps.vheight30,

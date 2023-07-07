@@ -16,9 +16,8 @@ class VideoUploadViewModel extends AsyncNotifier {
   Future<void> uploadVideo(File videoFile) async {
     // 🌈 SET Loading
     state = const AsyncValue.loading();
-    // 로그인 유저의 UID & 새로운 VID
+    // 로그인 유저의 UID
     final uid = ref.read(authRepo).currentUser!.uid;
-    final vid = DateTime.now().millisecondsSinceEpoch.toString();
 
     state = await AsyncValue.guard(
       () async {
@@ -26,14 +25,14 @@ class VideoUploadViewModel extends AsyncNotifier {
         final result = await _videoRepository.uploadFile(
           videoFile: videoFile,
           uid: uid,
-          vid: vid,
+          title: "title",
         );
 
         // ✅ 성공적으로 저장 시
         if (result.metadata != null) {
           // ✅ 새로운 비디오 모델 생성
           final video = VideoModel(
-            vid: vid,
+            vid: "", // 공백으로 해야 랜덤 ID 생성
             uid: uid,
             title: "title",
             desc: "desc",

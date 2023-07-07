@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/provider_watch_widget.dart';
+import 'package:may230517/wanda/constants/show_alert_with_cacnel_widget.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/constants/utils.dart';
-import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
+import 'package:may230517/wanda/features/videos/views/widgets/previews/preview_btn_widget.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/previews/preview_text_field_widget.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/previews/preview_video_widget.dart';
 import 'package:may230517/wanda/features/videos/vms/video_upload_vm.dart';
@@ -36,6 +36,7 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   String _title = '';
   String _desc = '';
 
+  // 🚀 비디오 세팅 함수
   Future<void> _initVideo() async {
     // 비디오컨트롤러 파일 세팅
     _videoPlayerController =
@@ -96,21 +97,36 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
 
     // ✅ 성공적으로 마쳤으면 메인페이지 이동
     if (mounted) {
-      context.push(NavMainScreen.routeName);
-      context.pop();
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ShowAlertWithCacnelBtn(
+            confirmFunc: () {
+              context.pop();
+              context.pop();
+              context.pop();
+            },
+            titleText: "업로드 성공",
+            subtitleText: "동영상을 업로드하였습니다!",
+            confirmBtnText: "홈으로",
+          );
+        },
+      );
     }
   }
 
   @override
   void initState() {
     super.initState();
-
+    // SET videoController
     _initVideo();
 
+    // LISTEN textController
     _titleTextController.addListener(() {
       _title = _titleTextController.value.text;
       setState(() {});
     });
+    // LISTEN textController
     _descTextController.addListener(() {
       _desc = _descTextController.value.text;
       setState(() {});
@@ -162,14 +178,14 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
                                 PreviewTextFieldWidget(
                                   textEditingController: _titleTextController,
                                   labelText: "동영상 제목",
-                                  hintText: "동영상 제목 추가",
+                                  hintText: "10자 이하",
                                   errorText: _getTitleValid(),
                                 ),
                                 Gaps.vheight30,
                                 PreviewTextFieldWidget(
                                   textEditingController: _descTextController,
                                   labelText: "동영상 설명",
-                                  hintText: "동영상 설명 추가",
+                                  hintText: "20자 이하",
                                   errorText: _getDescValid(),
                                 ),
                               ],
@@ -182,7 +198,9 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
                 ),
               ),
             )
-          : const Center(child: CircularProgressIndicator.adaptive()),
+          : const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.grey.shade50,
         elevation: 0,
@@ -194,70 +212,19 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // ✅ 1. 휴대폰에 저장하기 (갤러리영상이면 disabled)
-            IgnorePointer(
-              ignoring: widget.isGalleryVideo,
-              child: GestureDetector(
-                onTap: () {},
-                child: AnimatedContainer(
-                  duration: Utils.duration300, // 애니메이션 지속 시간 설정
-                  width: Sizes.width / 2.5,
-                  padding: EdgeInsets.symmetric(
-                    vertical: Sizes.height / 60,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey.shade400,
-                    ),
-                    borderRadius: BorderRadius.circular(Sizes.size14),
-                    // disabled
-                    color: widget.isGalleryVideo ? Colors.grey.shade300 : null,
-                  ),
-                  child: const Text(
-                    "휴대폰에 저장",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+            PreviewButtonWidget(
+              text: "휴대폰에 저장",
+              onTap: () {},
+              isActive: !widget.isGalleryVideo,
             ),
-            // ⭐️ 다음버튼
-            GestureDetector(
-              onTap: !videoUploadLoading &&
-                      _videoPlayerController.value.isInitialized &&
-                      _title.isNotEmpty &&
-                      _getTitleValid() == null &&
-                      _desc.isNotEmpty &&
-                      _getDescValid() == null
-                  ? () => _onNext()
-                  : null,
-              child: AnimatedContainer(
-                duration: Utils.duration300, // 애니메이션 지속 시간 설정
-                width: Sizes.width / 2.5,
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size14,
-                  horizontal: Sizes.size28,
-                ),
-                decoration: BoxDecoration(
-                  color: _title.isNotEmpty &&
-                          _getTitleValid() == null &&
-                          _desc.isNotEmpty &&
-                          _getDescValid() == null
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(Sizes.size14),
-                ),
-                child: Text(
-                  "다음",
-                  style: TextStyle(
-                    color: _title.isNotEmpty &&
-                            _getTitleValid() == null &&
-                            _desc.isNotEmpty &&
-                            _getDescValid() == null
-                        ? Colors.white
-                        : Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            // ✅ 2. 비디오 업로드 하기
+            PreviewButtonWidget(
+              text: "다음",
+              onTap: () => _onNext(),
+              isActive: _title.isNotEmpty &&
+                  _getTitleValid() == null &&
+                  _desc.isNotEmpty &&
+                  _getDescValid() == null,
             ),
           ],
         ),

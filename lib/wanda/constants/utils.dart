@@ -4,6 +4,7 @@ import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:timeago/timeago.dart';
 
 class Utils {
+  // ✅ 글자 그림자
   static final List<Shadow> textShadow = [
     const Shadow(
       blurRadius: Sizes.size10,
@@ -27,6 +28,7 @@ class Utils {
     return formattedDate;
   }
 
+  // ✅ GET firebase 아바타이미지 URL 함수
   static String getAvatarURL(String uid) {
     return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/avatarIMGs%2F$uid?alt=media&nocache=${DateTime.now().toString()}";
   }

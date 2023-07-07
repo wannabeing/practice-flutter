@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:may230517/wanda/features/settings/views/widgets/logout_alert_widget.dart';
+import 'package:go_router/go_router.dart';
+import 'package:may230517/wanda/constants/show_alert_with_cacnel_widget.dart';
+import 'package:may230517/wanda/features/auth/views/signup_main_screen.dart';
+import 'package:may230517/wanda/features/auth/vms/email_auth_vm.dart';
 import 'package:may230517/wanda/features/settings/views/widgets/user_exit_alert_widget.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 
@@ -12,11 +15,17 @@ class SettingMainScreen extends ConsumerWidget {
   static String routeName = "/settings";
 
   // 🚀 로그아웃 모달창 함수
-  void _showLogoutModal(BuildContext context) {
+  void _showLogoutModal(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (context) {
-        return const LogoutAlertWidget();
+        return ShowAlertWithCacnelBtn(
+          confirmFunc: () async => await _onLogout(ref, context),
+          titleText: "로그아웃",
+          subtitleText: "정말 로그아웃 하시겠어요?",
+          confirmBtnText: "로그아웃",
+          cancelBtn: true,
+        );
       },
     );
   }
@@ -38,6 +47,15 @@ class SettingMainScreen extends ConsumerWidget {
       applicationName: "완다",
       applicationVersion: "1.0.0",
     );
+  }
+
+  // 🚀 로그아웃 버튼 함수
+  Future<void> _onLogout(WidgetRef ref, BuildContext context) async {
+    await ref.read(emailAuthProvider.notifier).signOut();
+
+    if (context.mounted) {
+      context.go(SignupMainScreen.routeName);
+    }
   }
 
   @override
@@ -80,7 +98,7 @@ class SettingMainScreen extends ConsumerWidget {
           ),
           // ✅ 로그아웃
           ListTile(
-            onTap: () => _showLogoutModal(context),
+            onTap: () => _showLogoutModal(context, ref),
             title: const Text("로그아웃"),
           ),
           // ✅ 회원탈퇴
