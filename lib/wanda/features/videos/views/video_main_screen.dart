@@ -1,3 +1,4 @@
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,13 +28,21 @@ class _VideoMainScreenState extends ConsumerState<VideoMainScreen> {
   final _nextPageCurve = Curves.linear;
 
   // 🚀 비디오 페이지 이동 함수
-  void _onPageChanged(int index) {
-    // 페이지 이동할 때, 해당 인덱스로 빠르게 이동시킨다.
+  void _onPageChanged(
+      {required int nextIndex, required int totalLength}) async {
+    /* 
+      ✅ 페이지 이동할 때, 해당 인덱스로 빠르게 이동시킨다.
+    */
     _pageController.animateToPage(
-      index,
+      nextIndex, // videoProvider 초기값
       duration: _nextPageDuration,
       curve: _nextPageCurve,
     );
+
+    // 다음 비디오가 마지막 비디오면 다음 비디오 2개 state에 SET
+    if (nextIndex == totalLength - 1) {
+      await ref.watch(videoListProvider.notifier).getNextVideoList();
+    }
   }
 
   // 🚀 현재 비디오 끝났을 때 실행되는 함수
@@ -45,6 +54,11 @@ class _VideoMainScreenState extends ConsumerState<VideoMainScreen> {
     );
   }
 
+  // 🚀 새로고침 함수
+  Future<void> _onRefreshVideoList() async {
+    return await ref.read(videoListProvider.notifier).refreshVideoList();
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -53,7 +67,7 @@ class _VideoMainScreenState extends ConsumerState<VideoMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(videoMainProvider).when(
+    return ref.watch(videoListProvider).when(
           loading: () => const Center(
             child: CircularProgressIndicator.adaptive(),
           ),
@@ -85,17 +99,40 @@ class _VideoMainScreenState extends ConsumerState<VideoMainScreen> {
                   ],
                 ),
               ),
-              body: PageView.builder(
-                controller: _pageController,
-                itemCount: videoList.length,
-                onPageChanged: (value) => _onPageChanged(value),
-                itemBuilder: (context, index) {
-                  return VideoWidget(
-                    index: index,
-                    onVideoFinished: _onVideoFinished,
+              body: CustomRefreshIndicator(
+                onRefresh: _onRefreshVideoList,
+                builder: (context, child, controller) {
+                  return Stack(
+                    children: [
+                      if (!controller.isIdle)
+                        Padding(
+                          padding: EdgeInsets.only(top: Sizes.height / 40),
+                          child: const Align(
+                              alignment: Alignment.topCenter,
+                              child: CircularProgressIndicator.adaptive()),
+                        ),
+                      child,
+                    ],
                   );
                 },
-                scrollDirection: Axis.vertical,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: videoList.length,
+                  onPageChanged: (value) => _onPageChanged(
+                    nextIndex: value,
+                    totalLength: videoList.length,
+                  ),
+                  itemBuilder: (context, index) {
+                    final video = videoList[index];
+
+                    return VideoWidget(
+                      index: index,
+                      video: video,
+                      onVideoFinished: () => _onVideoFinished(),
+                    );
+                  },
+                  scrollDirection: Axis.vertical,
+                ),
               ),
             );
           },

@@ -13,7 +13,7 @@ class UserViewModel extends AsyncNotifier<UserModel> {
   late final AuthRepository _authRepository;
 
   // =============================================
-  // ✅ 생성자 및 초기화
+  // ✅ 생성자 및 초기화 (로그인유저 반환)
   // =============================================
   @override
   FutureOr<UserModel> build() async {
@@ -34,6 +34,18 @@ class UserViewModel extends AsyncNotifier<UserModel> {
     }
 
     return UserModel.empty();
+  }
+
+  // =============================================
+  // 🚀 사용자가 입력한 정보로 DB에 유저모델 가져오기 (GET)
+  // =============================================
+  Future<UserModel?> getUserModel(String uid) async {
+    final json = await _userRepository.getUserCollection(uid);
+
+    if (json != null) {
+      return UserModel.fromJson(json);
+    }
+    return null;
   }
 
   // =============================================

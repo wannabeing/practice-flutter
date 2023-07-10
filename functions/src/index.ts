@@ -44,7 +44,7 @@ export const listenAddVideo = functions
     });
 
     // ✅ 업로드한 유저모델에 새로운 컬렉션 생성 및 저장 (비디오 모델 관련)
-    // users/:uid/myVideos/:vid/{ vid, thumbnail, createdAt }
+    // users/:uid/myVideos/:vid/{ vid, thumbURL, createdAt }
     const db = admin.firestore();
     await db
       .collection("users")
@@ -54,7 +54,94 @@ export const listenAddVideo = functions
       .set({
         vid: videoID,
         title: video.title,
-        thumbnail: thumbFile.publicUrl(),
+        thumbURL: thumbFile.publicUrl(),
         createdAt: video.createdAt,
       });
+    // ✅ 업로드한 비디오모델에 새로운 컬렉션 생성 및 저장 (유저모델 관련)
+    // videos/:vid/creator/:uid/ {uid, displayName, avatarURL}
+    const user = (await db.collection("users").doc(video.uid).get()).data();
+    await db
+      .collection("videos")
+      .doc(videoID)
+      .collection("creator")
+      .doc(video.uid)
+      .set({
+        uid: video.uid,
+        displayName: user!.displayName,
+        avatarURL: user!.avatarURL,
+      });
+  });
+
+// 🚀 [LISTEN] 좋아요모델 생성
+export const listenAddLike = functions
+  .region("asia-northeast3")
+  .firestore.document("likes/{likeID}")
+  .onCreate(async (snapshot, context) => {
+    const like = snapshot.data();
+
+    // ✅ 유저모델에 새로운 컬렉션 생성 및 저장 (좋아요 모델 관련)
+    // users/:uid/myLikes/:vid/{ vid, thumbURL, createdAt }
+    const db = admin.firestore();
+
+    // 좋아요 누른 비디오 모델
+    const likeVideo = (
+      await db.collection("videos").doc(like.vid).get()
+    ).data();
+
+    // ✅ 좋아요 누른 비디오모델이 있다면
+    if (likeVideo) {
+      // ✅ 좋아요 1 증가
+      await db
+        .collection("videos")
+        .doc(like.vid)
+        .update({
+          likes: admin.firestore.FieldValue.increment(1),
+        });
+
+      // ✅ 유저모델에 해당 비디오모델 저장
+      await db
+        .collection("users")
+        .doc(like.uid)
+        .collection("myLikesVideos")
+        .doc(like.vid)
+        .set({
+          vid: like.vid,
+          title: likeVideo.title,
+          thumbURL: likeVideo.thumbURL,
+          createdAt: likeVideo.createdAt,
+        });
+    }
+  });
+
+// 🚀 [LISTEN] 좋아요모델 삭제
+export const listenDelLike = functions
+  .region("asia-northeast3")
+  .firestore.document("likes/{likeID}")
+  .onDelete(async (snapshot, context) => {
+    const like = snapshot.data();
+    const db = admin.firestore();
+
+    // 좋아요 중복으로 누른 비디오 모델
+    const likeVideo = (
+      await db.collection("videos").doc(like.vid).get()
+    ).data();
+
+    // ✅ 좋아요 중복으로 누른 비디오모델이 있다면
+    if (likeVideo) {
+      // ✅ 좋아요 1 감소
+      await db
+        .collection("videos")
+        .doc(like.vid)
+        .update({
+          likes: admin.firestore.FieldValue.increment(-1),
+        });
+
+      // ✅ 유저모델에 해당 비디오모델 삭제
+      await db
+        .collection("users")
+        .doc(like.uid)
+        .collection("myLikesVideos")
+        .doc(like.vid)
+        .delete();
+    }
   });

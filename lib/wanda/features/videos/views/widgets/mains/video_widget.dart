@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
+import 'package:may230517/wanda/constants/show_alert_with_cacnel_widget.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
+import 'package:may230517/wanda/features/auth/models/user_model.dart';
+import 'package:may230517/wanda/features/auth/vms/user_vm.dart';
+import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
+import 'package:may230517/wanda/features/videos/models/video_model.dart';
 import 'package:may230517/wanda/features/videos/views/comment_main_modal.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/mains/video_icon_widget.dart';
+import 'package:may230517/wanda/features/videos/vms/video_icon_vm.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoWidget extends ConsumerStatefulWidget {
+  final VideoModel video;
   final int index;
   final Function onVideoFinished;
   const VideoWidget({
     super.key,
+    required this.video,
     required this.onVideoFinished,
     required this.index,
   });
@@ -26,9 +35,9 @@ class VideoWidget extends ConsumerStatefulWidget {
 
 class _VideoWidgetState extends ConsumerState<VideoWidget>
     with SingleTickerProviderStateMixin {
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/goodhair.mp4");
+  late final VideoPlayerController _videoPlayerController;
   late final AnimationController _animationController;
+  UserModel creator = UserModel.empty();
 
   bool _isVideoPlay = true; // 비디오 실행 여부
   bool _isReadmore = false; // 비디오 상세보기 여부
@@ -80,6 +89,11 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
     _onTap();
   }
 
+  // 🚀 좋아요아이콘 클릭 함수
+  Future<void> _onTapLike() async {
+    await ref.read(videoIconProvider(widget.video.vid).notifier).setLikeVideo();
+  }
+
   // 🚀 비디오의 보이는 비율이 달라질 때마다 실행되는 함수 ⭐️⭐️⭐️
   void _visibilityChanged(VisibilityInfo info) {
     if (!mounted) return; // dispose된 controller 조작 방지
@@ -102,8 +116,11 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
 
   // 🚀 [1]. 비디오컨트롤러 시작 함수
   Future<void> _initVideoPlayer() async {
-    await _videoPlayerController.initialize(); // 비디오컨트롤러 초기화
-
+    // 비디오컨트롤러 초기화
+    _videoPlayerController =
+        VideoPlayerController.network(widget.video.videoURL);
+    await _videoPlayerController.initialize();
+    await _videoPlayerController.setLooping(true); // 반복 재생
     // 비디오컨트롤러 리스너 등록
     _videoPlayerController.addListener(() async {
       _onVideoListener();
@@ -144,6 +161,31 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
     );
   }
 
+  // 🚀 비디오 생성자 가져오는 함수
+  Future<void> _initCreator() async {
+    final result =
+        await ref.read(userProvider.notifier).getUserModel(widget.video.uid);
+    if (result != null) {
+      creator = result;
+    } else {
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ShowAlertWithCacnelBtn(
+              confirmFunc: () {
+                context.pop();
+                context.go(NavMainScreen.routeName);
+              },
+              titleText: "존재하지 않는 유저",
+              subtitleText: "존재하지 않는 유저의 영상입니다.",
+            );
+          },
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -151,6 +193,7 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
     _configVideoAutoplay = ref.read(settingConfigProvider).videoAutoplay;
     _configVideoMute = ref.read(settingConfigProvider).videoMute;
 
+    _initCreator(); // 비디오 생성자 정보 초기화
     _initVideoPlayer(); // 비디오컨트롤러 초기화
     _initAnimation(); // 애니메이션컨트롤러 초기화
   }
@@ -173,9 +216,7 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
           Positioned.fill(
             child: _videoPlayerController.value.isInitialized
                 ? VideoPlayer(_videoPlayerController)
-                : Container(
-                    color: Colors.black,
-                  ),
+                : const CircularProgressIndicator.adaptive(),
           ),
           // ✅ 화면 감지
           Positioned.fill(
@@ -234,7 +275,7 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "@ID",
+                    "@${creator.displayName}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -248,7 +289,7 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
                     child: AnimatedSize(
                       duration: Utils.duration300,
                       child: Text(
-                        "설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란설명하는란",
+                        widget.video.desc,
                         overflow: _isReadmore
                             ? TextOverflow.visible
                             : TextOverflow.ellipsis,
@@ -297,8 +338,15 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
                       ),
                       CircleAvatar(
                         radius: Sizes.width / 15,
-                        foregroundImage: const NetworkImage(
-                            "https://avatars.githubusercontent.com/u/79440384"),
+                        foregroundImage: creator.avatarURL.isNotEmpty
+                            ? NetworkImage(creator.avatarURL)
+                            : null,
+                        backgroundImage: creator.avatarURL.isEmpty
+                            ? AssetImage(
+                                Utils.defaultAvatarURL(),
+                              )
+                            : null,
+                        backgroundColor: Colors.grey.shade200,
                       ),
                     ],
                   ),
@@ -314,23 +362,23 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
               children: [
                 // 1. 좋아요
                 VideoIconWidget(
+                  onTap: () async => await _onTapLike(),
                   faIconData: FontAwesomeIcons.thumbsUp,
-                  dataText: S.of(context).videoLikes(1111),
+                  dataText: S.of(context).videoLikes(widget.video.likes),
                 ),
                 Gaps.vheight40,
                 // 2. 공유하기
-                const VideoIconWidget(
+                VideoIconWidget(
+                  onTap: () {},
                   faIconData: FontAwesomeIcons.share,
                   dataText: "공유",
                 ),
                 Gaps.vheight40,
                 // 3. 댓글
-                GestureDetector(
+                VideoIconWidget(
                   onTap: () => _onTapComment(context),
-                  child: VideoIconWidget(
-                    faIconData: FontAwesomeIcons.book,
-                    dataText: S.of(context).videoComments(999999),
-                  ),
+                  faIconData: FontAwesomeIcons.book,
+                  dataText: S.of(context).videoComments(widget.video.comments),
                 ),
                 Gaps.vheight40,
               ],

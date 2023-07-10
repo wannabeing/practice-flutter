@@ -91,9 +91,11 @@ class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   // 🚀 다음 클릭 함수
   Future<void> _onNext() async {
     // ✅ firestorage에 업로드 요청
-    await ref
-        .read(videoUploadProvider.notifier)
-        .uploadVideo(File(widget.video.path));
+    await ref.read(videoUploadProvider.notifier).uploadVideo(
+          videoFile: File(widget.video.path),
+          title: _title,
+          desc: _desc,
+        );
 
     // ✅ 성공적으로 마쳤으면 메인페이지 이동
     if (mounted) {

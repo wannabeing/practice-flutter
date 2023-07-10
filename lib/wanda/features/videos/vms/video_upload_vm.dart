@@ -8,12 +8,23 @@ import 'package:may230517/wanda/features/videos/repos/video_repo.dart';
 
 class VideoUploadViewModel extends AsyncNotifier {
   late final VideoRepository _videoRepository;
+
+  // =============================================
+  // ✅ 생성자 빌드 메소드 (초기화)
+  // =============================================
   @override
   FutureOr build() {
     _videoRepository = ref.read(videoRepo);
   }
 
-  Future<void> uploadVideo(File videoFile) async {
+  // =============================================
+  // 🚀 업로드한 비디오로 모델/로컬저장소에 저장(SET) 함수
+  // =============================================
+  Future<void> uploadVideo({
+    required File videoFile,
+    required String title,
+    required String desc,
+  }) async {
     // 🌈 SET Loading
     state = const AsyncValue.loading();
     // 로그인 유저의 UID
@@ -25,7 +36,7 @@ class VideoUploadViewModel extends AsyncNotifier {
         final result = await _videoRepository.uploadFile(
           videoFile: videoFile,
           uid: uid,
-          title: "title",
+          title: title,
         );
 
         // ✅ 성공적으로 저장 시
@@ -34,10 +45,10 @@ class VideoUploadViewModel extends AsyncNotifier {
           final video = VideoModel(
             vid: "", // 공백으로 해야 랜덤 ID 생성
             uid: uid,
-            title: "title",
-            desc: "desc",
+            title: title,
+            desc: desc,
             videoURL: await result.ref.getDownloadURL(),
-            thumbURL: "",
+            thumbURL: "", // firebase functions에서 생성
             createdAt: DateTime.now().toString(),
             likes: 0,
             comments: 0,

@@ -30,7 +30,16 @@ class Utils {
 
   // ✅ GET firebase 아바타이미지 URL 함수
   static String getAvatarURL(String uid) {
-    return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/avatarIMGs%2F$uid?alt=media&nocache=${DateTime.now().toString()}";
+    return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/avatarIMGs%2F$uid?alt=media}";
+  }
+
+  // ✅ GET 기본 아바타이미지 URL 함수
+  static String defaultAvatarURL() {
+    // Firebase 경로
+    // return "https://firebasestorage.googleapis.com/v0/b/may-230517.appspot.com/o/assets%2Fimages%2Favatar.png?alt=media&token=6544927b-6bbd-49b2-89b3-904b75b0cf4a";
+
+    // 로컬이미지 경로
+    return "assets/images/avatar.png";
   }
 }
 
