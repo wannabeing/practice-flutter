@@ -58,9 +58,9 @@ class UserModel {
   }
 
   // =============================================
-  // ✅ 유저모델 복사 함수
+  // ✅ 유저모델 덮어쓰기 함수
   // =============================================
-  UserModel copoyModel({
+  UserModel pasteModel({
     String? uid,
     String? email,
     String? displayName,

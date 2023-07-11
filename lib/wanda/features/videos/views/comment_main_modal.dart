@@ -16,6 +16,8 @@ class CommentMainModal extends ConsumerStatefulWidget {
 }
 
 class _CommentMainModalState extends ConsumerState<CommentMainModal> {
+  final TextEditingController _textEditingController = TextEditingController();
+
   // 🚀 모달창 닫기 함수
   void _onClose() {
     context.pop();
@@ -141,6 +143,7 @@ class _CommentMainModalState extends ConsumerState<CommentMainModal> {
                       child:
                           // ✅ 댓글 인풋 위젯
                           CommentInputWidget(
+                        controller: _textEditingController,
                         hintText: "댓글 추가...",
                         onSubmit: _submitComment,
                       ),

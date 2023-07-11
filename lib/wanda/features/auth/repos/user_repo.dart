@@ -39,6 +39,25 @@ class UserRepository {
   }
 
   // =============================================
+  // 🚀 GET List<User> Collection
+  // =============================================
+  Future<QuerySnapshot<Map<String, dynamic>>> getListUserCollection(
+      String loginUID) async {
+    // 로그인한 유저 정보 제외하고 가져오기
+    final fromDB = _db
+        .collection("users")
+        .orderBy(
+          "uid",
+          descending: true,
+        )
+        .where("uid", isNotEqualTo: loginUID)
+        .limit(5)
+        .get();
+
+    return fromDB;
+  }
+
+  // =============================================
   // 🚀 UPLOAD AvatarIMG FILE
   // =============================================
   Future<TaskSnapshot> uploadAvatarIMG(

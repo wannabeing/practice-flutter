@@ -11,7 +11,7 @@ class VideoListViewModel extends AsyncNotifier<List<VideoModel>> {
   // 🚀 VM에서 사용하는 Repo에서 비디오데이터 가져오는 함수
   Future<List<VideoModel>> _getVideos({String? lastVideoIndex}) async {
     // ✅ DB로 부터 가져온 List<JSON>을 List<VideoModel>로 변환
-    final fromDB = await _videoRepository.getVideoCollections(
+    final fromDB = await _videoRepository.getListVideoCollection(
         lastVideoIndex: lastVideoIndex);
     final videos = fromDB.docs.map((doc) {
       return VideoModel.fromJson(doc.data());

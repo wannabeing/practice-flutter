@@ -95,7 +95,7 @@ class UserViewModel extends AsyncNotifier<UserModel> {
     if (json != null) {
       // ✅ 수정한 유저모델
       final user = UserModel.fromJson(json);
-      final editUser = user.copoyModel(
+      final editUser = user.pasteModel(
         displayName: newDisplayName,
         birth: newBirth,
       );

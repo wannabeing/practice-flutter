@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:may230517/wanda/features/auth/models/user_model.dart';
 import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
 import 'package:may230517/wanda/features/auth/views/form_screens/birth_form_screen.dart';
 import 'package:may230517/wanda/features/auth/views/form_screens/email_form_screen.dart';
@@ -10,9 +11,9 @@ import 'package:may230517/wanda/features/auth/views/interest_screen.dart';
 import 'package:may230517/wanda/features/auth/views/login_main_screen.dart';
 import 'package:may230517/wanda/features/auth/views/signup_main_screen.dart';
 import 'package:may230517/wanda/features/boards/board_main_screen.dart';
-import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
-import 'package:may230517/wanda/features/chats/chat_main_screen.dart';
-import 'package:may230517/wanda/features/chats/chat_select_screen.dart';
+import 'package:may230517/wanda/features/chats/views/chat_detail_screen.dart';
+import 'package:may230517/wanda/features/chats/views/chat_main_screen.dart';
+import 'package:may230517/wanda/features/chats/views/chat_select_screen.dart';
 import 'package:may230517/wanda/features/mypage/mypage_main_screen.dart';
 import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 import 'package:may230517/wanda/features/onboard/onboard_main_screen.dart';
@@ -134,7 +135,9 @@ final routerProvider = Provider((ref) {
             path: ChatDetailScreen.routeName,
             builder: (context, state) {
               final id = state.params["username"]!; // 상대방 userID
-              return ChatDetailScreen(chatOppId: id);
+              return ChatDetailScreen(
+                chatOpp: UserModel.empty(),
+              );
             },
           ),
         ],
@@ -144,7 +147,7 @@ final routerProvider = Provider((ref) {
       GoRoute(
         path: MyPageMainScreen.routeName,
         builder: (context, state) {
-          final id = state.params["userId"]!; // userID
+          // final id = state.params["userId"]!; // userID
 
           String? tabTypes = state.queryParams["tabs"]; // 유저에게 받은 탭타입
           MyPageTabType tabType; // 저장할 탭타입

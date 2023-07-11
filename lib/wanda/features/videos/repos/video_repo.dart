@@ -12,7 +12,7 @@ class VideoRepository {
   // =============================================
   // 🚀 GET List<Video> Collection
   // =============================================
-  Future<QuerySnapshot<Map<String, dynamic>>> getVideoCollections(
+  Future<QuerySnapshot<Map<String, dynamic>>> getListVideoCollection(
       {String? lastVideoIndex}) async {
     // 공통 쿼리문 (생성일 내림차순 & 2개만)
     final defaultQuery = _db
@@ -31,6 +31,14 @@ class VideoRepository {
     else {
       return defaultQuery.startAfter([lastVideoIndex]).get();
     }
+  }
+
+  // =============================================
+  // 🚀 GET Video Collection
+  // =============================================
+  Future<Map<String, dynamic>?> getVideoCollection(String vid) async {
+    final fromDB = await _db.collection("videos").doc(vid).get();
+    return fromDB.data();
   }
 
   // =============================================
@@ -57,6 +65,18 @@ class VideoRepository {
     required String title,
   }) async {
     return await _storage.ref().child("videos/$uid/$title").putFile(videoFile);
+  }
+
+  // =============================================
+  // 🚀 GET USER LIKE Video Collection (로그인유저의 비디오 좋아요 여부)
+  // =============================================
+  Future<bool> getVideoLikeCollection({
+    required String vid,
+    required String uid,
+  }) async {
+    // ✅ 좋아요모델이 존재여부 반환
+    final fromDB = await _db.collection("likes").doc("${uid}000$vid").get();
+    return fromDB.exists;
   }
 
   // =============================================

@@ -70,7 +70,7 @@ class AvatarImgViewModel extends AsyncNotifier<void> {
         () async {
           // ✅ 수정한 유저모델
           final user = UserModel.fromJson(json);
-          final editUser = user.copoyModel(avatarURL: newAvatarURL);
+          final editUser = user.pasteModel(avatarURL: newAvatarURL);
 
           // ✅ userProvider state값을 갱신 (그래야 사용자단이 업데이트)
           ref.read(userProvider.notifier).state = AsyncValue.data(editUser);

@@ -1,20 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:may230517/generated/l10n.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
-import 'package:may230517/wanda/constants/show_alert_with_cacnel_widget.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/models/user_model.dart';
+import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
 import 'package:may230517/wanda/features/auth/vms/user_vm.dart';
-import 'package:may230517/wanda/features/navigations/nav_main_screen.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/features/videos/models/video_model.dart';
 import 'package:may230517/wanda/features/videos/views/comment_main_modal.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/mains/video_icon_widget.dart';
-import 'package:may230517/wanda/features/videos/vms/video_icon_vm.dart';
+import 'package:may230517/wanda/features/videos/vms/video_info_vm.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -43,6 +43,10 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
   bool _isReadmore = false; // 비디오 상세보기 여부
   late bool _configVideoAutoplay; // 사용자 설정 비디오오토플레이 여부
   late bool _configVideoMute; // 사용자 설정 비디오뮤트 여부
+
+  bool _isLikeTap = false; // 비디오 좋아요 여부
+  late int _likes = widget.video.likes; // 비디오 좋아요 개수
+  bool _isMyVideo = false; // 내가 업로드한 비디오 여부
 
   // 🚀 화면 클릭 함수
   void _onTap() {
@@ -91,7 +95,12 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
 
   // 🚀 좋아요아이콘 클릭 함수
   Future<void> _onTapLike() async {
-    await ref.read(videoIconProvider(widget.video.vid).notifier).setLikeVideo();
+    await ref.read(videoInfoProvider(widget.video.vid).notifier).setLikeVideo();
+
+    // ✅ true일 경우, 좋아요 색상 변경 & 좋아요 개수 변경
+    _isLikeTap = !_isLikeTap;
+    _likes = _isLikeTap ? _likes + 1 : _likes - 1;
+    setState(() {});
   }
 
   // 🚀 비디오의 보이는 비율이 달라질 때마다 실행되는 함수 ⭐️⭐️⭐️
@@ -163,26 +172,30 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
 
   // 🚀 비디오 생성자 가져오는 함수
   Future<void> _initCreator() async {
+    // ✅ DB에서 creator 가져오기
     final result =
         await ref.read(userProvider.notifier).getUserModel(widget.video.uid);
     if (result != null) {
-      creator = result;
-    } else {
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ShowAlertWithCacnelBtn(
-              confirmFunc: () {
-                context.pop();
-                context.go(NavMainScreen.routeName);
-              },
-              titleText: "존재하지 않는 유저",
-              subtitleText: "존재하지 않는 유저의 영상입니다.",
-            );
-          },
-        );
+        setState(() {
+          creator = result; // creator 저장
+          _isMyVideo =
+              creator.uid == ref.read(authRepo).currentUser!.uid; // 내 비디오 여부
+        });
       }
+    }
+  }
+
+  // 🚀 비디오 정보 가져오는 함수
+  Future<void> _initVideoInfo() async {
+    final fromDB = await ref
+        .read(videoInfoProvider(widget.video.vid).notifier)
+        .getIsLikeVideo();
+
+    if (mounted) {
+      setState(() {
+        _isLikeTap = fromDB;
+      });
     }
   }
 
@@ -194,6 +207,7 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
     _configVideoMute = ref.read(settingConfigProvider).videoMute;
 
     _initCreator(); // 비디오 생성자 정보 초기화
+    _initVideoInfo(); // 비디오 정보 초기화
     _initVideoPlayer(); // 비디오컨트롤러 초기화
     _initAnimation(); // 애니메이션컨트롤러 초기화
   }
@@ -363,22 +377,25 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
                 // 1. 좋아요
                 VideoIconWidget(
                   onTap: () async => await _onTapLike(),
-                  faIconData: FontAwesomeIcons.thumbsUp,
-                  dataText: S.of(context).videoLikes(widget.video.likes),
+                  faIconData: _isLikeTap
+                      ? FontAwesomeIcons.solidThumbsUp
+                      : FontAwesomeIcons.thumbsUp,
+                  dataText: S.of(context).videoLikes(_likes),
+                  iconColor: _isLikeTap ? Colors.red.shade400 : Colors.white,
                 ),
                 Gaps.vheight40,
-                // 2. 공유하기
+                // 2. 댓글
+                VideoIconWidget(
+                  onTap: () => _onTapComment(context),
+                  faIconData: FontAwesomeIcons.commentDots,
+                  dataText: S.of(context).videoComments(widget.video.comments),
+                ),
+                Gaps.vheight40,
+                // 3. 공유하기
                 VideoIconWidget(
                   onTap: () {},
                   faIconData: FontAwesomeIcons.share,
                   dataText: "공유",
-                ),
-                Gaps.vheight40,
-                // 3. 댓글
-                VideoIconWidget(
-                  onTap: () => _onTapComment(context),
-                  faIconData: FontAwesomeIcons.book,
-                  dataText: S.of(context).videoComments(widget.video.comments),
                 ),
                 Gaps.vheight40,
               ],

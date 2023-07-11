@@ -3,28 +3,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
+import 'package:may230517/wanda/features/auth/models/user_model.dart';
+import 'package:may230517/wanda/features/chats/vms/chat_detail_vm.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/features/videos/views/widgets/comments/comment_input_widget.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({
     super.key,
-    required this.chatOppId,
+    required this.chatOpp,
   });
 
   // 🌐 RouteName
   static String routeName = ":id";
 
-  final String chatOppId;
+  final UserModel chatOpp;
 
   @override
   ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
 
 class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
+  final TextEditingController _controller = TextEditingController();
+
   // 🚀 메시지 제출 함수
   void _onSubmit() {
-    _onCloseKeyboard(); // 키보드창 닫기 함수
+    final text = _controller.text;
+    if (text == "") return;
+    _controller.text = '';
+
+    ref
+        .read(chatDetailProvider.notifier)
+        .sendChat(text: text, oppUID: widget.chatOpp.uid);
   }
 
   // 🚀 키보드창 닫기 함수
@@ -35,9 +45,10 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final chatSendLoading = ref.watch(chatDetailProvider).isLoading;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("선택한 닉네임"),
+        title: Text(widget.chatOpp.displayName),
         actions: [
           IconButton(
             onPressed: () {}, // 채팅창 나가기
@@ -134,7 +145,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     child:
                         // ✅ 대화 인풋 위젯
                         CommentInputWidget(
-                      onSubmit: _onSubmit,
+                      controller: _controller,
+                      onSubmit: chatSendLoading ? () {} : () => _onSubmit(),
                     ),
                   ),
                 ],

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 
 class CommentInputWidget extends StatefulWidget {
+  final TextEditingController controller;
   final Function onSubmit; // 🚀 텍스트필드 제출 함수
   final Function? onTap; // 🚀 텍스트필드 클릭감지 함수 (사용한다면 _onKeyboard도 사용하자)
   final String? hintText;
@@ -10,6 +11,7 @@ class CommentInputWidget extends StatefulWidget {
   const CommentInputWidget({
     super.key,
     required this.onSubmit,
+    required this.controller,
     this.onTap,
     hintText,
   }) : hintText = hintText ?? "";
@@ -31,6 +33,7 @@ class _CommentInputWidgetState extends State<CommentInputWidget> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: widget.controller,
       onTap: () => widget.onTap ?? _onTap(),
       textInputAction: TextInputAction.newline, // 키보드 done을 줄 바꾸기로 변경
       expands: true, // 줄 바꾸기 설정

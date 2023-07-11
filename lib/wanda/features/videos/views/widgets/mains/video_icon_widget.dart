@@ -8,12 +8,15 @@ class VideoIconWidget extends StatelessWidget {
   final IconData faIconData;
   final String dataText;
   final Function onTap;
+  final Color iconColor;
+
   const VideoIconWidget({
     super.key,
     required this.faIconData,
     required this.dataText,
     required this.onTap,
-  });
+    iconColor,
+  }) : iconColor = iconColor ?? Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class VideoIconWidget extends StatelessWidget {
             ),
             child: FaIcon(
               faIconData,
-              color: Colors.white,
+              color: iconColor,
               size: Sizes.width / 12,
             ),
           ),

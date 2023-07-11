@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/chats/chat_detail_screen.dart';
-import 'package:may230517/wanda/features/chats/chat_select_screen.dart';
-import 'package:may230517/wanda/features/chats/widgets/chat_list_widget.dart';
+import 'package:may230517/wanda/features/auth/models/user_model.dart';
+import 'package:may230517/wanda/features/chats/views/chat_detail_screen.dart';
+import 'package:may230517/wanda/features/chats/views/chat_select_screen.dart';
+import 'package:may230517/wanda/features/chats/views/widgets/chat_list_widget.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -96,8 +97,8 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return const ChatDetailScreen(
-            chatOppId: "메인에서 디테일로",
+          return ChatDetailScreen(
+            chatOpp: UserModel.empty(),
           );
         },
       ),
