@@ -12,10 +12,40 @@ class ChatListViewModel extends AsyncNotifier<List<ChatListModel>> {
   late final UserRepository _userRepository;
   final List<ChatListModel> _list = [];
 
+  // 🚀 VM에서 사용하는 Repo에서 비디오데이터 가져오는 함수
+  Future<List<ChatListModel>> _getChatList({required String loginUID}) async {
+    // ✅ DB로 부터 가져온 List<JSON>을 List<VideoModel>로 변환
+    final fromDB =
+        await _chatRepository.getListChatCollection(loginUID: loginUID);
+
+    final chatList = fromDB.docs.map((doc) {
+      final newChatList = ChatListModel.fromJson(doc.data());
+
+      final otherUID =
+          newChatList.firstUID == loginUID ? newChatList.oppUID : loginUID;
+      // final otherUser = await ref.read(userRepo).getUserCollection(otherUID);
+
+      return ChatListModel.fromJson(doc.data());
+    });
+
+    chatList.toList();
+
+    return chatList.toList();
+  }
+
+  // =============================================
+  // ✅ 생성자 빌드 메소드 (초기값 반환)
+  // =============================================
   @override
-  FutureOr<List<ChatListModel>> build() {
+  FutureOr<List<ChatListModel>> build() async {
     _chatRepository = ChatRepository();
     _userRepository = UserRepository();
+
+    // _list = await _getChatList();
+
+    final test =
+        await _getChatList(loginUID: ref.read(authRepo).currentUser!.uid);
+
     return _list;
   }
 

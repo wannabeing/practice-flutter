@@ -145,3 +145,18 @@ export const listenDelLike = functions
         .delete();
     }
   });
+
+// 🚀 [LISTEN] 채팅 생성
+export const listenUpdateChat = functions
+  .region("asia-northeast3")
+  .firestore.document("chatRooms/{chatRoomID}/texts/{textID}")
+  .onCreate(async (snapshot, context) => {
+    const newChat = snapshot.data();
+    const chatRoomID = context.params.chatRoomID;
+    const db = admin.firestore();
+
+    await db.collection("chatRooms").doc(chatRoomID).update({
+      lastText: newChat.text,
+      lastTime: newChat.createdAt,
+    });
+  });

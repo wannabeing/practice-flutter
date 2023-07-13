@@ -8,6 +8,7 @@ import 'package:may230517/wanda/features/chats/views/chat_detail_screen.dart';
 import 'package:may230517/wanda/features/chats/views/chat_select_screen.dart';
 import 'package:may230517/wanda/features/chats/views/widgets/chat_list_widget.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
+import 'package:may230517/wanda/features/videos/vms/video_list_vm.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatMainScreen extends ConsumerStatefulWidget {
@@ -206,56 +207,66 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
       body: Stack(
         children: [
           // ✅ 1. 채팅리스트
-          Scrollbar(
-            controller: _scrollController,
-            child: ListView.separated(
-              itemCount: _items.length,
-              controller: _scrollController,
-              itemBuilder: (context, index) {
-                // ✅ MessageListWidget in Dismissible
-                return Dismissible(
-                  onDismissed: (direction) => _onDel(index),
-                  key: Key("${_items[index].hashCode}"),
-                  direction: DismissDirection.endToStart,
-                  // 옆으로 밀면 나오는 휴지통아이콘
-                  background: Container(
-                    padding: EdgeInsets.only(
-                      right: Sizes.width / 10,
-                    ),
-                    alignment: Alignment.centerRight,
-                    color: Colors.red,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        FaIcon(
-                          FontAwesomeIcons.trash,
-                          color: Colors.white,
-                        ),
-                        Gaps.v5,
-                        Text(
-                          "나가기",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // ✅ MessageListWidget
-                  child: _items[index],
-                );
-              },
-              separatorBuilder: (context, index) => Container(
-                height: 1,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.black,
-                      width: 0.2,
-                    ),
-                  ),
+          ref.watch(videoListProvider).when(
+                error: (error, stackTrace) => Center(
+                  child: Text("$error"),
                 ),
+                loading: () => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+                data: (chatList) {
+                  return Scrollbar(
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      itemCount: _items.length,
+                      controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        // ✅ MessageListWidget in Dismissible
+                        return Dismissible(
+                          onDismissed: (direction) => _onDel(index),
+                          key: Key("${_items[index].hashCode}"),
+                          direction: DismissDirection.endToStart,
+                          // 옆으로 밀면 나오는 휴지통아이콘
+                          background: Container(
+                            padding: EdgeInsets.only(
+                              right: Sizes.width / 10,
+                            ),
+                            alignment: Alignment.centerRight,
+                            color: Colors.red,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                FaIcon(
+                                  FontAwesomeIcons.trash,
+                                  color: Colors.white,
+                                ),
+                                Gaps.v5,
+                                Text(
+                                  "나가기",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // ✅ MessageListWidget
+                          child: _items[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) => Container(
+                        height: 1,
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black,
+                              width: 0.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-          ),
           // ✅ 2. 일반/비밀채팅 AppTitle 활성화 시 렌더링
           if (_isPlusTap)
             AnimatedModalBarrier(

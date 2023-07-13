@@ -29,12 +29,13 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   // 🚀 메시지 제출 함수
   void _onSubmit() {
     final text = _controller.text;
+    final oppUID = widget.chatOpp.uid;
     if (text == "") return;
     _controller.text = '';
 
     ref
-        .read(chatDetailProvider.notifier)
-        .sendChat(text: text, oppUID: widget.chatOpp.uid);
+        .read(chatDetailProvider(oppUID).notifier)
+        .sendChat(text: text, oppUID: oppUID);
   }
 
   // 🚀 키보드창 닫기 함수
@@ -44,8 +45,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final chatSendLoading = ref.watch(chatDetailProvider).isLoading;
+    final chatSendLoading =
+        ref.watch(chatDetailProvider(widget.chatOpp.uid)).isLoading;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.chatOpp.displayName),
@@ -62,60 +69,90 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         child: Column(
           children: [
             // ✅ 1. 대화창
-            Expanded(
-              child: Scrollbar(
-                child: ListView.separated(
-                  // ✅ 대화 구분 공백
-                  separatorBuilder: (context, index) {
-                    return Gaps.v10;
-                  },
-                  padding: EdgeInsets.only(
-                    right: Sizes.width / 20,
-                    left: Sizes.width / 20,
-                    top: Sizes.height / 40,
-                    bottom: Sizes.height / 40,
+            ref.watch(chatDetailProvider(widget.chatOpp.uid)).when(
+                  error: (error, stackTrace) => const Text("ERROR"),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator.adaptive(),
                   ),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    // ✅ 대화 위젯
-                    final isMyMsg = index % 2 == 0;
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: isMyMsg
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(maxWidth: Sizes.width),
-                          padding: EdgeInsets.all(Sizes.width / 22),
-                          decoration: BoxDecoration(
-                            color: isMyMsg
-                                ? Theme.of(context).primaryColor
-                                : Colors.grey.shade600,
-                            borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(24),
-                              topRight: const Radius.circular(24),
-                              bottomLeft: Radius.circular(isMyMsg ? 24 : 4),
-                              bottomRight: Radius.circular(!isMyMsg ? 24 : 4),
-                            ),
-                          ),
-                          child: SizedBox(
-                            width: Sizes.width / 1.5,
-                            child: Text(
-                              "가나다라가나다라가나다라가나다라가나다가나다라가나다라가나다라가나다라가나다라가나다라가나다라가나다라가나다라라가나다라가나다라가나다라가나다라",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Sizes.width / 25,
+                  // 🚀 [LISTEN] chatDetailProvider
+                  data: (chatRoomID) {
+                    return Expanded(
+                      child: Scrollbar(
+                        // 🚀 [LISTEN] chatStreamProvider
+                        child: ref.watch(chatStreamProvider(chatRoomID)).when(
+                          error: (error, stackTrace) {
+                            return const Text("ERROR");
+                          },
+                          loading: () {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          },
+                          data: (chatList) {
+                            return ListView.separated(
+                              // ✅ 대화 구분 공백
+                              separatorBuilder: (context, index) {
+                                return Gaps.v10;
+                              },
+                              padding: EdgeInsets.only(
+                                right: Sizes.width / 20,
+                                left: Sizes.width / 20,
+                                top: Sizes.height / 40,
+                                bottom: Sizes.height / 40,
                               ),
-                            ),
-                          ),
+                              itemCount: chatList.length,
+                              itemBuilder: (context, index) {
+                                // ✅ 내 메시지 여부
+                                final isMyMsg =
+                                    chatList[index].uid != widget.chatOpp.uid;
+
+                                // ✅ 대화 위젯
+                                return Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: isMyMsg
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      constraints:
+                                          BoxConstraints(maxWidth: Sizes.width),
+                                      padding: EdgeInsets.all(Sizes.width / 22),
+                                      decoration: BoxDecoration(
+                                        color: isMyMsg
+                                            ? Theme.of(context).primaryColor
+                                            : Colors.grey.shade600,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: const Radius.circular(24),
+                                          topRight: const Radius.circular(24),
+                                          bottomLeft:
+                                              Radius.circular(isMyMsg ? 24 : 4),
+                                          bottomRight: Radius.circular(
+                                              !isMyMsg ? 24 : 4),
+                                        ),
+                                      ),
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                            maxWidth: Sizes.width / 1.5),
+                                        child: Text(
+                                          chatList[index].text,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: Sizes.width / 25,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                         ),
-                      ],
+                      ),
                     );
                   },
                 ),
-              ),
-            ),
+
             // ✅ 2. 하단고정 채팅입력창
             Align(
               alignment: Alignment.bottomCenter,

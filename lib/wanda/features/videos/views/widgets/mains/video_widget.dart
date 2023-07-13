@@ -8,7 +8,6 @@ import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
 import 'package:may230517/wanda/constants/utils.dart';
 import 'package:may230517/wanda/features/auth/models/user_model.dart';
-import 'package:may230517/wanda/features/auth/repos/auth_repo.dart';
 import 'package:may230517/wanda/features/auth/vms/user_vm.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
 import 'package:may230517/wanda/features/videos/models/video_model.dart';
@@ -46,7 +45,6 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
 
   bool _isLikeTap = false; // 비디오 좋아요 여부
   late int _likes = widget.video.likes; // 비디오 좋아요 개수
-  bool _isMyVideo = false; // 내가 업로드한 비디오 여부
 
   // 🚀 화면 클릭 함수
   void _onTap() {
@@ -60,10 +58,6 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
         _videoPlayerController.play();
         _animationController.forward(); // lower -> upper
       }
-      // 3. 비디오 실행여부 변수 상태전환
-      setState(() {
-        _isVideoPlay = !_isVideoPlay;
-      });
     }
   }
 
@@ -179,8 +173,6 @@ class _VideoWidgetState extends ConsumerState<VideoWidget>
       if (mounted) {
         setState(() {
           creator = result; // creator 저장
-          _isMyVideo =
-              creator.uid == ref.read(authRepo).currentUser!.uid; // 내 비디오 여부
         });
       }
     }
