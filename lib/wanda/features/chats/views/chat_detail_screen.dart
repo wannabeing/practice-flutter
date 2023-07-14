@@ -45,11 +45,6 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final chatSendLoading =
         ref.watch(chatDetailProvider(widget.chatOpp.uid)).isLoading;

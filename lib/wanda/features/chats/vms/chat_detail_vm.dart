@@ -34,7 +34,7 @@ class ChatDetailViewModel extends FamilyAsyncNotifier<String, String> {
     required String oppUID,
   }) async {
     await AsyncValue.guard(() async {
-      final chat = ChatModel(
+      final chat = ChatTextModel(
         text: text,
         uid: _loginUser.uid,
         createdAt: DateTime.now().toString(),
@@ -50,7 +50,7 @@ class ChatDetailViewModel extends FamilyAsyncNotifier<String, String> {
 }
 
 // =============================================
-// 🔥 채팅 디테일 Provider
+// 🚀 채팅방 화면 Provider
 // ChatDetailViewModel: provider 호출 시 접근하는 class 이름
 // String: provider 호출 시 return(제공)하는 형식
 // String: provider가 받는 인자(arg) 형식
@@ -61,16 +61,16 @@ final chatDetailProvider =
 );
 
 // =============================================
-// 🔥 채팅룸 메시지 Stream Provider
+// 🚀 채팅룸 메시지 Stream Provider
 // List<ChatModel>: provider 호출 시 return(제공)하는 형식
 // String: provider가 받는 인자(arg) 형식
 // =============================================
 final chatStreamProvider =
-    StreamProvider.family.autoDispose<List<ChatModel>, String>(
+    StreamProvider.family.autoDispose<List<ChatTextModel>, String>(
   (ref, chatDetailArg) {
     final db = FirebaseFirestore.instance;
 
-    // ✅ 채팅룸 안에 texts 컬렉션이 변경될 때마다 List<ChatModel> 변환하여 return
+    // ✅ 채팅룸 안에 texts 컬렉션이 변경될 때마다 List<ChatTextModel> 변환하여 return
     return db
         .collection("chatRooms")
         .doc(chatDetailArg)
@@ -80,7 +80,7 @@ final chatStreamProvider =
         .map(
           (event) => event.docs
               .map(
-                (doc) => ChatModel.fromJson(
+                (doc) => ChatTextModel.fromJson(
                   doc.data(),
                 ),
               )

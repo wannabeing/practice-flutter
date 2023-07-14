@@ -10,14 +10,12 @@ class ChatRepository {
   // =============================================
   Future<QuerySnapshot<Map<String, dynamic>>> getListChatCollection(
       {required String loginUID}) async {
-    return await _db
-        .collection("chatRooms")
-        .where(
-          Filter.or(
-            Filter("firstUID", isEqualTo: loginUID),
-            Filter("oppUID", isEqualTo: loginUID),
-          ),
-        )
+    return _db
+        .collection("users")
+        .doc(loginUID)
+        .collection("myChats")
+        .orderBy("lastTime", descending: true)
+        .limit(10)
         .get();
   }
 
@@ -49,7 +47,7 @@ class ChatRepository {
   Future<void> updateTextCollection({
     required String loginUID,
     required String oppUID,
-    required ChatModel chat,
+    required ChatTextModel chat,
   }) async {
     dynamic query;
 

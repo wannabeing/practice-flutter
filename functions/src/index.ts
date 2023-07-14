@@ -3,7 +3,7 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
-// 🚀 [LISTEN] 비디오모델 생성
+// 🚀 [LISTEN] 비디오 컬렉션 생성
 export const listenAddVideo = functions
   .region("asia-northeast3")
   .firestore.document("videos/{vid}")
@@ -72,7 +72,7 @@ export const listenAddVideo = functions
       });
   });
 
-// 🚀 [LISTEN] 좋아요모델 생성
+// 🚀 [LISTEN] 좋아요 컬렉션 생성
 export const listenAddLike = functions
   .region("asia-northeast3")
   .firestore.document("likes/{likeID}")
@@ -113,7 +113,7 @@ export const listenAddLike = functions
     }
   });
 
-// 🚀 [LISTEN] 좋아요모델 삭제
+// 🚀 [LISTEN] 좋아요 컬렉션 삭제
 export const listenDelLike = functions
   .region("asia-northeast3")
   .firestore.document("likes/{likeID}")
@@ -146,17 +146,117 @@ export const listenDelLike = functions
     }
   });
 
-// 🚀 [LISTEN] 채팅 생성
-export const listenUpdateChat = functions
+// 🚀 [LISTEN] 채팅방 컬렉션 생성
+export const listenAddChatRoom = functions
+  .region("asia-northeast3")
+  .firestore.document("chatRooms/{chatRoomID}")
+  .onCreate(async (snapshot, context) => {
+    const chatRoom = snapshot.data(); // 생성된 채팅방 컬렉션 데이터
+    const db = admin.firestore();
+
+    // ✅ 대화시작유저 / 상대유저 가져오기
+    const firstUser = (
+      await db.collection("users").doc(chatRoom.firstUID).get()
+    ).data();
+    const oppUser = (
+      await db.collection("users").doc(chatRoom.oppUID).get()
+    ).data();
+
+    // ✅ 두 유저 컬렉션에 나의채팅방 컬렉션 생성
+    if (firstUser && oppUser) {
+      await db
+        .collection("users")
+        .doc(firstUser.uid)
+        .collection("myChats")
+        .doc(context.params.chatRoomID)
+        .set({
+          chatRoomID: context.params.chatRoomID,
+          oppUID: oppUser.uid,
+          oppDisplayname: oppUser.displayName,
+          oppAvatarURL: oppUser.avatarURL,
+        });
+      await db
+        .collection("users")
+        .doc(oppUser.uid)
+        .collection("myChats")
+        .doc(context.params.chatRoomID)
+        .set({
+          chatRoomID: context.params.chatRoomID,
+          oppUID: firstUser.uid,
+          oppDisplayname: firstUser.displayName,
+          oppAvatarURL: firstUser.avatarURL,
+        });
+    }
+  });
+
+// 🚀 [LISTEN] 채팅 텍스트 컬렉션 생성
+export const listenAddChat = functions
   .region("asia-northeast3")
   .firestore.document("chatRooms/{chatRoomID}/texts/{textID}")
   .onCreate(async (snapshot, context) => {
-    const newChat = snapshot.data();
-    const chatRoomID = context.params.chatRoomID;
-    const db = admin.firestore();
+    const newChat = snapshot.data(); // 새로 생성된 채팅 텍스트 컬렉션 데이터
+    const chatRoomID = context.params.chatRoomID; // 채팅방 id
+    const [firstUID, oppUID] = chatRoomID.split("000"); // 두 유저 id
+    const db = admin.firestore(); // db
 
-    await db.collection("chatRooms").doc(chatRoomID).update({
+    // ✅ 채팅방 컬렉션 업데이트 (마지막 텍스트)
+    db.collection("chatRooms").doc(chatRoomID).update({
       lastText: newChat.text,
       lastTime: newChat.createdAt,
     });
+
+    // ✅ 대화시작유저 / 상대유저 나의채팅방 컬렉션 업데이트
+    db.collection("users")
+      .doc(firstUID)
+      .collection("myChats")
+      .doc(chatRoomID)
+      .update({
+        lastText: newChat.text,
+        lastTime: newChat.createdAt,
+      });
+
+    db.collection("users")
+      .doc(oppUID)
+      .collection("myChats")
+      .doc(chatRoomID)
+      .update({
+        lastText: newChat.text,
+        lastTime: newChat.createdAt,
+      });
+  });
+
+// 🚀 [LISTEN] 나의 채팅방 컬렉션 생성
+export const listenAddMyChats = functions
+  .region("asia-northeast3")
+  .firestore.document("users/{uid}/myChats/{cid}")
+  .onCreate(async (snapshot, context) => {
+    const cid = context.params.cid; // 채팅방 id
+    const [firstUID, oppUID] = cid.split("000"); // 대화유저 id
+    const db = admin.firestore();
+
+    // ✅ 두 유저의 채팅방 정보
+    const chatRoom = (await db.collection("chatRooms").doc(cid).get()).data();
+
+    // ✅ 대화시작유저 / 상대유저 나의채팅방 컬렉션 업데이트
+    if (chatRoom) {
+      await db
+        .collection("users")
+        .doc(firstUID)
+        .collection("myChats")
+        .doc(cid)
+        .update({
+          lastText: chatRoom.lastText,
+          lastTime: chatRoom.lastTime,
+        });
+
+      await db
+        .collection("users")
+        .doc(oppUID)
+        .collection("myChats")
+        .doc(cid)
+        .update({
+          lastText: chatRoom.lastText,
+          lastTime: chatRoom.lastTime,
+        });
+    }
   });

@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:may230517/wanda/constants/gaps.dart';
 import 'package:may230517/wanda/constants/sizes.dart';
-import 'package:may230517/wanda/features/auth/models/user_model.dart';
+import 'package:may230517/wanda/features/auth/vms/user_vm.dart';
 import 'package:may230517/wanda/features/chats/views/chat_detail_screen.dart';
 import 'package:may230517/wanda/features/chats/views/chat_select_screen.dart';
 import 'package:may230517/wanda/features/chats/views/widgets/chat_list_widget.dart';
+import 'package:may230517/wanda/features/chats/vms/chat_list_vm.dart';
 import 'package:may230517/wanda/features/settings/vms/setting_config_vm.dart';
-import 'package:may230517/wanda/features/videos/vms/video_list_vm.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatMainScreen extends ConsumerStatefulWidget {
@@ -27,19 +27,6 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 150),
-  );
-
-  // 예시 채팅리스트
-  late final List<Widget> _items = List.generate(
-    20,
-    (index) => ChatListWidget(
-      nickname: "닉네임 $index",
-      lastChat: "마지막 대화",
-      lastChatTime: timeago.format(DateTime.now()),
-      index: index,
-      onTap: _moveDetailChatScreen,
-      onLongPress: _onDel,
-    ),
   );
 
   bool _isOffsetOver = false; // appBar title 활성화 여부
@@ -75,7 +62,7 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
 
   // 🚀 메시지 삭제 함수
   void _onDel(int index) {
-    _items.removeAt(index);
+    // _items.removeAt(index);
     setState(() {});
   }
 
@@ -94,16 +81,20 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
   }
 
   // 🚀 채팅 디테일 페이지 이동 함수
-  void _moveDetailChatScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return ChatDetailScreen(
-            chatOpp: UserModel.empty(),
-          );
-        },
-      ),
-    );
+  void _moveDetailChatScreen(String oppUID) async {
+    final oppUser = await ref.read(userProvider.notifier).getUserModel(oppUID);
+
+    if (mounted && oppUser != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return ChatDetailScreen(
+              chatOpp: oppUser,
+            );
+          },
+        ),
+      );
+    }
   }
 
   // 🚀 메시지 추가함수 클릭
@@ -121,6 +112,16 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
 
     setState(() {});
   }
+
+  // void _onVisibilityChanged(VisibilityInfo info) async {
+  //   if (!mounted) return;
+
+  //   if (info.visibleFraction == 1) {
+  //     await ref.read(chatListProvider.notifier).getChatList(
+  //           loginUID: ref.read(authRepo).currentUser!.uid,
+  //         );
+  //   }
+  // }
 
   @override
   void initState() {
@@ -207,7 +208,7 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
       body: Stack(
         children: [
           // ✅ 1. 채팅리스트
-          ref.watch(videoListProvider).when(
+          ref.watch(chatListStreamProvider).when(
                 error: (error, stackTrace) => Center(
                   child: Text("$error"),
                 ),
@@ -218,13 +219,13 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
                   return Scrollbar(
                     controller: _scrollController,
                     child: ListView.separated(
-                      itemCount: _items.length,
+                      itemCount: chatList.length,
                       controller: _scrollController,
                       itemBuilder: (context, index) {
                         // ✅ MessageListWidget in Dismissible
                         return Dismissible(
                           onDismissed: (direction) => _onDel(index),
-                          key: Key("${_items[index].hashCode}"),
+                          key: Key("${chatList[index].hashCode}"),
                           direction: DismissDirection.endToStart,
                           // 옆으로 밀면 나오는 휴지통아이콘
                           background: Container(
@@ -249,7 +250,18 @@ class _ChatMainScreenState extends ConsumerState<ChatMainScreen>
                             ),
                           ),
                           // ✅ MessageListWidget
-                          child: _items[index],
+                          child: ChatListWidget(
+                            avatarURL: chatList[index].oppAvatarURL,
+                            nickname: chatList[index].oppDisplayname,
+                            lastChat: chatList[index].lastText,
+                            lastChatTime: timeago.format(
+                              DateTime.parse(chatList[index].lastTime),
+                            ),
+                            index: index,
+                            onTap: () =>
+                                _moveDetailChatScreen(chatList[index].oppUID),
+                            onLongPress: (p0) => _onDel(index),
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) => Container(

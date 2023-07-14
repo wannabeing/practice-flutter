@@ -3,6 +3,7 @@ import 'package:may230517/wanda/constants/sizes.dart';
 
 class ChatListWidget extends StatelessWidget {
   final String nickname;
+  final String avatarURL;
   final String lastChat;
   final String lastChatTime;
   final int index; // key역할을 하는 index
@@ -12,6 +13,7 @@ class ChatListWidget extends StatelessWidget {
   const ChatListWidget({
     super.key,
     required this.nickname,
+    required this.avatarURL,
     required this.lastChat,
     required this.lastChatTime,
     required this.index,
@@ -26,8 +28,8 @@ class ChatListWidget extends StatelessWidget {
       onLongPress: () => onLongPress(index), // 꾹 누르면 실행되는 함수
       leading: CircleAvatar(
         radius: Sizes.width / 15,
-        foregroundImage: const NetworkImage(
-            "https://avatars.githubusercontent.com/u/79440384"),
+        foregroundImage: NetworkImage(avatarURL),
+        backgroundColor: Colors.grey.shade300,
       ),
       title: Text(
         nickname,

@@ -1,15 +1,15 @@
-class ChatModel {
+class ChatTextModel {
   final String text;
   final String uid;
   final String createdAt;
 
-  ChatModel({
+  ChatTextModel({
     required this.text,
     required this.uid,
     required this.createdAt,
   });
 
-  ChatModel.fromJson(Map<String, dynamic> json)
+  ChatTextModel.fromJson(Map<String, dynamic> json)
       : text = json["text"],
         uid = json["uid"],
         createdAt = json["createdAt"];
